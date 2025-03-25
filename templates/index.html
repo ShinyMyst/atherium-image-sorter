@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="divider"></div>
+        <h3>Model</h3>
+        <select id="model-select">
+            <option value="any">Any</option>
+            <option value="hoseki">Hoseki</option>
+            <option value="hoshino">Hoshino</option>
+        </select>
+
+        <div class="divider"></div>
+        <h3>LoRA</h3>
+        <div class="slider-container">
+            <input type="range" id="bold-brash" class="slider" min="0" max="4" step="1" value="0">
+            <div class="slider-value" id="bold-brash-value">Any</div>
+            <label class="slider-label" for="bold-brash">Bold & Brash</label>
+        </div>
+        <div class="slider-container">
+            <input type="range" id="bold-outline" class="slider" min="0" max="4" step="1" value="0">
+            <div class="slider-value" id="bold-outline-value">Any</div>
+            <label class="slider-label" for="bold-outline">Bold Outlines & Soft Shading</label>
+        </div>
+
+        <div class="divider"></div>
+        <h3>Sampling</h3>
+        <select id="sampling-method">
+            <option value="any">Any</option>
+            <option value="euler-a">Euler A</option>
+            <option value="euler">Euler</option>
+            <option value="ddim">DDIM</option>
+            <option value="lms">LMS</option>
+        </select>
+    </div>
+    <div class="grid">
+        <!-- Image Containers -->
+    </div>
+
+    <script>
+        // Update slider value display
+        document.querySelectorAll('.slider').forEach(slider => {
+            const valueDisplay = document.getElementById(slider.id + '-value');
+            const values = ["Any", "0.7", "1", "1.5", "0"];
+            slider.addEventListener('input', () => {
+                valueDisplay.textContent = values[slider.value];
+            });
+        });
+    </script>
+
+
+    <div class="grid">
+        <!-- Images will be inserted here dynamically -->
+    </div>
+
+    <div class="grid">
+        <!-- Images will be inserted here dynamically -->
+    </div>
+
+    <script>
+        // Hardcoded JSON data
+        const images = [
+            {
+                "url": "https://images-ng.pixai.art/images/orig/39e686c2-963f-4714-a6a7-a7deb1ad1bee",
+                "model": "Hoshino",
+                "LoRA": {
+                    "DMD2": 0.7,
+                    "Bold & Soft": 0.7,
+                    "Bold & Brash": 1
+                },
+                "Sampling Method": "Euler A",
+                "Sampling Steps": 10
+            },
+            {
+                "url": "https://images-ng.pixai.art/images/orig/e80c9f31-420f-42af-a24e-205d9c507d2d",
+                "model": "Hoshino",
+                "LoRA": {
+                    "DMD2": 0.7,
+                    "Bold & Soft": 0.7,
+                    "Bold & Brash": 1.5
+                },
+                "Sampling Method": "Euler A",
+                "Sampling Steps": 10
+            },
+            {
+                "url": "https://images-ng.pixai.art/images/orig/b000ddd8-8965-43ec-9f6a-a43afd057308",
+                "model": "Hoshino",
+                "LoRA": {
+                    "DMD2": 0.7,
+                    "Bold & Soft": 0.7,
+                    "Bold & Brash": 0.7
+                },
+                "Sampling Method": "Euler A",
+                "Sampling Steps": 10
+            }
+        ];
+
+        function displayImages() {
+            const grid = document.querySelector(".grid");
+            grid.innerHTML = "";  // Clear any existing images
+
+            images.forEach(img => {
+                const container = document.createElement("div");
+                container.className = "image-container";
+                container.innerHTML = `
+                    <img src="${img.url}" alt="Generated Image">
+                    <div class="image-details">
+                        <p>Model: ${img.model}</p>
+                        <p>Bold & Brash: ${img.LoRA["Bold & Brash"] || "N/A"}</p>
+                        <p>Sampling: ${img["Sampling Method"]}</p>
+                    </div>
+                `;
+                grid.appendChild(container);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", displayImages);
+    </script>
+</body>
+</html>
