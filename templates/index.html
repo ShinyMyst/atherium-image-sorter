@@ -54,56 +54,19 @@
         });
     </script>
 
-
-    <div class="grid">
-        <!-- Images will be inserted here dynamically -->
-    </div>
-
-    <div class="grid">
-        <!-- Images will be inserted here dynamically -->
-    </div>
-
     <script>
-        // Hardcoded JSON data
-        const images = [
-            {
-                "url": "https://images-ng.pixai.art/images/orig/39e686c2-963f-4714-a6a7-a7deb1ad1bee",
-                "model": "Hoshino",
-                "LoRA": {
-                    "DMD2": 0.7,
-                    "Bold & Soft": 0.7,
-                    "Bold & Brash": 1
-                },
-                "Sampling Method": "Euler A",
-                "Sampling Steps": 10
-            },
-            {
-                "url": "https://images-ng.pixai.art/images/orig/e80c9f31-420f-42af-a24e-205d9c507d2d",
-                "model": "Hoshino",
-                "LoRA": {
-                    "DMD2": 0.7,
-                    "Bold & Soft": 0.7,
-                    "Bold & Brash": 1.5
-                },
-                "Sampling Method": "Euler A",
-                "Sampling Steps": 10
-            },
-            {
-                "url": "https://images-ng.pixai.art/images/orig/b000ddd8-8965-43ec-9f6a-a43afd057308",
-                "model": "Hoshino",
-                "LoRA": {
-                    "DMD2": 0.7,
-                    "Bold & Soft": 0.7,
-                    "Bold & Brash": 0.7
-                },
-                "Sampling Method": "Euler A",
-                "Sampling Steps": 10
-            }
-        ];
+        // PROPER SOLUTION - handles all cases
+        let images = JSON.parse({{ image_json|tojson|safe }});
 
         function displayImages() {
             const grid = document.querySelector(".grid");
-            grid.innerHTML = "";  // Clear any existing images
+            grid.innerHTML = "";
+
+            // Safety check
+            if (!Array.isArray(images)) {
+                console.error("Images is not an array:", images);
+                return;
+            }
 
             images.forEach(img => {
                 const container = document.createElement("div");
@@ -112,6 +75,7 @@
                     <img src="${img.url}" alt="Generated Image">
                     <div class="image-details">
                         <p>Model: ${img.model}</p>
+                        <p>Bold & Soft: ${img.LoRA["Bold & Soft"] || "N/A"}</p>
                         <p>Bold & Brash: ${img.LoRA["Bold & Brash"] || "N/A"}</p>
                         <p>Sampling: ${img["Sampling Method"]}</p>
                     </div>
