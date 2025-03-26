@@ -38,7 +38,7 @@
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0.7,
-            "Bold & Brash": 1
+            "Bold & Brash": 0.7
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -70,7 +70,7 @@
         "model": "Hoshino",
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0.7,
+            "Bold & Soft": 0,
             "Bold & Brash": 0.7
         },
         "Sampling Method": "Euler A",
@@ -81,7 +81,7 @@
         "model": "Hoshino",
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0.7,
+            "Bold & Soft": 0,
             "Bold & Brash": 1.5
         },
         "Sampling Method": "Euler A",
@@ -92,7 +92,7 @@
         "model": "Hoseki",
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0.7,
+            "Bold & Soft": 0,
             "Bold & Brash": 1
         },
         "Sampling Method": "Euler A",
@@ -115,7 +115,7 @@
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0.7,
-            "Bold & Brash": 1
+            "Bold & Brash": 0
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10

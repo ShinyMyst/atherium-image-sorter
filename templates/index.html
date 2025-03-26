@@ -43,6 +43,8 @@
         <!-- Image Containers -->
     </div>
 
+
+
     <script>
         // Update slider value display
         document.querySelectorAll('.slider').forEach(slider => {
@@ -52,23 +54,30 @@
                 valueDisplay.textContent = values[slider.value];
             });
         });
-    </script>
 
-    <script>
-        // PROPER SOLUTION - handles all cases
+
+        // Filter Settings
+        const boldBrash = document.getElementById('bold-brash').value;
+        const boldOutline = document.getElementById('bold-outline').value;
+        const sampling = document.getElementById('sampling-method').value;
+
         let images = JSON.parse({{ image_json|tojson|safe }});
 
         function displayImages() {
             const grid = document.querySelector(".grid");
+            const model = document.getElementById('model-select').value;
+
             grid.innerHTML = "";
 
-            // Safety check
-            if (!Array.isArray(images)) {
-                console.error("Images is not an array:", images);
-                return;
-            }
-
             images.forEach(img => {
+                console.log(model)
+                console.log(img.model)
+
+                if (model !== "any" && model.toLowerCase() !== img.model.toLowerCase()) {
+                    return;
+                }
+
+
                 const container = document.createElement("div");
                 container.className = "image-container";
                 container.innerHTML = `
@@ -83,8 +92,9 @@
                 grid.appendChild(container);
             });
         }
-
+        document.getElementById('model-select').addEventListener('change', displayImages);
         document.addEventListener("DOMContentLoaded", displayImages);
     </script>
+
 </body>
 </html>
