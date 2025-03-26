@@ -33,7 +33,7 @@
         <h3>Sampling</h3>
         <select id="sampling-method">
             <option value="any">Any</option>
-            <option value="euler-a">Euler A</option>
+            <option value="euler a">Euler A</option>
             <option value="euler">Euler</option>
             <option value="ddim">DDIM</option>
             <option value="lms">LMS</option>
@@ -49,34 +49,39 @@
         // Update slider value display
         document.querySelectorAll('.slider').forEach(slider => {
             const valueDisplay = document.getElementById(slider.id + '-value');
-            const values = ["Any", "0.7", "1", "1.5", "0"];
+            const values = ["Any", 0.7, 1, 1.5, 0];
             slider.addEventListener('input', () => {
                 valueDisplay.textContent = values[slider.value];
             });
         });
 
-
-        // Filter Settings
-        const boldBrash = document.getElementById('bold-brash').value;
-        const boldOutline = document.getElementById('bold-outline').value;
-        const sampling = document.getElementById('sampling-method').value;
-
+        //
         let images = JSON.parse({{ image_json|tojson|safe }});
 
         function displayImages() {
             const grid = document.querySelector(".grid");
             const model = document.getElementById('model-select').value;
+            const boldBrash = document.getElementById('bold-brash-value').textContent;
+            const boldOutline = document.getElementById('bold-outline-value').textContent;
+            const sampling = document.getElementById('sampling-method').value;
+
 
             grid.innerHTML = "";
 
             images.forEach(img => {
-                console.log(model)
-                console.log(img.model)
+                console.log(boldBrash, boldOutline, sampling)
+                console.log(img.LoRA["Bold & Soft"])
+                console.log(img.LoRA["Bold & Brash"])
+                console.log(img["Sampling Method"])
 
-                if (model !== "any" && model.toLowerCase() !== img.model.toLowerCase()) {
+                if (
+                    (model !== "any" && model.toLowerCase() !== img.model.toLowerCase()) ||
+                    (boldBrash.toLowerCase() != "any" && boldBrash != img.LoRA["Bold & Brash"]) ||
+                    (boldOutline.toLowerCase() != "any" && boldOutline != img.LoRA["Bold & Soft"]) ||
+                    (sampling !== "any" && sampling.toLowerCase() !== img["Sampling Method"].toLowerCase())
+                ) {
                     return;
                 }
-
 
                 const container = document.createElement("div");
                 container.className = "image-container";
@@ -93,6 +98,10 @@
             });
         }
         document.getElementById('model-select').addEventListener('change', displayImages);
+        document.getElementById('bold-brash').addEventListener('input', displayImages);
+        document.getElementById('bold-outline').addEventListener('input', displayImages);
+        document.getElementById('sampling-method').addEventListener('change', displayImages);
+
         document.addEventListener("DOMContentLoaded", displayImages);
     </script>
 
