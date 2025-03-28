@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form with Image Preview</title>
+    <style>
+        body {
+            display: flex;
+            background-color: #2c3e50;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-container {
+            background-color: #34495e;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 45%;
+            color: white;
+        }
+
+        .form-container h2 {
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .form-container label {
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .form-container input, .form-container select, .form-container input[type="range"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #2c3e50;
+            border-radius: 4px;
+            width: 100%;
+            background-color: #3b4b5e;
+            color: white;
+        }
+
+        .form-container button {
+            background-color: #2ecc71;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .form-container button:disabled {
+            background-color: #ccc;
+        }
+
+        .image-preview-container {
+            background-color: #3b4b5e;
+            width: 45%;
+            height: 100%;
+            margin-left: 20px;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .image-preview-container img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 4px;
+            display: none; /* Initially hidden */
+        }
+
+        .form-wrapper {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+        }
+
+        .slider-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slider-container input {
+            width: 60%;
+            margin: 0 10px;
+        }
+
+        .slider-value {
+            color: white;
+            font-size: 14px;
+            width: 40px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-wrapper">
+    <div class="form-container">
+        <h2>Form</h2>
+
+        <form id="data-form">
+            <!-- Image URL -->
+            <label for="html-field">Enter URL (for Image Preview):</label>
+            <input type="url" id="html-field" name="html-field" required>
+
+            <!-- LoRA Style -->
+            <div>
+                <label for="bold-outline">Bold Outline:</label>
+                <div class="slider-container">
+                    <input type="range" id="bold-outline" min="0" max="1.5" step="0.1" value="0">
+                    <span id="bold-outline-value" class="slider-value">0</span>
+                </div>
+
+                <label for="brash">Brash:</label>
+                <div class="slider-container">
+                    <input type="range" id="brash" min="0" max="1.5" step="0.1" value="0">
+                    <span id="brash-value" class="slider-value">0</span>
+                </div>
+            </div>
+
+            <!-- Processing Option -->
+            <label for="processing-select">Processing:</label>
+            <select id="processing-select">
+                <option value="none">None</option>
+                <option value="DMD2">DMD2</option>
+                <option value="LCM">LCM</option>
+            </select>
+
+            <!-- Processing Slider (Hidden until selected) -->
+            <div class="slider-container" id="processing-slider-container" style="display: none;">
+                <input type="range" id="processing-slider" min="0" max="1.5" step="0.1" value="0">
+                <span id="processing-slider-value" class="slider-value">0</span>
+            </div>
+
+            <button type="submit" id="submit-button" disabled>Submit</button>
+        </form>
+    </div>
+
+    <!-- Image Preview Section -->
+    <div class="image-preview-container" id="image-preview-container">
+        <img id="image-preview" src="" alt="Preview">
+        <p id="preview-text">Preview</p>
+    </div>
+</div>
+
+<script>
+    // Show image preview when URL is entered
+    document.getElementById("html-field").addEventListener("input", function () {
+        const url = this.value.trim();
+        const previewImg = document.getElementById("image-preview");
+        const previewText = document.getElementById("preview-text");
+
+        if (url) {
+            previewImg.src = url;
+            previewImg.style.display = "block";
+            previewText.style.display = "none";
+        } else {
+            previewImg.style.display = "none";
+            previewText.style.display = "block";
+        }
+    });
+
+    // Update slider values
+    document.querySelectorAll("input[type=range]").forEach(slider => {
+        const valueDisplay = document.getElementById(`${slider.id}-value`);
+        slider.addEventListener("input", () => {
+            valueDisplay.textContent = slider.value;
+        });
+    });
+
+    // Show processing slider only when an option is selected
+    document.getElementById("processing-select").addEventListener("change", function () {
+        const processingSliderContainer = document.getElementById("processing-slider-container");
+        processingSliderContainer.style.display = this.value !== "none" ? "flex" : "none";
+    });
+
+    // Enable submit button only when an image URL is entered
+    document.getElementById("html-field").addEventListener("input", function () {
+        document.getElementById("submit-button").disabled = !this.value.trim();
+    });
+
+    // Handle form submission
+    document.getElementById("data-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = {
+            image_url: document.getElementById("html-field").value,
+            bold_outline: document.getElementById("bold-outline").value,
+            brash: document.getElementById("brash").value,
+            processing: document.getElementById("processing-select").value,
+            processing_value: document.getElementById("processing-slider").value
+        };
+        console.log(formData);
+    });
+</script>
+
+</body>
+</html>

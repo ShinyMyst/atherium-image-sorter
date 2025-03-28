@@ -18,6 +18,11 @@ def get_images():
     return jsonify(image_data)
 
 
+@app.route('/submit')
+def get_submit():
+    return render_template('submit.html')
+
+
 @app.route('/favicon.ico')
 def favicon():
     return "", 204  # No content response to stop the 404
