@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import json
 
 app = Flask(__name__)
@@ -18,9 +18,28 @@ def get_images():
     return jsonify(image_data)
 
 
-@app.route('/submit')
+@app.route('/new')
 def get_submit():
     return render_template('submit.html')
+
+
+@app.route('/submit', methods=['POST'])
+def post_submit():
+    form_data = request.form.to_dict()
+    structured_data = {
+        "url": form_data["url"],
+        "model": form_data["model"],
+        "LoRA": {
+            "DMD2": float(form_data["LoRA[DMD2]"]),
+            "Bold & Soft": float(form_data["LoRA[Bold & Soft]"]),
+            "Bold & Brash": float(form_data["LoRA[Bold & Brash]"])
+        },
+        "Sampling Method": form_data["Sampling Method"],
+        "Sampling Steps": int(form_data["Sampling Steps"])
+    }
+
+    print("Received Data:", structured_data)  # Logs form data
+    return jsonify(structured_data)
 
 
 @app.route('/favicon.ico')

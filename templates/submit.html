@@ -107,54 +107,57 @@
 </head>
 <body>
 
-<div class="form-wrapper">
-    <div class="form-container">
-        <h2>Form</h2>
+    <div class="form-wrapper">
+        <div class="form-container">
+            <h2>Form</h2>
 
-        <form id="data-form">
-            <!-- Image URL -->
-            <label for="html-field">Enter URL (for Image Preview):</label>
-            <input type="url" id="html-field" name="html-field" required>
+            <form id="data-form" action="/submit" method="POST">
+                <!-- Image URL -->
+                <label for="html-field">Enter URL (for Image Preview):</label>
+                <input type="url" id="html-field" name="url" required>
 
-            <!-- LoRA Style -->
-            <div>
-                <label for="bold-outline">Bold Outline:</label>
-                <div class="slider-container">
-                    <input type="range" id="bold-outline" min="0" max="1.5" step="0.1" value="0">
-                    <span id="bold-outline-value" class="slider-value">0</span>
-                </div>
+                <!-- Model -->
+                <label for="model-select">Model:</label>
+                <select id="model-select" name="model">
+                    <option value="Hoseki">Hoseki</option>
+                </select>
 
-                <label for="brash">Brash:</label>
-                <div class="slider-container">
-                    <input type="range" id="brash" min="0" max="1.5" step="0.1" value="0">
-                    <span id="brash-value" class="slider-value">0</span>
-                </div>
-            </div>
+                <!-- LoRA Grouping -->
+                <fieldset>
+                    <legend>LoRA Settings</legend>
 
-            <!-- Processing Option -->
-            <label for="processing-select">Processing:</label>
-            <select id="processing-select">
-                <option value="none">None</option>
-                <option value="DMD2">DMD2</option>
-                <option value="LCM">LCM</option>
-            </select>
+                    <!-- Bold & Soft Slider -->
+                    <label for="bold-outline">Bold & Soft: <span id="bold-outline-value">0</span></label>
+                    <input type="range" id="bold-outline" name="LoRA[Bold & Soft]" min="0" max="1.5" step="0.1" value="0">
 
-            <!-- Processing Slider (Hidden until selected) -->
-            <div class="slider-container" id="processing-slider-container" style="display: none;">
-                <input type="range" id="processing-slider" min="0" max="1.5" step="0.1" value="0">
-                <span id="processing-slider-value" class="slider-value">0</span>
-            </div>
+                    <!-- Bold & Brash Slider -->
+                    <label for="brash">Bold & Brash: <span id="brash-value">0</span></label>
+                    <input type="range" id="brash" name="LoRA[Bold & Brash]" min="0" max="1.5" step="0.1" value="0">
 
-            <button type="submit" id="submit-button" disabled>Submit</button>
-        </form>
+                    <!-- LoRA Processing (DMD2) Slider -->
+                    <label for="processing-slider">LoRA Processing (DMD2): <span id="processing-slider-value">0</span></label>
+                    <input type="range" id="processing-slider" name="LoRA[DMD2]" min="0" max="1.5" step="0.1" value="0">
+                </fieldset>
+
+                <!-- Sampling -->
+                <label for="sampling-method">Sampling Method:</label>
+                <select id="sampling-method" name="Sampling Method">
+                    <option value="Euler A">Euler A</option>
+                </select>
+
+                <label for="sampling-steps">Sampling Steps:</label>
+                <input type="number" id="sampling-steps" name="Sampling Steps" min="1" max="100" value="10">
+
+                <button type="submit" id="submit-button">Submit</button>
+            </form>
+        </div>
+
+        <!-- Image Preview Section -->
+        <div class="image-preview-container" id="image-preview-container">
+            <img id="image-preview" src="" alt="Preview">
+            <p id="preview-text">Preview</p>
+        </div>
     </div>
-
-    <!-- Image Preview Section -->
-    <div class="image-preview-container" id="image-preview-container">
-        <img id="image-preview" src="" alt="Preview">
-        <p id="preview-text">Preview</p>
-    </div>
-</div>
 
 <script>
     // Show image preview when URL is entered
@@ -181,29 +184,7 @@
         });
     });
 
-    // Show processing slider only when an option is selected
-    document.getElementById("processing-select").addEventListener("change", function () {
-        const processingSliderContainer = document.getElementById("processing-slider-container");
-        processingSliderContainer.style.display = this.value !== "none" ? "flex" : "none";
-    });
 
-    // Enable submit button only when an image URL is entered
-    document.getElementById("html-field").addEventListener("input", function () {
-        document.getElementById("submit-button").disabled = !this.value.trim();
-    });
-
-    // Handle form submission
-    document.getElementById("data-form").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const formData = {
-            image_url: document.getElementById("html-field").value,
-            bold_outline: document.getElementById("bold-outline").value,
-            brash: document.getElementById("brash").value,
-            processing: document.getElementById("processing-select").value,
-            processing_value: document.getElementById("processing-slider").value
-        };
-        console.log(formData);
-    });
 </script>
 
 </body>
