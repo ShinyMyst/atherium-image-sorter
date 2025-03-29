@@ -38,7 +38,16 @@ def post_submit():
         "Sampling Steps": int(form_data["Sampling Steps"])
     }
 
-    print("Received Data:", structured_data)  # Logs form data
+    # TODO - Don't load to write
+    # It was simpler to just load/append but should append w/o loading all
+    with open("data/images.json", "r") as f:
+        images = json.load(f)
+
+    images.append(structured_data)
+
+    with open("data/images.json", "w") as f:
+        json.dump(images, f, indent=4)
+
     return jsonify(structured_data)
 
 
