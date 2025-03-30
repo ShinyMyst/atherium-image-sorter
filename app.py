@@ -37,7 +37,8 @@ def post_submit():
         "model": form_data["model"],
         "Sampling Method": form_data["Sampling Method"],
         "Sampling Steps": int(form_data["Sampling Steps"]),
-        "LoRA": {}
+        "LoRA": {},
+        "Prompt": form_data["prompt"]
     }
 
     for key, value in form_data.items():
