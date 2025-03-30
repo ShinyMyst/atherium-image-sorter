@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .navbar {
+            background-color: #34495e;
+            padding: 15px;
+            text-align: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+    </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="navbar">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="gallery">Gallery</a>
+            <a href="submit" target="_blank">Submit</a>
+        </div>
+        <div class="divider"></div>
+        <h3>Model</h3>
+        <select id="model-select">
+            <option value="any">Any</option>
+            <option value="hoseki">Hoseki</option>
+            <option value="hoshino">Hoshino</option>
+        </select>
+
+        <div class="divider"></div>
+        <h3>LoRA</h3>
+        <div class="slider-container">
+            <input type="range" id="bold-brash" class="slider" min="0" max="4" step="1" value="0">
+            <div class="slider-value" id="bold-brash-value">Any</div>
+            <label class="slider-label" for="bold-brash">Bold & Brash</label>
+        </div>
+        <div class="slider-container">
+            <input type="range" id="bold-outline" class="slider" min="0" max="4" step="1" value="0">
+            <div class="slider-value" id="bold-outline-value">Any</div>
+            <label class="slider-label" for="bold-outline">Bold Outlines & Soft Shading</label>
+        </div>
+
+        <div class="divider"></div>
+        <h3>Sampling</h3>
+        <select id="sampling-method">
+            <option value="any">Any</option>
+            <option value="euler a">Euler A</option>
+            <option value="euler">Euler</option>
+            <option value="ddim">DDIM</option>
+            <option value="lms">LMS</option>
+        </select>
+    </div>
+    <div class="grid">
+        <!-- Image Containers -->
+    </div>
+
+
+
+    <script>
+        // Update slider value display
+        document.querySelectorAll('.slider').forEach(slider => {
+            const valueDisplay = document.getElementById(slider.id + '-value');
+            const values = ["Any", 0.7, 1, 1.5, 0];
+            slider.addEventListener('input', () => {
+                valueDisplay.textContent = values[slider.value];
+            });
+        });
+
+        //
+        let images = JSON.parse({{ image_json|tojson|safe }});
+
+        function displayImages() {
+            const grid = document.querySelector(".grid");
+            const model = document.getElementById('model-select').value;
+            const boldBrash = document.getElementById('bold-brash-value').textContent;
+            const boldOutline = document.getElementById('bold-outline-value').textContent;
+            const sampling = document.getElementById('sampling-method').value;
+
+
+            grid.innerHTML = "";
+
+            images.forEach(img => {
+                console.log(boldBrash, boldOutline, sampling)
+                console.log(img.LoRA["Bold & Soft"])
+                console.log(img.LoRA["Bold & Brash"])
+                console.log(img["Sampling Method"])
+
+                if (
+                    (model !== "any" && model.toLowerCase() !== img.model.toLowerCase()) ||
+                    (boldBrash.toLowerCase() != "any" && boldBrash != img.LoRA["Bold & Brash"]) ||
+                    (boldOutline.toLowerCase() != "any" && boldOutline != img.LoRA["Bold & Soft"]) ||
+                    (sampling !== "any" && sampling.toLowerCase() !== img["Sampling Method"].toLowerCase())
+                ) {
+                    return;
+                }
+
+                const container = document.createElement("div");
+                container.className = "image-container";
+                container.innerHTML = `
+                    <img src="${img.url}" alt="Generated Image">
+                    <div class="image-details">
+                        <p>Model: ${img.model}</p>
+                        <p>Bold & Soft: ${img.LoRA["Bold & Soft"] || "N/A"}</p>
+                        <p>Bold & Brash: ${img.LoRA["Bold & Brash"] || "N/A"}</p>
+                        <p>Sampling: ${img["Sampling Method"]}</p>
+                    </div>
+                `;
+                grid.appendChild(container);
+            });
+        }
+        document.getElementById('model-select').addEventListener('change', displayImages);
+        document.getElementById('bold-brash').addEventListener('input', displayImages);
+        document.getElementById('bold-outline').addEventListener('input', displayImages);
+        document.getElementById('sampling-method').addEventListener('change', displayImages);
+
+        document.addEventListener("DOMContentLoaded", displayImages);
+    </script>
+
+</body>
+</html>
