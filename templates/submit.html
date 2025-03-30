@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form with Image Preview</title>
+    <title>Image Processing Form</title>
     <style>
         body {
             display: flex;
             background-color: #2c3e50;
             margin: 0;
             font-family: Arial, sans-serif;
-            height: 100vh;
+            min-height: 100vh;
             justify-content: center;
             align-items: center;
         }
-
         .form-container {
             background-color: #34495e;
             border-radius: 8px;
@@ -23,18 +22,14 @@
             width: 45%;
             color: white;
         }
-
         .form-container h2 {
             margin-bottom: 15px;
-            color: white;
         }
-
-        .form-container label {
-            margin-top: 10px;
-            margin-bottom: 5px;
+        label {
+            display: block;
+            margin: 10px 0 5px;
         }
-
-        .form-container input, .form-container select, .form-container input[type="range"] {
+        input, select {
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #2c3e50;
@@ -43,8 +38,7 @@
             background-color: #3b4b5e;
             color: white;
         }
-
-        .form-container button {
+        button {
             background-color: #2ecc71;
             color: white;
             padding: 10px;
@@ -54,92 +48,109 @@
             font-size: 14px;
             width: 100%;
         }
-
-        .form-container button:disabled {
-            background-color: #ccc;
-        }
-
         .image-preview-container {
             background-color: #3b4b5e;
             width: 45%;
-            height: 100%;
+            min-height: 300px;
             margin-left: 20px;
             border-radius: 8px;
-            color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            padding: 10px;
         }
-
         .image-preview-container img {
             max-width: 100%;
             max-height: 100%;
             border-radius: 4px;
-            display: none; /* Initially hidden */
+            display: none;
         }
-
         .form-wrapper {
             display: flex;
             justify-content: space-between;
             width: 80%;
         }
-
+        fieldset {
+            border: 1px solid #2c3e50;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+        .slider-group {
+            margin-bottom: 15px;
+        }
         .slider-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 10px;
         }
-
-        .slider-container input {
-            width: 60%;
-            margin: 0 10px;
+        .slider-container input[type="range"] {
+            flex: 1;
+            margin: 0;
         }
-
         .slider-value {
-            color: white;
-            font-size: 14px;
             width: 40px;
             text-align: right;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-
     <div class="form-wrapper">
         <div class="form-container">
-            <h2>Form</h2>
-
-            <form id="data-form" action="/submit" method="POST">
+            <h2>Image Processing</h2>
+            <form id="data-form" action="/new" method="POST" onsubmit="return prepareForm()">
                 <!-- Image URL -->
-                <label for="html-field">Enter URL (for Image Preview):</label>
-                <input type="url" id="html-field" name="url" required>
+                <label for="image-url">Image URL:</label>
+                <input type="url" id="image-url" name="url" required>
 
-                <!-- Model -->
+                <!-- Model Selection -->
                 <label for="model-select">Model:</label>
                 <select id="model-select" name="model">
+                    <option value="Hoshino">Hoshino</option>
                     <option value="Hoseki">Hoseki</option>
                 </select>
 
-                <!-- LoRA Grouping -->
+                <!-- LoRA Settings -->
                 <fieldset>
                     <legend>LoRA Settings</legend>
 
-                    <!-- Bold & Soft Slider -->
-                    <label for="bold-outline">Bold & Soft: <span id="bold-outline-value">0</span></label>
-                    <input type="range" id="bold-outline" name="LoRA[Bold & Soft]" min="0" max="1.5" step="0.1" value="0">
+                    <div class="slider-group">
+                        <label for="bold-soft">Bold & Soft: <span id="bold-soft-value">0</span></label>
+                        <div class="slider-container">
+                            <input type="range" id="bold-soft" min="0" max="1.5" step="0.1" value="0">
+                        </div>
+                    </div>
 
-                    <!-- Bold & Brash Slider -->
-                    <label for="brash">Bold & Brash: <span id="brash-value">0</span></label>
-                    <input type="range" id="brash" name="LoRA[Bold & Brash]" min="0" max="1.5" step="0.1" value="0">
-
-                    <!-- LoRA Processing (DMD2) Slider -->
-                    <label for="processing-slider">LoRA Processing (DMD2): <span id="processing-slider-value">0</span></label>
-                    <input type="range" id="processing-slider" name="LoRA[DMD2]" min="0" max="1.5" step="0.1" value="0">
+                    <div class="slider-group">
+                        <label for="bold-brash">Bold & Brash: <span id="bold-brash-value">0</span></label>
+                        <div class="slider-container">
+                            <input type="range" id="bold-brash" min="0" max="1.5" step="0.1" value="0">
+                        </div>
+                    </div>
                 </fieldset>
 
-                <!-- Sampling -->
+                <!-- LoRA Processing -->
+                <fieldset>
+                    <legend>LoRA Processing</legend>
+
+                    <label for="processing-select">Processing Method:</label>
+                    <select id="processing-select">
+                        <option value="None">None</option>
+                        <option value="DMD2">DMD2</option>
+                        <option value="LCM">LCM</option>
+                    </select>
+
+                    <div id="processing-slider-group" class="hidden">
+                        <label for="processing-strength">Strength: <span id="processing-strength-value">0</span></label>
+                        <div class="slider-container">
+                            <input type="range" id="processing-strength" min="0" max="1.5" step="0.1" value="0">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Sampling Settings -->
                 <label for="sampling-method">Sampling Method:</label>
                 <select id="sampling-method" name="Sampling Method">
                     <option value="Euler A">Euler A</option>
@@ -148,44 +159,81 @@
                 <label for="sampling-steps">Sampling Steps:</label>
                 <input type="number" id="sampling-steps" name="Sampling Steps" min="1" max="100" value="10">
 
-                <button type="submit" id="submit-button">Submit</button>
+                <button type="submit">Submit</button>
             </form>
         </div>
 
-        <!-- Image Preview Section -->
-        <div class="image-preview-container" id="image-preview-container">
+        <!-- Image Preview -->
+        <div class="image-preview-container">
             <img id="image-preview" src="" alt="Preview">
             <p id="preview-text">Preview</p>
         </div>
     </div>
 
-<script>
-    // Show image preview when URL is entered
-    document.getElementById("html-field").addEventListener("input", function () {
-        const url = this.value.trim();
-        const previewImg = document.getElementById("image-preview");
-        const previewText = document.getElementById("preview-text");
-
-        if (url) {
-            previewImg.src = url;
-            previewImg.style.display = "block";
-            previewText.style.display = "none";
-        } else {
-            previewImg.style.display = "none";
-            previewText.style.display = "block";
-        }
-    });
-
-    // Update slider values
-    document.querySelectorAll("input[type=range]").forEach(slider => {
-        const valueDisplay = document.getElementById(`${slider.id}-value`);
-        slider.addEventListener("input", () => {
-            valueDisplay.textContent = slider.value;
+    <script>
+        // Slider value displays
+        document.getElementById('bold-soft').addEventListener('input', function() {
+            document.getElementById('bold-soft-value').textContent = this.value;
         });
-    });
+        document.getElementById('bold-brash').addEventListener('input', function() {
+            document.getElementById('bold-brash-value').textContent = this.value;
+        });
+        document.getElementById('processing-strength').addEventListener('input', function() {
+            document.getElementById('processing-strength-value').textContent = this.value;
+        });
 
+        // Show/hide processing slider
+        document.getElementById('processing-select').addEventListener('change', function() {
+            const sliderGroup = document.getElementById('processing-slider-group');
+            sliderGroup.classList.toggle('hidden', this.value === 'None');
+        });
 
-</script>
+        // Image preview
+        document.getElementById('image-url').addEventListener('input', function() {
+            const url = this.value.trim();
+            const previewImg = document.getElementById('image-preview');
+            const previewText = document.getElementById('preview-text');
 
+            if (url) {
+                previewImg.src = url;
+                previewImg.style.display = 'block';
+                previewText.style.display = 'none';
+            } else {
+                previewImg.style.display = 'none';
+                previewText.style.display = 'block';
+            }
+        });
+
+        // Form preparation for submission
+        function prepareForm() {
+            const form = document.getElementById('data-form');
+            const processingSelect = document.getElementById('processing-select');
+            const processingStrength = document.getElementById('processing-strength').value;
+
+            // Create hidden inputs for LoRA values
+            const boldSoftInput = document.createElement('input');
+            boldSoftInput.type = 'hidden';
+            boldSoftInput.name = 'LoRA[Bold & Soft]';
+            boldSoftInput.value = document.getElementById('bold-soft').value;
+            form.appendChild(boldSoftInput);
+
+            const boldBrashInput = document.createElement('input');
+            boldBrashInput.type = 'hidden';
+            boldBrashInput.name = 'LoRA[Bold & Brash]';
+            boldBrashInput.value = document.getElementById('bold-brash').value;
+            form.appendChild(boldBrashInput);
+
+            // Only add processing if not "None"
+            if (processingSelect.value !== 'None') {
+                const processingInput = document.createElement('input');
+                processingInput.type = 'hidden';
+                processingInput.name = `LoRA[${processingSelect.value}]`;
+                processingInput.value = processingStrength;
+                form.appendChild(processingInput);
+            }
+
+            return true;
+        }
+    </script>
 </body>
 </html>

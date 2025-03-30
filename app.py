@@ -31,17 +31,21 @@ def get_submit():
 @app.route('/new', methods=['POST'])
 def post_submit():
     form_data = request.form.to_dict()
+    print(form_data)
     structured_data = {
         "url": form_data["url"],
         "model": form_data["model"],
-        "LoRA": {
-            "DMD2": float(form_data["LoRA[DMD2]"]),
-            "Bold & Soft": float(form_data["LoRA[Bold & Soft]"]),
-            "Bold & Brash": float(form_data["LoRA[Bold & Brash]"])
-        },
         "Sampling Method": form_data["Sampling Method"],
-        "Sampling Steps": int(form_data["Sampling Steps"])
+        "Sampling Steps": int(form_data["Sampling Steps"]),
+        "LoRA": {}
     }
+
+    for key, value in form_data.items():
+        if key.startswith('LoRA['):
+            param_name = key.split('[')[1].split(']')[0]
+            structured_data["LoRA"][param_name] = float(value)
+
+    print(structured_data)
 
     # TODO - Don't load to write
     # It was simpler to just load/append but should append w/o loading all
@@ -53,7 +57,8 @@ def post_submit():
     with open("data/images.json", "w") as f:
         json.dump(images, f, indent=4)
 
-    return render_template('index.html', image_json=json.dumps(images))
+    return jsonify(structured_data)
+    # return render_template('index.html', image_json=json.dumps(images))
 
 
 @app.route('/favicon.ico')

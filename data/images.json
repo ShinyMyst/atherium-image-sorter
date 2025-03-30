@@ -119,5 +119,283 @@
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "DMD2": 0.2,
+            "Bold & Soft": 0.2,
+            "Bold & Brash": 0.2
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "DMD2": 0.2,
+            "Bold & Soft": 0.2,
+            "Bold & Brash": 0.2
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "DMD2": 0.4,
+            "Bold & Soft": 0.3,
+            "Bold & Brash": 0.3
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "DMD2": 0.3,
+            "Bold & Soft": 0.3,
+            "Bold & Brash": 0.3
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "LCM": 0.3,
+            "Bold & Soft": 0.3,
+            "Bold & Brash": 0.3
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.3,
+            "Bold & Brash": 0.3
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.3,
+            "Bold & Brash": 0.3
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.3,
+            "Bold & Brash": 0.3
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.5,
+            "Bold & Brash": 0.5
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.6,
+            "Bold & Brash": 0.6
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.5,
+            "Bold & Brash": 0.5
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.8,
+            "Bold & Brash": 0.7
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.8,
+            "Bold & Brash": 0.8
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.8,
+            "Bold & Brash": 0.7
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "LoRA": {
+            "Bold & Soft": 0.8,
+            "Bold & Brash": 0.7
+        },
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoseki",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.6,
+            "Bold & Brash": 0.5
+        }
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoseki",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.6,
+            "Bold & Brash": 0.5,
+            "DMD2": 0.7
+        }
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoseki",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.6,
+            "Bold & Brash": 0.5,
+            "DMD2": 0.7
+        }
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoseki",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.6,
+            "Bold & Brash": 0.5,
+            "DMD2": 0.7
+        }
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoseki",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.6,
+            "Bold & Brash": 0.5
+        }
     }
 ]
