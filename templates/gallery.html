@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+    <link rel="stylesheet" href="/static/css/style.css">
     <style>
         .navbar {
             background-color: #34495e;
@@ -16,14 +21,8 @@
             text-decoration: underline;
         }
     </style>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask App</title>
-    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-
     <div class="sidebar">
         <div class="navbar">
             <a href="{{ url_for('index') }}">Home</a>
@@ -37,7 +36,6 @@
             <option value="hoseki">Hoseki</option>
             <option value="hoshino">Hoshino</option>
         </select>
-
         <div class="divider"></div>
         <h3>LoRA</h3>
         <div class="slider-container">
@@ -50,7 +48,6 @@
             <div class="slider-value" id="bold-outline-value">Any</div>
             <label class="slider-label" for="bold-outline">Bold Outlines & Soft Shading</label>
         </div>
-
         <div class="divider"></div>
         <h3>Sampling</h3>
         <select id="sampling-method">
@@ -60,15 +57,25 @@
             <option value="ddim">DDIM</option>
             <option value="lms">LMS</option>
         </select>
+        <div class="divider"></div>
+        <h3>Processing</h3>
+        <select id="processing-select">
+            <option value="any">Any</option>
+            <option value="DMD2">DMD2</option>
+            <option value="LCM">LCM</option>
+        </select>
+        <div id="processing-slider-group" style="display: none;">
+            <label for="processing-strength">Strength: <span id="processing-strength-value">0</span></label>
+            <div class="slider-container">
+                <input type="range" id="processing-strength" min="0" max="1.5" step="0.1" value="0">
+            </div>
+
+        </div>
     </div>
     <div class="grid">
         <!-- Image Containers -->
     </div>
-
-
-
     <script>
-        // Update slider value display
         document.querySelectorAll('.slider').forEach(slider => {
             const valueDisplay = document.getElementById(slider.id + '-value');
             const values = ["Any", 0.7, 1, 1.5, 0];
@@ -76,35 +83,26 @@
                 valueDisplay.textContent = values[slider.value];
             });
         });
-
-        //
         let images = JSON.parse({{ image_json|tojson|safe }});
-
         function displayImages() {
             const grid = document.querySelector(".grid");
             const model = document.getElementById('model-select').value;
             const boldBrash = document.getElementById('bold-brash-value').textContent;
             const boldOutline = document.getElementById('bold-outline-value').textContent;
             const sampling = document.getElementById('sampling-method').value;
-
-
+            const processing = document.getElementById('processing-select').value;
+            const processingStrength = parseFloat(document.getElementById('processing-strength').value);
             grid.innerHTML = "";
-
             images.forEach(img => {
-                console.log(boldBrash, boldOutline, sampling)
-                console.log(img.LoRA["Bold & Soft"])
-                console.log(img.LoRA["Bold & Brash"])
-                console.log(img["Sampling Method"])
-
                 if (
                     (model !== "any" && model.toLowerCase() !== img.model.toLowerCase()) ||
-                    (boldBrash.toLowerCase() != "any" && boldBrash != img.LoRA["Bold & Brash"]) ||
-                    (boldOutline.toLowerCase() != "any" && boldOutline != img.LoRA["Bold & Soft"]) ||
-                    (sampling !== "any" && sampling.toLowerCase() !== img["Sampling Method"].toLowerCase())
+                    (boldBrash.toLowerCase() !== "any" && boldBrash != img.LoRA["Bold & Brash"]) ||
+                    (boldOutline.toLowerCase() !== "any" && boldOutline != img.LoRA["Bold & Soft"]) ||
+                    (sampling !== "any" && sampling.toLowerCase() !== img["Sampling Method"].toLowerCase()) ||
+                    (processing !== "any" && (!img.LoRA[processing] || img.LoRA[processing] != processingStrength))
                 ) {
                     return;
                 }
-
                 const container = document.createElement("div");
                 container.className = "image-container";
                 container.innerHTML = `
@@ -113,6 +111,7 @@
                         <p>Model: ${img.model}</p>
                         <p>Bold & Soft: ${img.LoRA["Bold & Soft"] || "N/A"}</p>
                         <p>Bold & Brash: ${img.LoRA["Bold & Brash"] || "N/A"}</p>
+                        <p>${img.LoRA["DMD2"] ? `DMD2: ${img.LoRA["DMD2"]}` : img.LoRA["LCM"] ? `LCM: ${img.LoRA["LCM"]}` : "N/A"}</p>
                         <p>Sampling: ${img["Sampling Method"]}</p>
                     </div>
                 `;
@@ -123,9 +122,16 @@
         document.getElementById('bold-brash').addEventListener('input', displayImages);
         document.getElementById('bold-outline').addEventListener('input', displayImages);
         document.getElementById('sampling-method').addEventListener('change', displayImages);
-
+        document.getElementById('processing-select').addEventListener('change', function () {
+            document.getElementById('processing-slider-group').style.display =
+                this.value === "any" ? "none" : "block";
+            displayImages();
+        });
+        document.getElementById('processing-strength').addEventListener('input', function () {
+            document.getElementById('processing-strength-value').textContent = this.value;
+            displayImages();
+        });
         document.addEventListener("DOMContentLoaded", displayImages);
     </script>
-
 </body>
 </html>

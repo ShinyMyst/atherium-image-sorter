@@ -119,5 +119,77 @@
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/e6d1ed7d-6dc8-4d00-86e2-32a1e83fd047",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7,
+            "DMD2": 0.7
+        },
+        "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed"
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/08c87635-46bb-402e-88b9-41213cf1937b",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7,
+            "DMD2": 0.7
+        },
+        "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile,"
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/4587f935-b8d4-44eb-bc2d-90e85d2b6b6a",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 1,
+            "DMD2": 0.7
+        },
+        "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile,"
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/4cbea400-9068-4b46-90e4-663197825aaa",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7,
+            "DMD2": 0.7
+        },
+        "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile, maroon background,"
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/c1721b2b-aea9-4933-84ad-21361b6b003c",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7,
+            "DMD2": 0.7
+        },
+        "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile, maroon background,"
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/514c0b2a-d21b-4565-805f-1062d21853d1",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.7,
+            "Bold & Brash": 0.7,
+            "LCM": 0.7
+        },
+        "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile, maroon background,,<lora:LCMTurboMix2fix:1>, "
     }
 ]
