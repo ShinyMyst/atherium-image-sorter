@@ -113,6 +113,13 @@
         <div class="form-container">
             <h2>Image Processing</h2>
             <form id="data-form" action="/new" method="POST" onsubmit="return prepareForm()">
+                <!-- Style Options -->
+                <fieldset>
+                    <legend>Style Options</legend>
+                    <label>
+                        <input type="checkbox" name="Data Set" value="Kagerou Style"> Kagerou Style
+                    </label>
+                </fieldset>
                 <!-- Image URL -->
                 <label for="image-url">Image URL:</label>
                 <input type="url" id="image-url" name="url" required>
@@ -250,11 +257,21 @@
                 form.appendChild(processingInput);
             }
 
+            // Add prompt to the form
             const promptInput = document.createElement('input');
             promptInput.type = 'hidden';
             promptInput.name = 'prompt';
             promptInput.value = promptValue;
             form.appendChild(promptInput);
+
+            // Add checked checkboxes to
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = `Data Set[${checkbox.id}]`;
+                input.value = checkbox.value || '1';
+                form.appendChild(input);
+            });
 
             return true;
         }

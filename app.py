@@ -46,7 +46,7 @@ def post_submit():
             param_name = key.split('[')[1].split(']')[0]
             structured_data["LoRA"][param_name] = float(value)
 
-    print(structured_data)
+    # print(structured_data)
 
     # TODO - Don't load to write
     # It was simpler to just load/append but should append w/o loading all

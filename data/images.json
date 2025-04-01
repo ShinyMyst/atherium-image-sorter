@@ -191,5 +191,53 @@
             "LCM": 0.7
         },
         "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile, maroon background,,<lora:LCMTurboMix2fix:1>, "
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.2,
+            "Bold & Brash": 0.2,
+            "DMD2": 0.2
+        },
+        "Prompt": ""
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.1,
+            "Bold & Brash": 0.2,
+            "DMD2": 0.1
+        },
+        "Prompt": ""
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.2,
+            "Bold & Brash": 0.2,
+            "DMD2": 0.2
+        },
+        "Prompt": ""
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "LoRA": {
+            "Bold & Soft": 0.2,
+            "Bold & Brash": 0.2,
+            "LCM": 0.2
+        },
+        "Prompt": "..."
     }
 ]
