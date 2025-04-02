@@ -115,9 +115,12 @@
             <form id="data-form" action="/new" method="POST" onsubmit="return prepareForm()">
                 <!-- Style Options -->
                 <fieldset>
-                    <legend>Style Options</legend>
+                    <legend>Data Set</legend>
                     <label>
-                        <input type="checkbox" name="Data Set" value="Kagerou Style"> Kagerou Style
+                        <input type="checkbox" name="Data Set" value="Styles Kagerou"> Styles - Kagerou
+                    </label>
+                    <label>
+                        <input type="checkbox" name="Data Set" value="Styles Holo"> Styles - Holo
                     </label>
                 </fieldset>
                 <!-- Image URL -->
@@ -229,11 +232,11 @@
             }
         });
 
-        // Form preparation for submission
         function prepareForm() {
             const form = document.getElementById('data-form');
             const processingSelect = document.getElementById('processing-select');
             const processingStrength = document.getElementById('processing-strength').value;
+            const promptValue = document.getElementById('prompt').value;
 
             // Create hidden inputs for LoRA values
             const boldSoftInput = document.createElement('input');
@@ -264,15 +267,7 @@
             promptInput.value = promptValue;
             form.appendChild(promptInput);
 
-            // Add checked checkboxes to
-            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = `Data Set[${checkbox.id}]`;
-                input.value = checkbox.value || '1';
-                form.appendChild(input);
-            });
-
+            // No need to modify the checkboxes - they'll submit naturally
             return true;
         }
     </script>

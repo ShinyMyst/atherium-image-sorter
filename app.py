@@ -30,26 +30,26 @@ def get_submit():
 
 @app.route('/new', methods=['POST'])
 def post_submit():
-    form_data = request.form.to_dict()
-    print(form_data)
+    # Get all form data
+    data_sets = request.form.getlist('Data Set')
+
     structured_data = {
-        "url": form_data["url"],
-        "model": form_data["model"],
-        "Sampling Method": form_data["Sampling Method"],
-        "Sampling Steps": int(form_data["Sampling Steps"]),
+        "url": request.form["url"],
+        "model": request.form["model"],
+        "Sampling Method": request.form["Sampling Method"],
+        "Sampling Steps": int(request.form["Sampling Steps"]),
+        "Data Set": data_sets,
         "LoRA": {},
-        "Prompt": form_data["prompt"]
+        "Prompt": request.form["prompt"]
     }
 
-    for key, value in form_data.items():
+    # Process LoRA parameters
+    for key, value in request.form.items():
         if key.startswith('LoRA['):
             param_name = key.split('[')[1].split(']')[0]
             structured_data["LoRA"][param_name] = float(value)
 
-    # print(structured_data)
-
-    # TODO - Don't load to write
-    # It was simpler to just load/append but should append w/o loading all
+    # Load, update, and save JSON data
     with open("data/images.json", "r") as f:
         images = json.load(f)
 
@@ -59,7 +59,6 @@ def post_submit():
         json.dump(images, f, indent=4)
 
     return jsonify(structured_data)
-    # return render_template('index.html', image_json=json.dumps(images))
 
 
 @app.route('/favicon.ico')
