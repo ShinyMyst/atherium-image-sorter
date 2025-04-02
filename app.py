@@ -1,6 +1,12 @@
 from flask import Flask, render_template, jsonify, request
 import json
 
+
+json_dict = {
+    'Gallery': "data/images.json",
+    'Style': "data/styles.json"
+}
+
 app = Flask(__name__)
 
 
@@ -31,17 +37,23 @@ def get_submit():
 @app.route('/new', methods=['POST'])
 def post_submit():
     # Get all form data
-    data_sets = request.form.getlist('Data Set')
 
     structured_data = {
         "url": request.form["url"],
         "model": request.form["model"],
         "Sampling Method": request.form["Sampling Method"],
         "Sampling Steps": int(request.form["Sampling Steps"]),
-        "Data Set": data_sets,
+        "Data Set": request.form.getlist('Data Set'),
         "LoRA": {},
         "Prompt": request.form["prompt"]
     }
+
+    print(structured_data)
+    data_set = set()
+    for item in request.form.getlist('Data Set'):
+        data_set.add(item.split()[0])
+
+    print(data_set)
 
     # Process LoRA parameters
     for key, value in request.form.items():
@@ -49,14 +61,13 @@ def post_submit():
             param_name = key.split('[')[1].split(']')[0]
             structured_data["LoRA"][param_name] = float(value)
 
-    # Load, update, and save JSON data
-    with open("data/images.json", "r") as f:
-        images = json.load(f)
-
-    images.append(structured_data)
-
-    with open("data/images.json", "w") as f:
-        json.dump(images, f, indent=4)
+    for key in data_set:
+        print(key)
+        with open(json_dict[key], "r") as f:
+            json_file = json.load(f)
+        json_file.append(structured_data)
+        with open(json_dict[key], "w") as f:
+            json.dump(json_file, f, indent=4)
 
     return jsonify(structured_data)
 

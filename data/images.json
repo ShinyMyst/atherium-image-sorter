@@ -193,128 +193,36 @@
         "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile, maroon background,,<lora:LCMTurboMix2fix:1>, "
     },
     {
-        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
-        "model": "Hoshino",
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "LoRA": {
-            "Bold & Soft": 0.2,
-            "Bold & Brash": 0.2,
-            "DMD2": 0.2
-        },
-        "Prompt": ""
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
-        "model": "Hoshino",
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "LoRA": {
-            "Bold & Soft": 0.1,
-            "Bold & Brash": 0.2,
-            "DMD2": 0.1
-        },
-        "Prompt": ""
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
-        "model": "Hoshino",
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "LoRA": {
-            "Bold & Soft": 0.2,
-            "Bold & Brash": 0.2,
-            "DMD2": 0.2
-        },
-        "Prompt": ""
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
-        "model": "Hoshino",
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "LoRA": {
-            "Bold & Soft": 0.2,
-            "Bold & Brash": 0.2,
-            "LCM": 0.2
-        },
-        "Prompt": "..."
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
-        "model": "Hoshino",
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "LoRA": {
-            "Bold & Soft": 0.2,
-            "Bold & Brash": 0.2,
-            "DMD2": 0.2
-        },
-        "Prompt": "..."
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
-        "model": "Hoshino",
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "LoRA": {
-            "Bold & Soft": 0.2,
-            "Bold & Brash": 0.3,
-            "DMD2": 0.2
-        },
-        "Prompt": "..."
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
-        "model": "Hoshino",
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "LoRA": {
-            "Bold & Soft": 0.2,
-            "Bold & Brash": 0.2,
-            "DMD2": 0.2
-        },
-        "Prompt": ""
-    },
-    {
         "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
-        "model": "Hoseki",
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "Data Set": [],
-        "LoRA": {
-            "Bold & Soft": 0.4,
-            "Bold & Brash": 0.4,
-            "DMD2": 0.5
-        },
-        "Prompt": ""
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
-        "model": "Hoshino",
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "Data Set": [],
-        "LoRA": {
-            "Bold & Soft": 0.3,
-            "Bold & Brash": 0.2,
-            "DMD2": 0.4
-        },
-        "Prompt": ""
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/918ec03b-e415-4876-a55b-ef571a557432",
         "model": "Hoshino",
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "Data Set": [
-            "Styles Kagerou",
-            "Styles Holo"
+            "Gallery",
+            "Style - Kagerou",
+            "Style - Holo"
         ],
         "LoRA": {
             "Bold & Soft": 0.2,
             "Bold & Brash": 0.3,
-            "DMD2": 0.4
+            "DMD2": 0.0
+        },
+        "Prompt": ""
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "Data Set": [
+            "Gallery",
+            "Style - Kagerou",
+            "Style - Holo"
+        ],
+        "LoRA": {
+            "Bold & Soft": 0.3,
+            "Bold & Brash": 0.2,
+            "DMD2": 0.5
         },
         "Prompt": ""
     }
