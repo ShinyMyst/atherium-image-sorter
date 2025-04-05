@@ -7,171 +7,73 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <div class="form-wrapper">
-        <div class="form-container">
-            <h2>Image Processing</h2>
-            <form id="data-form" action="/new" method="POST" onsubmit="return prepareForm()">
-                <!-- Style Options -->
-                <fieldset>
-                    <legend>Data Set</legend>
-                    <label>
-                        <input type="checkbox" name="Data Set" value="Gallery"> Gallery
-                    </label>
+    <form method="POST">
+        {{ form.hidden_tag() }}
 
-                    <label>
-                        <input type="checkbox" name="Data Set" value="Style - Kagerou"> Style - Kagerou
-                    </label>
-                    <label>
-                        <input type="checkbox" name="Data Set" value="Style - Holo"> Style - Holo
-                    </label>
-                </fieldset>
-                <!-- Image URL -->
-                <label for="image-url">Image URL:</label>
-                <input type="url" id="image-url" name="url" required>
+        <fieldset>
+            <legend>Data Sets</legend>
+            {{ form.gallery.label }} {{ form.gallery() }}<br>
+            {{ form.style_kagerou.label }} {{ form.style_kagerou() }}<br>
+            {{ form.style_holo.label }} {{ form.style_holo() }}<br>
+        </fieldset>
 
-                <!-- Model Selection -->
-                <label for="model-select">Model:</label>
-                <select id="model-select" name="model">
-                    <option value="Hoshino">Hoshino</option>
-                    <option value="Hoseki">Hoseki</option>
-                </select>
+        <fieldset>
+            <legend>Basic Info</legend>
+            <label for="image-url">Image URL:</label>
+            <input type="url" id="image-url" name="url" oninput="updatePreview(this.value)">
+            <img id="preview" src="">
 
-                <!-- LoRA Settings -->
-                <fieldset>
-                    <legend>LoRA Settings</legend>
+            {{ form.model.label }} {{ form.model() }}<br>
+            {{ form.prompt.label }} {{ form.prompt() }}<br>
+        </fieldset>
 
-                    <div class="slider-group">
-                        <label for="bold-soft">Bold & Soft: <span id="bold-soft-value">0</span></label>
-                        <div class="slider-container">
-                            <input type="range" id="bold-soft" min="0" max="1.5" step="0.1" value="0">
-                        </div>
-                    </div>
 
-                    <div class="slider-group">
-                        <label for="bold-brash">Bold & Brash: <span id="bold-brash-value">0</span></label>
-                        <div class="slider-container">
-                            <input type="range" id="bold-brash" min="0" max="1.5" step="0.1" value="0">
-                        </div>
-                    </div>
-                </fieldset>
-
-                <!-- LoRA Processing -->
-                <fieldset>
-                    <legend>LoRA Processing</legend>
-
-                    <label for="processing-select">Processing Method:</label>
-                    <select id="processing-select">
-                        <option value="None">None</option>
-                        <option value="DMD2">DMD2</option>
-                        <option value="LCM">LCM</option>
-                    </select>
-
-                    <div id="processing-slider-group" class="hidden">
-                        <label for="processing-strength">Strength: <span id="processing-strength-value">0</span></label>
-                        <div class="slider-container">
-                            <input type="range" id="processing-strength" min="0" max="1.5" step="0.1" value="0">
-                        </div>
-                    </div>
-                </fieldset>
-
-                <!-- Sampling Settings -->
-                <label for="sampling-method">Sampling Method:</label>
-                <select id="sampling-method" name="Sampling Method">
-                    <option value="Euler A">Euler A</option>
-                    <option value="Euler">Euler</option>
-                    <option value="DDIM">DDIM</option>
-                    <option value="LMS">LMS</option>
-                </select>
-
-                <label for="sampling-steps">Sampling Steps:</label>
-                <input type="number" id="sampling-steps" name="Sampling Steps" min="1" max="100" value="10">
-
-                <label for="prompt">Prompt:</label>
-                <textarea id="prompt" name="prompt" rows="2" placeholder="..."></textarea>
-
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-
-        <!-- Image Preview -->
-        <div class="image-preview-container">
-            <img id="image-preview" src="" alt="Preview">
-            <p id="preview-text">Preview</p>
-        </div>
-    </div>
 
     <script>
-        // Slider value displays
-        document.getElementById('bold-soft').addEventListener('input', function() {
-            document.getElementById('bold-soft-value').textContent = this.value;
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.slider-input').forEach(slider => {
+            const targetId = slider.getAttribute('data-target');
+            const target = document.getElementById(targetId);
+
+            slider.addEventListener('input', function() {
+                target.textContent = this.value;
+            });
         });
-        document.getElementById('bold-brash').addEventListener('input', function() {
-            document.getElementById('bold-brash-value').textContent = this.value;
-        });
-        document.getElementById('processing-strength').addEventListener('input', function() {
-            document.getElementById('processing-strength-value').textContent = this.value;
-        });
-
-        // Show/hide processing slider
-        document.getElementById('processing-select').addEventListener('change', function() {
-            const sliderGroup = document.getElementById('processing-slider-group');
-            sliderGroup.classList.toggle('hidden', this.value === 'None');
-        });
-
-        // Image preview
-        document.getElementById('image-url').addEventListener('input', function() {
-            const url = this.value.trim();
-            const previewImg = document.getElementById('image-preview');
-            const previewText = document.getElementById('preview-text');
-
-            if (url) {
-                previewImg.src = url;
-                previewImg.style.display = 'block';
-                previewText.style.display = 'none';
-            } else {
-                previewImg.style.display = 'none';
-                previewText.style.display = 'block';
-            }
-        });
-
-        function prepareForm() {
-            const form = document.getElementById('data-form');
-            const processingSelect = document.getElementById('processing-select');
-            const processingStrength = document.getElementById('processing-strength').value;
-            const promptValue = document.getElementById('prompt').value;
-
-            // Create hidden inputs for LoRA values
-            const boldSoftInput = document.createElement('input');
-            boldSoftInput.type = 'hidden';
-            boldSoftInput.name = 'LoRA[Bold & Soft]';
-            boldSoftInput.value = document.getElementById('bold-soft').value;
-            form.appendChild(boldSoftInput);
-
-            const boldBrashInput = document.createElement('input');
-            boldBrashInput.type = 'hidden';
-            boldBrashInput.name = 'LoRA[Bold & Brash]';
-            boldBrashInput.value = document.getElementById('bold-brash').value;
-            form.appendChild(boldBrashInput);
-
-            // Only add processing if not "None"
-            if (processingSelect.value !== 'None') {
-                const processingInput = document.createElement('input');
-                processingInput.type = 'hidden';
-                processingInput.name = `LoRA[${processingSelect.value}]`;
-                processingInput.value = processingStrength;
-                form.appendChild(processingInput);
-            }
-
-            // Add prompt to the form
-            const promptInput = document.createElement('input');
-            promptInput.type = 'hidden';
-            promptInput.name = 'prompt';
-            promptInput.value = promptValue;
-            form.appendChild(promptInput);
-
-            // No need to modify the checkboxes - they'll submit naturally
-            return true;
-        }
+    });
     </script>
+
+    <fieldset>
+        {# Jinja Macro #}
+        {% from "_macros.html" import slider_field %}
+        <legend>LoRA</legend>
+        {{ slider_field(form.dmd2) }}
+        {{ slider_field(form.lcm) }}
+        {{ slider_field(form.bold_outlines) }}
+        {{ slider_field(form.vivid_edge) }}
+        {{ slider_field(form.vivid_soft) }}
+    </fieldset>
+
+        <fieldset>
+            <legend>LoRA Details</legend>
+            {{ form.sampling_method.label }} {{ form.sampling_method() }}<br>
+            {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
+        </fieldset>
+
+        {{ form.submit() }}
+    </form>
+
+    <script>
+        function updatePreview(url) {
+            const img = document.getElementById("preview");
+            if (url) {
+                img.src = url;
+                img.style.display = 'block';
+            } else {
+                img.style.display = 'none';
+                img.src = '';
+            }
+        }
+        </script>
+
 </body>
 </html>

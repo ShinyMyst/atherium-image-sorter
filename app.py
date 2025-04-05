@@ -1,6 +1,8 @@
-from flask import Flask, render_template, jsonify, request
 import json
+from flask import Flask, render_template, jsonify, request
+from form_gallery import GalleryForm
 
+# TODO Rename gallery form to like submit form
 
 json_dict = {
     'Gallery': "data/images.json",
@@ -8,7 +10,7 @@ json_dict = {
 }
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = 'secret-key'
 
 @app.route('/')
 def index():
@@ -31,7 +33,7 @@ def get_images():
 
 @app.route('/submit')
 def get_submit():
-    return render_template('submit.html')
+    return render_template('submit.html', form=GalleryForm())
 
 
 @app.route('/new', methods=['POST'])
