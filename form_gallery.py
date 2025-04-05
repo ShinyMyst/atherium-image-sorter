@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, IntegerField, TextAreaField
+from wtforms import StringField, SubmitField, SelectField, IntegerField, TextAreaField, FloatField
 from wtforms.fields import BooleanField
 from wtforms.validators import DataRequired
 
@@ -19,11 +19,11 @@ class GalleryForm(FlaskForm):
     prompt = TextAreaField('Prompt', default='...')
 
     # LoRA
-    dmd2 = IntegerField('DMD2', default=0)
-    lcm = IntegerField('LCM', default=0)
-    bold_outlines = IntegerField('Bold Outlines', default=0)
-    vivid_edge = IntegerField('Vivid Edge', default=0)
-    vivid_soft = IntegerField('Vivid Soft', default=0)
+    dmd2 = FloatField('DMD2', default=0)
+    lcm = FloatField('LCM', default=0)
+    bold_outlines = FloatField('Bold Outlines', default=0)
+    vivid_edge = FloatField('Vivid Edge', default=0)
+    vivid_soft = FloatField('Vivid Soft', default=0)
 
     # LoRA Details
     sampling_method = SelectField('Sampling Method', choices=[('Euler A', 'Euler A'), ('Euler', 'Euler'), ('DDIM', 'DDIM'), ('LMS', 'LMS')]) # noqa

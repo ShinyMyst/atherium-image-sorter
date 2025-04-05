@@ -38,38 +38,35 @@ def get_submit():
 
 @app.route('/new', methods=['POST'])
 def post_submit():
-    # Get all form data
+    form = GalleryForm()
+    data_sets = []
+    if form.gallery:
+        data_sets.append("Gallery")
+    if form.style_kagerou:
+        data_sets.append("Style Kagerou")
+    if form.style_holo:
+        data_sets.append("Style Holo")
 
     structured_data = {
-        "url": request.form["url"],
-        "model": request.form["model"],
-        "Sampling Method": request.form["Sampling Method"],
-        "Sampling Steps": int(request.form["Sampling Steps"]),
-        "Data Set": request.form.getlist('Data Set'),
-        "LoRA": {},
-        "Prompt": request.form["prompt"]
+            # Direct access via form.field.data
+            "url": form.url.data,
+            "model": form.model.data,
+            "prompt": form.prompt.data,
+            "LoRA": {
+                "dmd2": form.dmd2.data,
+                "lcm": form.lcm.data,
+                "bold_outlines": form.bold_outlines.data,
+                "vivid_edge": form.vivid_edge.data,
+                "vivid_soft": form.vivid_soft.data
+            },
+            "Sampling Method": form.sampling_method.data,
+            "Sampling Steps": form.sampling_steps.data,
+            "Data Set": data_sets
     }
-
     print(structured_data)
     data_set = set()
     for item in request.form.getlist('Data Set'):
         data_set.add(item.split()[0])
-
-    print(data_set)
-
-    # Process LoRA parameters
-    for key, value in request.form.items():
-        if key.startswith('LoRA['):
-            param_name = key.split('[')[1].split(']')[0]
-            structured_data["LoRA"][param_name] = float(value)
-
-    for key in data_set:
-        print(key)
-        with open(json_dict[key], "r") as f:
-            json_file = json.load(f)
-        json_file.append(structured_data)
-        with open(json_dict[key], "w") as f:
-            json.dump(json_file, f, indent=4)
 
     return jsonify(structured_data)
 

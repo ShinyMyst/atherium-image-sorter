@@ -7,7 +7,11 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <form method="POST">
+{# Macros #}
+    {% from "_macros.html" import slider_field %}
+
+{# Form #}
+    <form method="POST" action="{{ url_for('post_submit') }}">
         {{ form.hidden_tag() }}
 
         <fieldset>
@@ -28,23 +32,7 @@
         </fieldset>
 
 
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.slider-input').forEach(slider => {
-            const targetId = slider.getAttribute('data-target');
-            const target = document.getElementById(targetId);
-
-            slider.addEventListener('input', function() {
-                target.textContent = this.value;
-            });
-        });
-    });
-    </script>
-
     <fieldset>
-        {# Jinja Macro #}
-        {% from "_macros.html" import slider_field %}
         <legend>LoRA</legend>
         {{ slider_field(form.dmd2) }}
         {{ slider_field(form.lcm) }}
@@ -62,18 +50,9 @@
         {{ form.submit() }}
     </form>
 
-    <script>
-        function updatePreview(url) {
-            const img = document.getElementById("preview");
-            if (url) {
-                img.src = url;
-                img.style.display = 'block';
-            } else {
-                img.style.display = 'none';
-                img.src = '';
-            }
-        }
-        </script>
+{# Script #}
+    <script src="{{ url_for('static', filename='js/img_preview.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sliders.js') }}"></script>
 
 </body>
 </html>
