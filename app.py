@@ -1,6 +1,7 @@
 import json
 from flask import Flask, render_template, jsonify, request
-from form_gallery import GalleryForm
+from forms.gallery import GalleryForm  # noqa
+from forms.submit import SubmitForm
 
 # TODO Rename gallery form to like submit form
 
@@ -11,6 +12,8 @@ json_dict = {
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
+# TODO - This is a place holder since it's required for forms
+
 
 @app.route('/')
 def index():
@@ -33,12 +36,13 @@ def get_images():
 
 @app.route('/submit')
 def get_submit():
-    return render_template('submit.html', form=GalleryForm())
+    return render_template('submit.html', form=SubmitForm())
 
 
 @app.route('/new', methods=['POST'])
 def post_submit():
-    form = GalleryForm()
+    form = SubmitForm()
+    # TODO - Stucturing form needs elsewhere
     data_sets = []
     if form.gallery:
         data_sets.append("Gallery")
