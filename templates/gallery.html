@@ -87,18 +87,38 @@
                 ) {
                     return;
                 }
+
                 const container = document.createElement("div");
                 container.className = "image-container";
-                container.innerHTML = `
-                    <img src="${img.url}" alt="Generated Image">
-                    <div class="image-details">
-                        <p>Model: ${img.model}</p>
-                        <p>Bold & Soft: ${img.LoRA["Bold & Soft"] || "N/A"}</p>
-                        <p>Bold & Brash: ${img.LoRA["Bold & Brash"] || "N/A"}</p>
-                        <p>${img.LoRA["DMD2"] ? `DMD2: ${img.LoRA["DMD2"]}` : img.LoRA["LCM"] ? `LCM: ${img.LoRA["LCM"]}` : "N/A"}</p>
-                        <p>Sampling: ${img["Sampling Method"]}</p>
-                    </div>
+
+                const imgElement = document.createElement("img");
+                imgElement.src = img.url;
+                imgElement.alt = "Generated Image";
+                imgElement.style.cursor = "pointer";
+                imgElement.addEventListener("click", () => {
+                    window.open(img.url, "_blank");
+                });
+
+                const detailsDiv = document.createElement("div");
+                detailsDiv.className = "image-details";
+                detailsDiv.innerHTML = `
+                    <p>Model: ${img.model}</p>
+                    <p>Bold & Soft: ${img.LoRA["Bold & Soft"] || "N/A"}</p>
+                    <p>Bold & Brash: ${img.LoRA["Bold & Brash"] || "N/A"}</p>
+                    <p>${img.LoRA["DMD2"] ? `DMD2: ${img.LoRA["DMD2"]}` : img.LoRA["LCM"] ? `LCM: ${img.LoRA["LCM"]}` : "N/A"}</p>
+                    <p>Sampling: ${img["Sampling Method"]}</p>
                 `;
+                detailsDiv.style.display = "none";
+
+                container.addEventListener("mouseenter", () => {
+                    detailsDiv.style.display = "block";
+                });
+                container.addEventListener("mouseleave", () => {
+                    detailsDiv.style.display = "none";
+                });
+
+                container.appendChild(imgElement);
+                container.appendChild(detailsDiv);
                 grid.appendChild(container);
             });
         }

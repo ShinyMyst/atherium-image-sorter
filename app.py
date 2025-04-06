@@ -1,7 +1,7 @@
 import json
 from flask import Flask, render_template, jsonify, request
-from forms.gallery import GalleryForm  # noqa
 from forms.submit import SubmitForm
+from forms.gallery import GalleryForm # noqa
 
 # TODO Rename gallery form to like submit form
 
