@@ -5,13 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery Page</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* New toggle box styles */
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .filter-box {
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .filter-box.active {
+            border-color: #4CAF50;
+        }
+
+        .filter-box img {
+            max-width: 40px;
+            max-height: 40px;
+            margin: 0 auto;
+        }
+
+        .filter-value {
+            display: none;
+            margin-top: 5px;
+        }
+
+        .active .filter-value {
+            display: block;
+        }
+    </style>
 </head>
-
-
 <body>
-    {# Macros #}
-    {% from "_macros.html" import slider_field %}
-
     <div class="sidebar">
         <div class="navbar">
             <a href="{{ url_for('index') }}">Home</a>
@@ -20,116 +56,127 @@
         </div>
 
         <div class="divider"></div>
-        <h3>{{ form.model.label }}</h3>
-        {{ form.model(class="form-control", id="model-select") }}
 
-
-        <div class="divider"></div>
-        <h3>LoRA</h3>
+        <!-- Model Select -->
         <fieldset>
-            <legend>LoRA</legend>
-            {{ slider_field(form.dmd2) }}
-            {{ slider_field(form.lcm) }}
-            {{ slider_field(form.bold_outlines) }}
-            {{ slider_field(form.vivid_edge) }}
-            {{ slider_field(form.vivid_soft) }}
+            <legend>Model</legend>
+            {{ form.model(class="form-control") }}
         </fieldset>
 
         <div class="divider"></div>
-        <h3>Sampling</h3>
-        <select id="sampling-method">
-            <option value="any">Any</option>
-            <option value="euler a">Euler A</option>
-            <option value="euler">Euler</option>
-            <option value="ddim">DDIM</option>
-            <option value="lms">LMS</option>
-        </select>
+
+    <!-- LoRA Toggle Boxes -->
+    <fieldset>
+        <legend>LoRA</legend>
+        <div class="filter-grid">
+            <!-- DMD2 Box -->
+            <div class="filter-box" data-lora="DMD2">
+                <span class="lora-label">DMD2</span>
+                <img src="/static/icons/dmd2.png" onerror="this.src='/static/icons/missing.png'">
+                <div class="filter-value">
+                    <input type="number" value="0.7" min="0" max="2" step="0.1"
+                        data-lora-field="DMD2" class="value-input">
+                </div>
+            </div>
+
+            <!-- LCM Box -->
+            <div class="filter-box" data-lora="LCM">
+                <span class="lora-label">LCM</span>
+                <img src="/static/icons/lcm.png" onerror="this.src='/static/icons/missing.png'">
+                <div class="filter-value">
+                    <input type="number" value="0.7" min="0" max="2" step="0.1"
+                        data-lora-field="LCM" class="value-input">
+                </div>
+            </div>
+
+            <!-- Bold Outlines Box -->
+            <div class="filter-box" data-lora="Bold Outlines">
+                <span class="lora-label">Bold Outlines</span>
+                <img src="/static/icons/bold.png" onerror="this.src='/static/icons/missing.png'">
+                <div class="filter-value">
+                    <input type="number" value="0.7" min="0" max="2" step="0.1"
+                        data-lora-field="Bold Outlines" class="value-input">
+                </div>
+            </div>
+
+            <!-- Vivid Edge Box -->
+            <div class="filter-box" data-lora="Vivid Edge">
+                <span class="lora-label">Vivid Edge</span>
+                <img src="/static/icons/vivid-edge.png" onerror="this.src='/static/icons/missing.png'">
+                <div class="filter-value">
+                    <input type="number" value="0.7" min="0" max="2" step="0.1"
+                        data-lora-field="Vivid Edge" class="value-input">
+                </div>
+            </div>
+
+            <!-- Vivid Soft Box -->
+            <div class="filter-box" data-lora="Vivid Soft">
+                <span class="lora-label">Vivid Soft</span>
+                <img src="/static/icons/vivid-soft.png" onerror="this.src='/static/icons/missing.png'">
+                <div class="filter-value">
+                    <input type="number" value="0.7" min="0" max="2" step="0.1"
+                        data-lora-field="Vivid Soft" class="value-input">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
         <div class="divider"></div>
 
-        </div>
+        <!-- Sampling Method -->
+        <fieldset>
+            <legend>Sampling</legend>
+            <select id="sampling-method" class="form-control">
+                <option value="any">Any</option>
+                <option value="euler a">Euler A</option>
+                <option value="euler">Euler</option>
+                <option value="ddim">DDIM</option>
+                <option value="lms">LMS</option>
+            </select>
+        </fieldset>
     </div>
-    <div class="grid">
-        <!-- Image Containers -->
-    </div>
-    <script src="{{ url_for('static', filename='js/sliders.js') }}"></script>
+
+    <div class="grid"><!-- Image containers will be inserted here --></div>
 
     <script>
-        document.querySelectorAll('.slider').forEach(slider => {
-            const valueDisplay = document.getElementById(slider.id + '-value');
-            const values = ["Any", 0.7, 1, 1.5, 0];
-            slider.addEventListener('input', () => {
-                valueDisplay.textContent = values[slider.value];
+        // Toggle box functionality
+        document.querySelectorAll('.filter-box').forEach(box => {
+            box.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const input = this.querySelector('.value-input');
+                input.value = this.classList.contains('active') ? '0.7' : '0';
+                displayImages();
             });
         });
-        let images = JSON.parse({{ image_json|tojson|safe }});
+
+        // Value input changes
+        document.querySelectorAll('.value-input').forEach(input => {
+            input.addEventListener('change', displayImages);
+        });
+
+        // Simplified displayImages function
         function displayImages() {
-            const grid = document.querySelector(".grid");
-            const model = document.getElementById('model-select').value;
-            const boldBrash = document.getElementById('bold-brash-value').textContent;
-            const boldOutline = document.getElementById('bold-outline-value').textContent;
-            const sampling = document.getElementById('sampling-method').value;
-            const processing = document.getElementById('processing-select').value;
-            const processingStrength = parseFloat(document.getElementById('processing-strength').value);
-            grid.innerHTML = "";
-            images.forEach(img => {
-                if (
-                    (model !== "any" && model.toLowerCase() !== img.model.toLowerCase()) ||
-                    (boldBrash.toLowerCase() !== "any" && boldBrash != img.LoRA["Bold & Brash"]) ||
-                    (boldOutline.toLowerCase() !== "any" && boldOutline != img.LoRA["Bold & Soft"]) ||
-                    (sampling !== "any" && sampling.toLowerCase() !== img["Sampling Method"].toLowerCase()) ||
-                    (processing !== "any" && (!img.LoRA[processing] || img.LoRA[processing] != processingStrength))
-                ) {
-                    return;
-                }
-
-                const container = document.createElement("div");
-                container.className = "image-container";
-
-                const imgElement = document.createElement("img");
-                imgElement.src = img.url;
-                imgElement.alt = "Generated Image";
-                imgElement.style.cursor = "pointer";
-                imgElement.addEventListener("click", () => {
-                    window.open(img.url, "_blank");
-                });
-
-                const detailsDiv = document.createElement("div");
-                detailsDiv.className = "image-details";
-                detailsDiv.innerHTML = `
-                    <p>Model: ${img.model}</p>
-                    <p>Bold & Soft: ${img.LoRA["Bold & Soft"] || "N/A"}</p>
-                    <p>Bold & Brash: ${img.LoRA["Bold & Brash"] || "N/A"}</p>
-                    <p>${img.LoRA["DMD2"] ? `DMD2: ${img.LoRA["DMD2"]}` : img.LoRA["LCM"] ? `LCM: ${img.LoRA["LCM"]}` : "N/A"}</p>
-                    <p>Sampling: ${img["Sampling Method"]}</p>
-                `;
-                detailsDiv.style.display = "none";
-
-                container.addEventListener("mouseenter", () => {
-                    detailsDiv.style.display = "block";
-                });
-                container.addEventListener("mouseleave", () => {
-                    detailsDiv.style.display = "none";
-                });
-
-                container.appendChild(imgElement);
-                container.appendChild(detailsDiv);
-                grid.appendChild(container);
+            const activeLoras = {};
+            document.querySelectorAll('.filter-box.active').forEach(box => {
+                const loraType = box.dataset.lora;
+                const value = parseFloat(box.querySelector('.value-input').value);
+                activeLoras[loraType] = value;
             });
+
+            const filters = {
+                model: document.querySelector('#model-select').value,
+                sampling: document.querySelector('#sampling-method').value,
+                loras: activeLoras
+            };
+
+            // Filter and display images based on filters...
+            // (Keep your existing image display logic, but use the new filters object)
         }
+
+        // Initialize event listeners
         document.getElementById('model-select').addEventListener('change', displayImages);
-        document.getElementById('bold-brash').addEventListener('input', displayImages);
-        document.getElementById('bold-outline').addEventListener('input', displayImages);
         document.getElementById('sampling-method').addEventListener('change', displayImages);
-        document.getElementById('processing-select').addEventListener('change', function () {
-            document.getElementById('processing-slider-group').style.display =
-                this.value === "any" ? "none" : "block";
-            displayImages();
-        });
-        document.getElementById('processing-strength').addEventListener('input', function () {
-            document.getElementById('processing-strength-value').textContent = this.value;
-            displayImages();
-        });
-        document.addEventListener("DOMContentLoaded", displayImages);
+        document.addEventListener('DOMContentLoaded', displayImages);
     </script>
 </body>
 </html>
