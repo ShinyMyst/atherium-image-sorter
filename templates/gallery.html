@@ -48,6 +48,8 @@
     </style>
 </head>
 <body>
+    {# Macros #}
+    {% from "_macros.html" import lora_toggle %}
     <div class="sidebar">
         <div class="navbar">
             <a href="{{ url_for('index') }}">Home</a>
@@ -69,55 +71,11 @@
     <fieldset>
         <legend>LoRA</legend>
         <div class="filter-grid">
-            <!-- DMD2 Box -->
-            <div class="filter-box" data-lora="DMD2">
-                <span class="lora-label">DMD2</span>
-                <img src="/static/icons/dmd2.png" onerror="this.src='/static/icons/missing.png'">
-                <div class="filter-value">
-                    <input type="number" value="0.7" min="0" max="2" step="0.1"
-                        data-lora-field="DMD2" class="value-input">
-                </div>
-            </div>
-
-            <!-- LCM Box -->
-            <div class="filter-box" data-lora="LCM">
-                <span class="lora-label">LCM</span>
-                <img src="/static/icons/lcm.png" onerror="this.src='/static/icons/missing.png'">
-                <div class="filter-value">
-                    <input type="number" value="0.7" min="0" max="2" step="0.1"
-                        data-lora-field="LCM" class="value-input">
-                </div>
-            </div>
-
-            <!-- Bold Outlines Box -->
-            <div class="filter-box" data-lora="Bold Outlines">
-                <span class="lora-label">Bold Outlines</span>
-                <img src="/static/icons/bold.png" onerror="this.src='/static/icons/missing.png'">
-                <div class="filter-value">
-                    <input type="number" value="0.7" min="0" max="2" step="0.1"
-                        data-lora-field="Bold Outlines" class="value-input">
-                </div>
-            </div>
-
-            <!-- Vivid Edge Box -->
-            <div class="filter-box" data-lora="Vivid Edge">
-                <span class="lora-label">Vivid Edge</span>
-                <img src="/static/icons/vivid-edge.png" onerror="this.src='/static/icons/missing.png'">
-                <div class="filter-value">
-                    <input type="number" value="0.7" min="0" max="2" step="0.1"
-                        data-lora-field="Vivid Edge" class="value-input">
-                </div>
-            </div>
-
-            <!-- Vivid Soft Box -->
-            <div class="filter-box" data-lora="Vivid Soft">
-                <span class="lora-label">Vivid Soft</span>
-                <img src="/static/icons/vivid-soft.png" onerror="this.src='/static/icons/missing.png'">
-                <div class="filter-value">
-                    <input type="number" value="0.7" min="0" max="2" step="0.1"
-                        data-lora-field="Vivid Soft" class="value-input">
-                </div>
-            </div>
+            {{ lora_toggle('DMD2') }}
+            {{ lora_toggle('LCM') }}
+            {{ lora_toggle('Bold Outlines', 'bold.png') }}
+            {{ lora_toggle('Vivid Edge', 'edge.png') }}
+            {{ lora_toggle('Vivid Soft', 'soft.png') }}
         </div>
     </fieldset>
 
