@@ -1,9 +1,8 @@
 import json
 from flask import Flask, render_template, jsonify, request
 from forms.submit import SubmitForm
-from forms.gallery import GalleryForm # noqa
+from forms.gallery import GalleryForm
 
-# TODO Rename gallery form to like submit form
 
 json_dict = {
     'Gallery': "data/images.json",
@@ -22,9 +21,10 @@ def index():
 
 @app.route('/gallery')
 def gallery():
+    form = GalleryForm()
     with open('data/images.json') as f:
         images = json.load(f)
-    return render_template('gallery.html', image_json=json.dumps(images))
+    return render_template('gallery.html', form=form, image_json=json.dumps(images))
 
 
 @app.route('/api/images')

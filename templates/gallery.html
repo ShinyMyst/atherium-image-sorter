@@ -3,35 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask App</title>
+    <title>Gallery Page</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
+
+
 <body>
+    {# Macros #}
+    {% from "_macros.html" import slider_field %}
+
     <div class="sidebar">
         <div class="navbar">
             <a href="{{ url_for('index') }}">Home</a>
             <a href="gallery">Gallery</a>
             <a href="submit" target="_blank">Submit</a>
         </div>
+
         <div class="divider"></div>
-        <h3>Model</h3>
-        <select id="model-select">
-            <option value="any">Any</option>
-            <option value="hoseki">Hoseki</option>
-            <option value="hoshino">Hoshino</option>
-        </select>
+        <h3>{{ form.model.label }}</h3>
+        {{ form.model(class="form-control", id="model-select") }}
+
+
         <div class="divider"></div>
         <h3>LoRA</h3>
-        <div class="slider-container">
-            <input type="range" id="bold-brash" class="slider" min="0" max="4" step="1" value="0">
-            <div class="slider-value" id="bold-brash-value">Any</div>
-            <label class="slider-label" for="bold-brash">Bold & Brash</label>
-        </div>
-        <div class="slider-container">
-            <input type="range" id="bold-outline" class="slider" min="0" max="4" step="1" value="0">
-            <div class="slider-value" id="bold-outline-value">Any</div>
-            <label class="slider-label" for="bold-outline">Bold Outlines & Soft Shading</label>
-        </div>
+        <fieldset>
+            <legend>LoRA</legend>
+            {{ slider_field(form.dmd2) }}
+            {{ slider_field(form.lcm) }}
+            {{ slider_field(form.bold_outlines) }}
+            {{ slider_field(form.vivid_edge) }}
+            {{ slider_field(form.vivid_soft) }}
+        </fieldset>
+
         <div class="divider"></div>
         <h3>Sampling</h3>
         <select id="sampling-method">
@@ -42,23 +45,14 @@
             <option value="lms">LMS</option>
         </select>
         <div class="divider"></div>
-        <h3>Processing</h3>
-        <select id="processing-select">
-            <option value="any">Any</option>
-            <option value="DMD2">DMD2</option>
-            <option value="LCM">LCM</option>
-        </select>
-        <div id="processing-slider-group" style="display: none;">
-            <label for="processing-strength">Strength: <span id="processing-strength-value">0</span></label>
-            <div class="slider-container">
-                <input type="range" id="processing-strength" min="0" max="1.5" step="0.1" value="0">
-            </div>
 
         </div>
     </div>
     <div class="grid">
         <!-- Image Containers -->
     </div>
+    <script src="{{ url_for('static', filename='js/sliders.js') }}"></script>
+
     <script>
         document.querySelectorAll('.slider').forEach(slider => {
             const valueDisplay = document.getElementById(slider.id + '-value');
