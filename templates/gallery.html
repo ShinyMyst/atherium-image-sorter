@@ -59,13 +59,13 @@
 
         <div class="divider"></div>
 
-        <!-- Model Select -->
-        <fieldset>
-            <legend>Model</legend>
-            {{ form.model(class="form-control") }}
-        </fieldset>
+    <!-- Model Select -->
+    <fieldset>
+        <legend>Model</legend>
+        {{ form.model(class="form-control") }}
+    </fieldset>
 
-        <div class="divider"></div>
+    <div class="divider"></div>
 
     <!-- LoRA Toggle Boxes -->
     <fieldset>
@@ -97,44 +97,144 @@
     <div class="grid"><!-- Image containers will be inserted here --></div>
 
     <script>
-        // Toggle box functionality
-        document.querySelectorAll('.filter-box').forEach(box => {
-            box.addEventListener('click', function() {
-                this.classList.toggle('active');
-                const input = this.querySelector('.value-input');
-                input.value = this.classList.contains('active') ? '0.7' : '0';
-                displayImages();
-            });
+        // Wait for DOM to be fully loaded before executing
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM element references
+            const grid = document.querySelector(".grid");
+            const modelSelect = document.querySelector("select[name='model']");
+            const samplingSelect = document.getElementById('sampling-method');
+
+            // Validate essential elements exist
+            if (!grid || !modelSelect || !samplingSelect) {
+                console.error("Critical elements missing from DOM");
+                return;
+            }
+
+            // Main function to display filtered images
+            function displayImages() {
+                try {
+                    grid.innerHTML = ""; // Clear existing images
+
+                    // Get active filters with fallbacks
+                    const filters = {
+                        model: modelSelect.value || "any",
+                        sampling: samplingSelect.value || "any",
+                        loras: getActiveLoras()
+                    };
+
+                    console.log("Active filters:", filters);
+
+                    // Process and display images
+                    const images = JSON.parse({{ image_json|tojson|safe }});
+                    images.forEach(img => {
+                        if (passesFilters(img, filters)) {
+                            grid.appendChild(createImageContainer(img));
+                        }
+                    });
+                } catch (error) {
+                    console.error("Error displaying images:", error);
+                }
+            }
+
+            // Toggle Box Highlighting and Activation
+            function setupLoraBoxes() {
+                document.querySelectorAll('.filter-box').forEach(box => {
+                    box.addEventListener('click', function() {
+                        this.classList.toggle('active');
+                        const input = this.querySelector('.value-input');
+                        input.value = this.classList.contains('active') ? '0.7' : '0';
+                        displayImages();
+                    });
+                });
+            }
+
+            // Get currently active LoRA filters
+            function getActiveLoras() {
+                const active = [];
+                document.querySelectorAll('.filter-box.active').forEach(box => {
+                    const input = box.querySelector('.value-input');
+                    if (input) {
+                        active.push({
+                            name: box.dataset.lora,
+                            value: parseFloat(input.value) || 0
+                        });
+                    }
+                });
+                return active;
+            }
+
+            // Filter checking logic
+            function passesFilters(img, filters) {
+                // Model check
+                if (filters.model !== "any" && img.model.toLowerCase() !== filters.model.toLowerCase()) {
+                    return false;
+                }
+
+                // Sampling check
+                if (filters.sampling !== "any" && img["Sampling Method"].toLowerCase() !== filters.sampling.toLowerCase()) {
+                    return false;
+                }
+
+                // LoRA checks
+                if (filters.loras.length > 0) {
+                    for (const lora of filters.loras) {
+                        const loraNameMap = {
+                            'bold outlines': 'Bold & Soft',
+                            'vivid edge': 'Bold & Brash'
+                        };
+                        const loraName = loraNameMap[lora.name.toLowerCase()] || lora.name;
+
+                        const loraKey = Object.keys(img.LoRA).find(
+                            key => key.toLowerCase() === loraName.toLowerCase()
+                        );
+
+                        if (!loraKey || img.LoRA[loraKey] !== lora.value) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            // Create image container element
+            function createImageContainer(img) {
+                const container = document.createElement("div");
+                container.className = "image-container";
+
+                container.innerHTML = `
+                    <img src="${img.url}" alt="Generated Image" style="cursor:pointer">
+                    <div class="image-details" style="display:none">
+                        <p>Model: ${img.model}</p>
+                        <p>Sampling: ${img["Sampling Method"]}</p>
+                        ${Object.entries(img.LoRA).map(([k,v]) => `<p>${k}: ${v}</p>`).join('')}
+                    </div>
+                `;
+
+                // Event handlers
+                container.querySelector('img').addEventListener('click', () => {
+                    window.open(img.url, "_blank");
+                });
+
+                container.addEventListener('mouseenter', () => {
+                    container.querySelector('.image-details').style.display = 'block';
+                });
+
+                container.addEventListener('mouseleave', () => {
+                    container.querySelector('.image-details').style.display = 'none';
+                });
+
+                return container;
+            }
+
+            // Initial setup
+            setupLoraBoxes();
+            displayImages();
+
+            // Event listeners
+            modelSelect.addEventListener('change', displayImages);
+            samplingSelect.addEventListener('change', displayImages);
         });
-
-        // Value input changes
-        document.querySelectorAll('.value-input').forEach(input => {
-            input.addEventListener('change', displayImages);
-        });
-
-        // Simplified displayImages function
-        function displayImages() {
-            const activeLoras = {};
-            document.querySelectorAll('.filter-box.active').forEach(box => {
-                const loraType = box.dataset.lora;
-                const value = parseFloat(box.querySelector('.value-input').value);
-                activeLoras[loraType] = value;
-            });
-
-            const filters = {
-                model: document.querySelector('#model-select').value,
-                sampling: document.querySelector('#sampling-method').value,
-                loras: activeLoras
-            };
-
-            // Filter and display images based on filters...
-            // (Keep your existing image display logic, but use the new filters object)
-        }
-
-        // Initialize event listeners
-        document.getElementById('model-select').addEventListener('change', displayImages);
-        document.getElementById('sampling-method').addEventListener('change', displayImages);
-        document.addEventListener('DOMContentLoaded', displayImages);
-    </script>
+        </script>
 </body>
 </html>
