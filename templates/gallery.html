@@ -46,6 +46,49 @@
             display: block;
         }
     </style>
+    <style>
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background: #3b4b5e;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .tag.active {
+            background:rgb(25, 100, 27);
+            color: white;
+        }
+
+        .tag-input-container {
+            display: flex;
+            gap: 5px;
+        }
+
+        #new-tag-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #add-tag-btn {
+            padding: 0 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     {# Macros #}
@@ -91,6 +134,21 @@
                 <option value="ddim">DDIM</option>
                 <option value="lms">LMS</option>
             </select>
+        </fieldset>
+
+        <!-- Tags -->
+        <fieldset>
+            <legend>Tags</legend>
+            <div class="tags-container" id="tags-container">
+                <!-- Default tags will appear here -->
+                <span class="tag" data-tag="landscape">landscape</span>
+                <span class="tag" data-tag="portrait">portrait</span>
+                <span class="tag" data-tag="fantasy">fantasy</span>
+            </div>
+            <div class="tag-input-container">
+                <input type="text" id="new-tag-input" placeholder="Add new tag...">
+                <button id="add-tag-btn">+</button>
+            </div>
         </fieldset>
     </div>
 
@@ -236,5 +294,47 @@
             samplingSelect.addEventListener('change', displayImages);
         });
         </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tagsContainer = document.getElementById('tags-container');
+        const newTagInput = document.getElementById('new-tag-input');
+        const addTagBtn = document.getElementById('add-tag-btn');
+
+        // Toggle tags on click
+        tagsContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tag')) {
+                e.target.classList.toggle('active');
+                // You'll add filtering logic here later
+            }
+        });
+
+        // Add new tag
+        addTagBtn.addEventListener('click', function() {
+            const tagText = newTagInput.value.trim();
+            if (tagText && !tagExists(tagText)) {
+                const newTag = document.createElement('span');
+                newTag.className = 'tag';
+                newTag.dataset.tag = tagText.toLowerCase();
+                newTag.textContent = tagText;
+                tagsContainer.appendChild(newTag);
+                newTagInput.value = '';
+            }
+        });
+
+        // Also add tag on Enter key
+        newTagInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTagBtn.click();
+            }
+        });
+
+        // Check if tag already exists
+        function tagExists(tagText) {
+            return Array.from(tagsContainer.querySelectorAll('.tag'))
+                .some(tag => tag.dataset.tag === tagText.toLowerCase());
+        }
+    });
+    </script>
 </body>
 </html>
