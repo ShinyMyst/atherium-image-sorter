@@ -2,6 +2,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/39e686c2-963f-4714-a6a7-a7deb1ad1bee",
         "model": "Hoshino",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0.7,
@@ -13,6 +17,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/e80c9f31-420f-42af-a24e-205d9c507d2d",
         "model": "Hoshino",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0.7,
@@ -24,6 +32,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/b000ddd8-8965-43ec-9f6a-a43afd057308",
         "model": "Hoshino",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0.7,
@@ -35,6 +47,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/51924973-5912-40d6-a99f-4139bac9f2b3",
         "model": "Hoshino",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0.7,
@@ -46,6 +62,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/2eea3104-2e87-4d24-8481-4223a4f96ad4",
         "model": "Hoshino",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0.7,
@@ -57,6 +77,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/7acb5df8-020a-4e3f-a83d-b7342912b2ed",
         "model": "Hoshino",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0,
@@ -68,6 +92,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/8e625e4d-2a52-4691-8c82-cfd4c0c3c5d8",
         "model": "Hoshino",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0,
@@ -79,6 +107,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/df32bc2a-da0e-4333-bf14-8e6b076681cb",
         "model": "Hoshino",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0,
@@ -90,6 +122,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/2d9928b6-cec5-4d6b-a978-b7fa7faee703",
         "model": "Hoseki",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0,
@@ -101,6 +137,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/4ace778b-68a6-4b22-8ce8-c1de4dbd88aa",
         "model": "Hoseki",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0.7,
@@ -112,6 +152,10 @@
     {
         "url": "https://images-ng.pixai.art/images/orig/b6d37e87-f6b5-4829-8377-1d1a1c1361a7",
         "model": "Hoseki",
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "DMD2": 0.7,
             "Bold & Soft": 0.7,
@@ -125,6 +169,10 @@
         "model": "Hoshino",
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "Bold & Soft": 0.7,
             "Bold & Brash": 0.7,
@@ -137,6 +185,10 @@
         "model": "Hoshino",
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "Bold & Soft": 0.7,
             "Bold & Brash": 0.7,
@@ -149,6 +201,10 @@
         "model": "Hoshino",
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "Bold & Soft": 0.7,
             "Bold & Brash": 1,
@@ -161,6 +217,10 @@
         "model": "Hoshino",
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "Bold & Soft": 0.7,
             "Bold & Brash": 0.7,
@@ -173,6 +233,10 @@
         "model": "Hoshino",
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "Bold & Soft": 0.7,
             "Bold & Brash": 0.7,
@@ -185,6 +249,10 @@
         "model": "Hoshino",
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
+        "Tags": [
+            "kagerou",
+            "style"
+        ],
         "LoRA": {
             "Bold & Soft": 0.7,
             "Bold & Brash": 0.7,
@@ -214,10 +282,9 @@
         "model": "Hoshino",
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
-        "Data Set": [
-            "Gallery",
-            "Style - Kagerou",
-            "Style - Holo"
+        "Tags": [
+            "kagerou",
+            "style"
         ],
         "LoRA": {
             "Bold & Soft": 0.3,

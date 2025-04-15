@@ -141,9 +141,10 @@
             <legend>Tags</legend>
             <div class="tags-container" id="tags-container">
                 <!-- Default tags will appear here -->
-                <span class="tag" data-tag="landscape">landscape</span>
-                <span class="tag" data-tag="portrait">portrait</span>
-                <span class="tag" data-tag="fantasy">fantasy</span>
+                <span class="tag" data-tag="style">style</span>
+                <span class="tag" data-tag="kagerou">kagerou</span>
+                <span class="tag" data-tag="invalid">invalid</span>
+                <span class="tag" data-tag="test">test</span>
             </div>
             <div class="tag-input-container">
                 <input type="text" id="new-tag-input" placeholder="Add new tag...">
@@ -155,15 +156,18 @@
     <div class="grid"><!-- Image containers will be inserted here --></div>
 
     <script>
-        // Wait for DOM to be fully loaded before executing
+        // SINGLE DOMContentLoaded listener
         document.addEventListener('DOMContentLoaded', function() {
             // DOM element references
             const grid = document.querySelector(".grid");
             const modelSelect = document.querySelector("select[name='model']");
             const samplingSelect = document.getElementById('sampling-method');
+            const tagsContainer = document.getElementById('tags-container');
+            const newTagInput = document.getElementById('new-tag-input');
+            const addTagBtn = document.getElementById('add-tag-btn');
 
             // Validate essential elements exist
-            if (!grid || !modelSelect || !samplingSelect) {
+            if (!grid || !modelSelect || !samplingSelect || !tagsContainer) {
                 console.error("Critical elements missing from DOM");
                 return;
             }
@@ -177,7 +181,8 @@
                     const filters = {
                         model: modelSelect.value || "any",
                         sampling: samplingSelect.value || "any",
-                        loras: getActiveLoras()
+                        loras: getActiveLoras(),
+                        tags: getActiveTags()
                     };
 
                     console.log("Active filters:", filters);
@@ -185,6 +190,7 @@
                     // Process and display images
                     const images = JSON.parse({{ image_json|tojson|safe }});
                     images.forEach(img => {
+                        console.log("Checking image:", img.url, "Tags:", img.Tags);
                         if (passesFilters(img, filters)) {
                             grid.appendChild(createImageContainer(img));
                         }
@@ -225,11 +231,13 @@
             function passesFilters(img, filters) {
                 // Model check
                 if (filters.model !== "any" && img.model.toLowerCase() !== filters.model.toLowerCase()) {
+                    console.log("Filtered by model");
                     return false;
                 }
 
                 // Sampling check
                 if (filters.sampling !== "any" && img["Sampling Method"].toLowerCase() !== filters.sampling.toLowerCase()) {
+                    console.log("Filtered by sampling");
                     return false;
                 }
 
@@ -247,8 +255,17 @@
                         );
 
                         if (!loraKey || img.LoRA[loraKey] !== lora.value) {
+                            console.log("Filtered by LoRA");
                             return false;
                         }
+                    }
+                }
+
+                // Tag filtering
+                if (filters.tags.length > 0) {
+                    if (!img.Tags || !img.Tags.some(tag => filters.tags.includes(tag))) {
+                        console.log("Filtered by tags - Image tags:", img.Tags, "Active tags:", filters.tags);
+                        return false;
                     }
                 }
 
@@ -266,6 +283,7 @@
                         <p>Model: ${img.model}</p>
                         <p>Sampling: ${img["Sampling Method"]}</p>
                         ${Object.entries(img.LoRA).map(([k,v]) => `<p>${k}: ${v}</p>`).join('')}
+                        ${img.Tags ? `<p>Tags: ${img.Tags.join(', ')}</p>` : ''}
                     </div>
                 `;
 
@@ -285,6 +303,48 @@
                 return container;
             }
 
+            // Get array of active tags
+            function getActiveTags() {
+                const activeTags = Array.from(document.querySelectorAll('#tags-container .tag.active'))
+                    .map(tag => tag.dataset.tag);
+                console.log("Current active tags:", activeTags);
+                return activeTags;
+            }
+
+            // Check if tag already exists
+            function tagExists(tagText) {
+                return Array.from(tagsContainer.querySelectorAll('.tag'))
+                    .some(tag => tag.dataset.tag === tagText.toLowerCase());
+            }
+
+            // Toggle tags on click
+            tagsContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('tag')) {
+                    e.target.classList.toggle('active');
+                    console.log("Tag toggled:", e.target.dataset.tag, "Active:", e.target.classList.contains('active'));
+                    displayImages();
+                }
+            });
+
+            // Add new tag
+            addTagBtn.addEventListener('click', function() {
+                const tagText = newTagInput.value.trim();
+                if (tagText && !tagExists(tagText)) {
+                    const newTag = document.createElement('span');
+                    newTag.className = 'tag';
+                    newTag.dataset.tag = tagText.toLowerCase();
+                    newTag.textContent = tagText;
+                    tagsContainer.appendChild(newTag);
+                    newTagInput.value = '';
+                }
+            });
+
+            newTagInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addTagBtn.click();
+                }
+            });
+
             // Initial setup
             setupLoraBoxes();
             displayImages();
@@ -294,47 +354,5 @@
             samplingSelect.addEventListener('change', displayImages);
         });
         </script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const tagsContainer = document.getElementById('tags-container');
-        const newTagInput = document.getElementById('new-tag-input');
-        const addTagBtn = document.getElementById('add-tag-btn');
-
-        // Toggle tags on click
-        tagsContainer.addEventListener('click', function(e) {
-            if (e.target.classList.contains('tag')) {
-                e.target.classList.toggle('active');
-                // You'll add filtering logic here later
-            }
-        });
-
-        // Add new tag
-        addTagBtn.addEventListener('click', function() {
-            const tagText = newTagInput.value.trim();
-            if (tagText && !tagExists(tagText)) {
-                const newTag = document.createElement('span');
-                newTag.className = 'tag';
-                newTag.dataset.tag = tagText.toLowerCase();
-                newTag.textContent = tagText;
-                tagsContainer.appendChild(newTag);
-                newTagInput.value = '';
-            }
-        });
-
-        // Also add tag on Enter key
-        newTagInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                addTagBtn.click();
-            }
-        });
-
-        // Check if tag already exists
-        function tagExists(tagText) {
-            return Array.from(tagsContainer.querySelectorAll('.tag'))
-                .some(tag => tag.dataset.tag === tagText.toLowerCase());
-        }
-    });
-    </script>
 </body>
 </html>
