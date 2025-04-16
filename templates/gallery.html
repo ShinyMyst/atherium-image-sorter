@@ -166,11 +166,6 @@
             const newTagInput = document.getElementById('new-tag-input');
             const addTagBtn = document.getElementById('add-tag-btn');
 
-            // Validate essential elements exist
-            if (!grid || !modelSelect || !samplingSelect || !tagsContainer) {
-                console.error("Critical elements missing from DOM");
-                return;
-            }
 
             // Main function to display filtered images
             function displayImages() {
