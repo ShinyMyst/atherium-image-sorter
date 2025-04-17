@@ -24,3 +24,5 @@ document.addEventListener('DOMContentLoaded', function() {
     initLoras();
 
 });
+
+// TODO - Do not work on this futher until HTML updated to use WTForm everywhere
