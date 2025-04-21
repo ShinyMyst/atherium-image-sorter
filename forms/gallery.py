@@ -1,6 +1,6 @@
 
 from flask_wtf import FlaskForm
-from wtforms import SelectField, FloatField
+from wtforms import SelectField  # , FloatField
 
 
 class GalleryForm(FlaskForm):
@@ -12,12 +12,7 @@ class GalleryForm(FlaskForm):
     ])
 
     # LoRA - Sliders
-    dmd2 = FloatField('DMD2', default=0)
-    lcm = FloatField('LCM', default=0)
-    bold_outlines = FloatField('Bold Outlines', default=0)
-    vivid_edge = FloatField('Vivid Edge', default=0)
-    vivid_soft = FloatField('Vivid Soft', default=0)
-
+    # (Macro is used to format these)
     lora = [
         ("DMD2", None),
         ("LCM", None),
@@ -33,3 +28,16 @@ class GalleryForm(FlaskForm):
         ('ddim', 'DDIM'),
         ('lms', 'LMS')
     ])
+
+    # Tags - Toggle Box
+    default_tags = ["style", "kagerou", "invalid", "test"]
+
+
+"""
+TODO - It 'might' be worth considering rather than using a form here,
+making the gallery route its own Python file and passing all of these
+as individual variables.
+
+Only half of these make use of Flask forms and I could probably pass
+the FlaskForm from the route page if needed.
+"""

@@ -125,24 +125,16 @@
         <!-- Sampling Method -->
         <fieldset>
             <legend>Sampling</legend>
-            <select id="sampling-method" class="form-control">
-                <option value="any">Any</option>
-                <option value="euler a">Euler A</option>
-                <option value="euler">Euler</option>
-                <option value="ddim">DDIM</option>
-                <option value="lms">LMS</option>
-            </select>
+            {{ form.sampling(class="form-control", id="sampling-method") }}
         </fieldset>
 
         <!-- Tags -->
         <fieldset>
             <legend>Tags</legend>
             <div class="tags-container" id="tags-container">
-                <!-- Default tags will appear here -->
-                <span class="tag" data-tag="style">style</span>
-                <span class="tag" data-tag="kagerou">kagerou</span>
-                <span class="tag" data-tag="invalid">invalid</span>
-                <span class="tag" data-tag="test">test</span>
+                {% for tag in form.default_tags %}
+                    <span class="tag" data-tag="{{ tag }}">{{ tag }}</span>
+                {% endfor %}
             </div>
             <div class="tag-input-container">
                 <input type="text" id="new-tag-input" placeholder="Add new tag...">
