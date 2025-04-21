@@ -18,6 +18,14 @@ class GalleryForm(FlaskForm):
     vivid_edge = FloatField('Vivid Edge', default=0)
     vivid_soft = FloatField('Vivid Soft', default=0)
 
+    lora = [
+        ("DMD2", None),
+        ("LCM", None),
+        ("Bold Outlines", None),
+        ("Vivid Edge", None),
+        ("Vivid Soft", None)
+    ]
+
     # Sampling - Dropdown
     sampling = SelectField('Sampling', choices=[
         ('any', 'Any'),

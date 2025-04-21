@@ -114,11 +114,9 @@
     <fieldset>
         <legend>LoRA</legend>
         <div class="filter-grid">
-            {{ lora_toggle('DMD2') }}
-            {{ lora_toggle('LCM') }}
-            {{ lora_toggle('Bold Outlines', 'bold.png') }}
-            {{ lora_toggle('Vivid Edge', 'edge.png') }}
-            {{ lora_toggle('Vivid Soft', 'soft.png') }}
+            {% for name, icon_src in form.lora %}
+                {{ lora_toggle(name, icon_src) }}
+            {% endfor %}
         </div>
     </fieldset>
 
