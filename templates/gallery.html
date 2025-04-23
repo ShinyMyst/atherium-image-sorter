@@ -145,17 +145,20 @@
 
     <div class="grid"><!-- Image containers will be inserted here --></div>
 
+    <script src="{{ url_for('static', filename='js/gallery/tags.js') }}"></script>
     <script>
+    {# Script #}
+
+
+
         // SINGLE DOMContentLoaded listener
         document.addEventListener('DOMContentLoaded', function() {
             // DOM element references
             const grid = document.querySelector(".grid");
             const modelSelect = document.querySelector("select[name='model']");
             const samplingSelect = document.getElementById('sampling-method');
-            const tagsContainer = document.getElementById('tags-container');
-            const newTagInput = document.getElementById('new-tag-input');
-            const addTagBtn = document.getElementById('add-tag-btn');
 
+            initTags(displayImages);
 
             // Main function to display filtered images
             function displayImages() {
@@ -296,39 +299,6 @@
                 return activeTags;
             }
 
-            // Check if tag already exists
-            function tagExists(tagText) {
-                return Array.from(tagsContainer.querySelectorAll('.tag'))
-                    .some(tag => tag.dataset.tag === tagText.toLowerCase());
-            }
-
-            // Toggle tags on click
-            tagsContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('tag')) {
-                    e.target.classList.toggle('active');
-                    console.log("Tag toggled:", e.target.dataset.tag, "Active:", e.target.classList.contains('active'));
-                    displayImages();
-                }
-            });
-
-            // Add new tag
-            addTagBtn.addEventListener('click', function() {
-                const tagText = newTagInput.value.trim();
-                if (tagText && !tagExists(tagText)) {
-                    const newTag = document.createElement('span');
-                    newTag.className = 'tag';
-                    newTag.dataset.tag = tagText.toLowerCase();
-                    newTag.textContent = tagText;
-                    tagsContainer.appendChild(newTag);
-                    newTagInput.value = '';
-                }
-            });
-
-            newTagInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    addTagBtn.click();
-                }
-            });
 
             // Initial setup
             setupLoraBoxes();
