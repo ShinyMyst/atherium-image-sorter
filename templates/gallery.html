@@ -146,6 +146,7 @@
     <div class="grid"><!-- Image containers will be inserted here --></div>
 
     <script src="{{ url_for('static', filename='js/gallery/tags.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gallery/display.js') }}"></script>
     <script>
     {# Script #}
 
@@ -158,9 +159,8 @@
             const modelSelect = document.querySelector("select[name='model']");
             const samplingSelect = document.getElementById('sampling-method');
 
-            initTags(displayImages);
+            initTags();
 
-            // Main function to display filtered images
             function displayImages() {
                 try {
                     grid.innerHTML = ""; // Clear existing images
@@ -172,8 +172,6 @@
                         loras: getActiveLoras(),
                         tags: getActiveTags()
                     };
-
-                    console.log("Active filters:", filters);
 
                     // Process and display images
                     const images = JSON.parse({{ image_json|tojson|safe }});
@@ -188,6 +186,7 @@
                 }
             }
 
+
             // Toggle Box Highlighting and Activation
             function setupLoraBoxes() {
                 document.querySelectorAll('.filter-box').forEach(box => {
@@ -200,65 +199,6 @@
                 });
             }
 
-            // Get currently active LoRA filters
-            function getActiveLoras() {
-                const active = [];
-                document.querySelectorAll('.filter-box.active').forEach(box => {
-                    const input = box.querySelector('.value-input');
-                    if (input) {
-                        active.push({
-                            name: box.dataset.lora,
-                            value: parseFloat(input.value) || 0
-                        });
-                    }
-                });
-                return active;
-            }
-
-            // Filter checking logic
-            function passesFilters(img, filters) {
-                // Model check
-                if (filters.model !== "any" && img.model.toLowerCase() !== filters.model.toLowerCase()) {
-                    console.log("Filtered by model");
-                    return false;
-                }
-
-                // Sampling check
-                if (filters.sampling !== "any" && img["Sampling Method"].toLowerCase() !== filters.sampling.toLowerCase()) {
-                    console.log("Filtered by sampling");
-                    return false;
-                }
-
-                // LoRA checks
-                if (filters.loras.length > 0) {
-                    for (const lora of filters.loras) {
-                        const loraNameMap = {
-                            'bold outlines': 'Bold & Soft',
-                            'vivid edge': 'Bold & Brash'
-                        };
-                        const loraName = loraNameMap[lora.name.toLowerCase()] || lora.name;
-
-                        const loraKey = Object.keys(img.LoRA).find(
-                            key => key.toLowerCase() === loraName.toLowerCase()
-                        );
-
-                        if (!loraKey || img.LoRA[loraKey] !== lora.value) {
-                            console.log("Filtered by LoRA");
-                            return false;
-                        }
-                    }
-                }
-
-                // Tag filtering
-                if (filters.tags.length > 0) {
-                    if (!img.Tags || !img.Tags.some(tag => filters.tags.includes(tag))) {
-                        console.log("Filtered by tags - Image tags:", img.Tags, "Active tags:", filters.tags);
-                        return false;
-                    }
-                }
-
-                return true;
-            }
 
             // Create image container element
             function createImageContainer(img) {
@@ -290,15 +230,6 @@
 
                 return container;
             }
-
-            // Get array of active tags
-            function getActiveTags() {
-                const activeTags = Array.from(document.querySelectorAll('#tags-container .tag.active'))
-                    .map(tag => tag.dataset.tag);
-                console.log("Current active tags:", activeTags);
-                return activeTags;
-            }
-
 
             // Initial setup
             setupLoraBoxes();

@@ -1,4 +1,4 @@
-function initTags(displayImagesCallback) {
+function initTags() {
     const tagsContainer = document.getElementById('tags-container');
     const newTagInput = document.getElementById('new-tag-input');
     const addTagBtn = document.getElementById('add-tag-btn');
@@ -22,7 +22,6 @@ function initTags(displayImagesCallback) {
     tagsContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('tag')) {
             e.target.classList.toggle('active');
-            displayImagesCallback();
         }
     });
 
@@ -32,7 +31,6 @@ function initTags(displayImagesCallback) {
         if (tagText && !tagExists(tagText)) {
             tagsContainer.appendChild(createTagElement(tagText));
             newTagInput.value = '';
-            displayImagesCallback();
         }
     }
 
@@ -41,3 +39,5 @@ function initTags(displayImagesCallback) {
         if (e.key === 'Enter') addNewTag();
     });
 }
+
+// Seperate functions and listeners
