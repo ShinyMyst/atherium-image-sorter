@@ -19,15 +19,6 @@ function initTags() {
         tag.dataset.tag = tagText;
         return tag;
     }
-
-// Toggle tag highlight
-    tagsContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('tag')) {
-            e.target.classList.toggle('active');
-            displayImages();
-        }
-    });
-
 // Add new tag
     function addNewTag() {
         const tagText = newTagInput.value.trim();
@@ -41,7 +32,6 @@ function initTags() {
     newTagInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') addNewTag();
     });
-}
+};
 
-// Seperate functions and listeners
-// TODO - Actually just revise how this is written entirely...
+// TODO - This function could be reworked.
