@@ -146,11 +146,11 @@
     <div class="grid"><!-- Image containers will be inserted here --></div>
 
     <script src="{{ url_for('static', filename='js/gallery/tags.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gallery/filter.js') }}"></script>
     <script src="{{ url_for('static', filename='js/gallery/display.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gallery/lora.js') }}"></script>
     <script>
     {# Script #}
-
-
 
         // SINGLE DOMContentLoaded listener
         document.addEventListener('DOMContentLoaded', function() {
@@ -160,44 +160,9 @@
             const samplingSelect = document.getElementById('sampling-method');
 
             initTags();
-
-            function displayImages() {
-                try {
-                    grid.innerHTML = ""; // Clear existing images
-
-                    // Get active filters with fallbacks
-                    const filters = {
-                        model: modelSelect.value || "any",
-                        sampling: samplingSelect.value || "any",
-                        loras: getActiveLoras(),
-                        tags: getActiveTags()
-                    };
-
-                    // Process and display images
-                    const images = JSON.parse({{ image_json|tojson|safe }});
-                    images.forEach(img => {
-                        console.log("Checking image:", img.url, "Tags:", img.Tags);
-                        if (passesFilters(img, filters)) {
-                            grid.appendChild(createImageContainer(img));
-                        }
-                    });
-                } catch (error) {
-                    console.error("Error displaying images:", error);
-                }
-            }
-
-
-            // Toggle Box Highlighting and Activation
-            function setupLoraBoxes() {
-                document.querySelectorAll('.filter-box').forEach(box => {
-                    box.addEventListener('click', function() {
-                        this.classList.toggle('active');
-                        const input = this.querySelector('.value-input');
-                        input.value = this.classList.contains('active') ? '0.7' : '0';
-                        displayImages();
-                    });
-                });
-            }
+            // TODO - Tags import doesn't update display images
+            // All of the update checkers need consolidated in one place
+            // They can then call the display image function
 
 
             // Create image container element

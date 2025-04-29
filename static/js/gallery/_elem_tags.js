@@ -3,13 +3,13 @@ function initTags() {
     const newTagInput = document.getElementById('new-tag-input');
     const addTagBtn = document.getElementById('add-tag-btn');
 
-    // Check if tag exists (case-insensitive)
+// Check if tag exists (case-insensitive)
     function tagExists(tagText) {
         return Array.from(tagsContainer.querySelectorAll('.tag'))
                    .some(tag => tag.textContent.toLowerCase() === tagText.toLowerCase());
     }
 
-    // Create new tag element
+// Create new tag element
     function createTagElement(tagText) {
         const tag = document.createElement('span');
         tag.className = 'tag';
@@ -18,14 +18,14 @@ function initTags() {
         return tag;
     }
 
-    // Toggle tag highlight
+// Toggle tag highlight
     tagsContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('tag')) {
             e.target.classList.toggle('active');
         }
     });
 
-    // Add new tag
+// Add new tag
     function addNewTag() {
         const tagText = newTagInput.value.trim();
         if (tagText && !tagExists(tagText)) {
@@ -41,3 +41,4 @@ function initTags() {
 }
 
 // Seperate functions and listeners
+// TODO - Actually just revise how this is written entirely...
