@@ -1,3 +1,5 @@
+// This element is unrelated to filters.
+
 function createImageContainer(img) {
     const container = document.createElement("div");
     container.className = "image-container";

@@ -1,27 +1,28 @@
 // TODO - Initialize all the other scripts here instead.
 // Pass the displayImages function to them so they can handle their own events
 
+// TODO - Consider changing how files are named.
+// Not all elements are related to filter and need the display image function
 
-function displayImages() {
-    try {
-        // Get active filters with fallbacks
-        const filters = {
-            model: modelSelect.value || "any",
-            sampling: samplingSelect.value || "any",
-            loras: getActiveLoras(),
-            tags: getActiveTags()
-        };
 
-        // Process and display images
-        grid.innerHTML = "";
-        const images = JSON.parse('{{ image_json | tojson | safe }}');
+import { displayImages } from './_display.js';
 
-        images.forEach(img => {
-            if (passesFilters(img, filters)) {
-                grid.appendChild(createImageContainer(img));
-            }
-        });
-    } catch (error) {
-        console.error("Error displaying images:", error);
-    }
-}
+// Event Listeners for Filter Updates
+const modelSelect = document.querySelector("select[name='model']");
+const samplingSelect = document.getElementById('sampling-method');
+const loraSelect = document.querySelectorAll('.filter-box');
+
+modelSelect.addEventListener('change', displayImages);
+samplingSelect.addEventListener('change', displayImages);
+loraSelect.forEach(box => {
+    box.addEventListener('click', () => {
+        box.classList.toggle('active');
+        const input = box.querySelector('.value-input');
+        input.value = box.classList.contains('active') ? '0.7' : '0';
+        displayImages();
+    });
+});
+
+
+// TODO - Lora box does not properly track value changes yet and only toggles
+// TODO - I would like the tags to fall under this same structure as the other select elements

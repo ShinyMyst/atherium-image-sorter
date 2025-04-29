@@ -1,3 +1,5 @@
+import { displayImages } from './_display.js';
+
 function initTags() {
     const tagsContainer = document.getElementById('tags-container');
     const newTagInput = document.getElementById('new-tag-input');
@@ -22,6 +24,7 @@ function initTags() {
     tagsContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('tag')) {
             e.target.classList.toggle('active');
+            displayImages();
         }
     });
 

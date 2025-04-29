@@ -1,4 +1,4 @@
-import { getCurrentFilters } from './getFilters.js';
+import { getCurrentFilters } from './_filters_get.js';
 
 function _checkLoras(imageLoras, activeLoras) {
     return activeLoras.every(filterLora => {
