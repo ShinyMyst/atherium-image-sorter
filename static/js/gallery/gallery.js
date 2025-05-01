@@ -1,6 +1,6 @@
 import { displayImages } from './_display.js';
 
-// Event Listeners for Filter Updates
+// ========== Event Listeners and Filter Updates ==========
 const modelSelect = document.querySelector("select[name='model']");
 const samplingSelect = document.getElementById('sampling-method');
 const loraSelect = document.querySelectorAll('.filter-box');
@@ -25,9 +25,7 @@ tagSelect.addEventListener('click', (e) => {
     }
 });
 
-// TODO - Combine the filter functions into a singular file.  Perhaps event put them with display.js
-// TODO - Consider changing how files are named.
-// Not all elements are related to filter and need the display image function
+
 // TODO - Initialize all the other scripts here instead.
 // Pass the displayImages function to them so they can handle their own events
 // TODO - Once everything located here, see if webpage functions again

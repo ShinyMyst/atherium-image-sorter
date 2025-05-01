@@ -1,4 +1,4 @@
-import { passesFilters } from './_filters_pass.js';
+import { passesFilters } from './_filters.js';
 
 export function displayImages() {
     try {
