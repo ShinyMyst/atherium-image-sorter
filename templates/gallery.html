@@ -145,35 +145,10 @@
 
     <div class="grid"><!-- Image containers will be inserted here --></div>
 
-    <script src="{{ url_for('static', filename='js/gallery/tags.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/gallery/filter.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/gallery/display.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/gallery/lora.js') }}"></script>
-    <script>
-    {# Script #}
+    <script type="module">
+        import { initGallery } from './static/js/gallery/gallery.js';
+        initGallery();
+    </script>
 
-        // SINGLE DOMContentLoaded listener
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM element references
-            const grid = document.querySelector(".grid");
-
-
-            initTags();
-            // TODO - Tags import doesn't update display images
-            // All of the update checkers need consolidated in one place
-            // They can then call the display image function
-
-
-            // Create image container element
-
-
-            // Initial setup
-            setupLoraBoxes();
-            displayImages();
-
-
-
-        });
-        </script>
 </body>
 </html>

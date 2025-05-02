@@ -23,15 +23,3 @@ export function displayImages() {
         console.error("Error displaying images:", error);
     }
 };
-
-// Event Listeners
-
-// Loras and tags need their own file
-// Actually the LORA one is short.  TODO maybe put all event listeners in gallery.
-// At the very least put these and the LoRA there.
-
-
-// TODO - Keep in mind that currently, this updates EVERYTHING when something is changed.
-// Ideally, we should  only update the element being changed and not get all filters from scratch
-// Get and set filters when webpage loaded.
-// Update the portion of filter that changes only
