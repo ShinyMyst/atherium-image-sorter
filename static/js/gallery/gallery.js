@@ -1,17 +1,32 @@
-import { displayImages } from './_display.js';
 import { initTags, initImageContainer } from './_elements.js';
+import { passesFilters, getCurrentFilters } from './_filters.js';
 
 export function initGallery() {
-    // ========== Elements ==========
-    initTags()
-    initImageContainer()
-
-    // ========== Event Listeners and Filter Updates ==========
+    // ========== Constants ==========
+    const grid = document.querySelector(".grid");
     const modelSelect = document.querySelector("select[name='model']");
     const samplingSelect = document.getElementById('sampling-method');
     const loraSelect = document.querySelectorAll('.filter-box');
     const tagSelect = document.getElementById('tags-container');
 
+    // ========== Image Display ==========
+    function displayImages() {
+        try {
+            grid.innerHTML = "";
+            const filters = getCurrentFilters()
+4
+            imageData.forEach(img => {
+                if (passesFilters(img, filters)) {
+                    grid.appendChild(initImageContainer(img));
+                }
+            });
+        } catch (error) {
+        }
+    }
+
+    initTags()
+
+    // ========== Event Listeners and Filter Updates ==========
     modelSelect.addEventListener('change', displayImages);
     samplingSelect.addEventListener('change', displayImages);
 
@@ -30,6 +45,7 @@ export function initGallery() {
             displayImages();
         }
     });
+    displayImages()
 };
 
 // TODO - Once everything located here, see if webpage functions again

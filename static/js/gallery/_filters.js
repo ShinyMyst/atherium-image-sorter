@@ -19,7 +19,7 @@ function _getActiveLoras() {
     return active;
 }
 
-function getCurrentFilters() {
+export function getCurrentFilters() {
     return {
         model: document.querySelector("select[name='model']").value || "any",
         sampling: document.getElementById('sampling-method').value || "any",
