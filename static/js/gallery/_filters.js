@@ -43,7 +43,8 @@ function _checkTags(imageTags, activeTags) {
 }
 
 export function passesFilters(img) {
-    filters = getCurrentFilters()
+    const filters = getCurrentFilters()
+    console.log("CHECK")
 
     // Model check
     if (filters.model !== "any" && img.model.toLowerCase() !== filters.model.toLowerCase()) {

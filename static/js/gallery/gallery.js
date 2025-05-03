@@ -1,7 +1,7 @@
 import { initTags, initImageContainer } from './_elements.js';
 import { passesFilters, getCurrentFilters } from './_filters.js';
 
-export function initGallery() {
+export function initGallery(IMAGE_DATA) {
     // ========== Constants ==========
     const grid = document.querySelector(".grid");
     const modelSelect = document.querySelector("select[name='model']");
@@ -12,15 +12,22 @@ export function initGallery() {
     // ========== Image Display ==========
     function displayImages() {
         try {
+            const imageArray = Array.isArray(IMAGE_DATA) ? IMAGE_DATA : [];
+            console.log("First image:", imageArray[0]?.url);
+            console.log("TRY")
             grid.innerHTML = "";
-            const filters = getCurrentFilters()
-4
-            imageData.forEach(img => {
-                if (passesFilters(img, filters)) {
+            //TODO - lora and tags are both [] so maybe the filter is looking for blank instead of any
+            console.log("Image data length:", IMAGE_DATA.length);
+            IMAGE_DATA.forEach(img => {
+                console.log(":TEST")
+                if (passesFilters(img)) {
+                    console.log("TRUE")
                     grid.appendChild(initImageContainer(img));
                 }
+                console.log("FALSE")
             });
         } catch (error) {
+            console.error("RENDER ERROR:", error);
         }
     }
 

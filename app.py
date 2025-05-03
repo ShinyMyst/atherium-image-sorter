@@ -24,7 +24,7 @@ def gallery():
     form = GalleryForm()
     with open('data/images.json') as f:
         images = json.load(f)
-    return render_template('gallery.html', form=form, image_json=json.dumps(images))
+    return render_template('gallery.html', form=form, image_json=images)
 
 
 @app.route('/api/images')
