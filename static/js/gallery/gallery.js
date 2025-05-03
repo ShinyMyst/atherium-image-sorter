@@ -1,5 +1,5 @@
 import { initTags, initImageContainer } from './_elements.js';
-import { passesFilters, getCurrentFilters } from './_filters.js';
+import { passesFilters } from './_filters.js';
 
 export function initGallery(IMAGE_DATA) {
     // ========== Constants ==========
@@ -12,16 +12,10 @@ export function initGallery(IMAGE_DATA) {
     // ========== Image Display ==========
     function displayImages() {
         try {
-            const imageArray = Array.isArray(IMAGE_DATA) ? IMAGE_DATA : [];
-            console.log("First image:", imageArray[0]?.url);
-            console.log("TRY")
             grid.innerHTML = "";
-            //TODO - lora and tags are both [] so maybe the filter is looking for blank instead of any
-            console.log("Image data length:", IMAGE_DATA.length);
+
             IMAGE_DATA.forEach(img => {
-                console.log(":TEST")
                 if (passesFilters(img)) {
-                    console.log("TRUE")
                     grid.appendChild(initImageContainer(img));
                 }
                 console.log("FALSE")
@@ -54,8 +48,6 @@ export function initGallery(IMAGE_DATA) {
     });
     displayImages()
 };
-
-// TODO - Once everything located here, see if webpage functions again
 
 // TODO - Lora box does not properly track value changes yet and only toggles
 
