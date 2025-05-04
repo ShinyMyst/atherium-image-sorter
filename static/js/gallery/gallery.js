@@ -31,10 +31,32 @@ export function initGallery(IMAGE_DATA) {
     samplingSelect.addEventListener('change', displayImages);
 
     loraSelect.forEach(box => {
+        const input = box.querySelector('.value-input');
+
+        // Click
         box.addEventListener('click', () => {
             box.classList.toggle('active');
-            const input = box.querySelector('.value-input');
             input.value = box.classList.contains('active') ? '0.7' : '0';
+            displayImages();
+        });
+
+        // Enter key
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const isActive = parseFloat(input.value) > 0;
+                box.classList.toggle('active', isActive);
+
+                if (isActive && input.value === '0') {
+                    input.value = '0.7';
+                }
+                displayImages();
+                e.preventDefault();
+            }
+        });
+
+        // Direct
+        input.addEventListener('change', () => {
+            box.classList.toggle('active', parseFloat(input.value) > 0);
             displayImages();
         });
     });
