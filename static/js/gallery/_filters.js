@@ -7,11 +7,11 @@ function _getActiveTags() {
 
 function _getActiveLoras() {
     const active = [];
-    document.querySelectorAll('.lora-filter.active').forEach(box => {
-        const input = box.querySelector('.lora-value');
+    document.querySelectorAll('.filter-box.active').forEach(box => {
+        const input = box.querySelector('.value-input');
         if (input) {
             active.push({
-                name: box.dataset.loraName,
+                name: box.dataset.lora,
                 value: parseFloat(input.value) || 0
             });
         }
@@ -34,7 +34,8 @@ function _checkLoras(imageLoras, activeLoras) {
         const imgLoraKey = Object.keys(imageLoras).find(
             key => key.toLowerCase() === filterLora.name.toLowerCase()
         );
-        return imgLoraKey && imageLoras[imgLoraKey] === filterLora.value;
+        const matches = imageLoras[imgLoraKey] == filterLora.value;
+        return matches
     });
 }
 

@@ -18,7 +18,6 @@ export function initGallery(IMAGE_DATA) {
                 if (passesFilters(img)) {
                     grid.appendChild(initImageContainer(img));
                 }
-                console.log("FALSE")
             });
         } catch (error) {
             console.error("RENDER ERROR:", error);
