@@ -6,11 +6,15 @@
 {% endmacro %}
 
 {% macro lora_toggle(name, icon_src=None) %}
-    {% set icon_path = icon_src if icon_src else name.lower().replace(' ', '-') + '.png' %}
     <div class="filter-box" data-lora="{{ name }}">
         <span class="lora-label">{{ name }}</span>
-        <img src="/static/icons/{{ icon_path }}"
-             onerror="this.src='/static/icons/missing.png'">
+        {% if icon_src is not none %}
+            <img src="{{ icon_src }}">
+        {% else %}
+            {% set icon_path = name.lower().replace(' ', '-') + '.png' %}
+            <img src="/static/icons/{{ icon_path }}"
+                 onerror="this.src='/static/icons/missing.png'">
+        {% endif %}
         <div class="filter-value">
             <input type="number" value="0.7" min="0" max="2" step="0.1"
                    data-lora-field="{{ name }}" class="value-input">
