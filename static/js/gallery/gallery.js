@@ -1,34 +1,22 @@
-import { initTags, initImageContainer } from './_elements.js';
-import { passesFilters } from './_filters.js';
+import { initTags } from './_elements.js';
+import { displayImages } from './_display.js';
 
+
+
+// ========== Image Display ==========
 export function initGallery(IMAGE_DATA) {
     // ========== Constants ==========
-    const grid = document.querySelector(".grid");
     const modelSelect = document.querySelector("select[name='model']");
     const samplingSelect = document.getElementById('sampling-method');
     const loraSelect = document.querySelectorAll('.filter-box');
     const tagSelect = document.getElementById('tags-container');
 
-    // ========== Image Display ==========
-    function displayImages() {
-        try {
-            grid.innerHTML = "";
-
-            IMAGE_DATA.forEach(img => {
-                if (passesFilters(img)) {
-                    grid.appendChild(initImageContainer(img));
-                }
-            });
-        } catch (error) {
-            console.error("RENDER ERROR:", error);
-        }
-    }
 
     initTags()
 
     // ========== Event Listeners and Filter Updates ==========
-    modelSelect.addEventListener('change', displayImages);
-    samplingSelect.addEventListener('change', displayImages);
+    modelSelect.addEventListener('change', () => displayImages(IMAGE_DATA));
+    samplingSelect.addEventListener('change', () => displayImages(IMAGE_DATA));
 
     loraSelect.forEach(box => {
         const input = box.querySelector('.value-input');
@@ -37,7 +25,7 @@ export function initGallery(IMAGE_DATA) {
         box.addEventListener('click', () => {
             box.classList.toggle('active');
             input.value = box.classList.contains('active') ? '0.7' : '0';
-            displayImages();
+            displayImages(IMAGE_DATA);
         });
 
         // Enter key
@@ -49,7 +37,7 @@ export function initGallery(IMAGE_DATA) {
                 if (isActive && input.value === '0') {
                     input.value = '0.7';
                 }
-                displayImages();
+                displayImages(IMAGE_DATA);
                 e.preventDefault();
             }
         });
@@ -57,17 +45,18 @@ export function initGallery(IMAGE_DATA) {
         // Direct
         input.addEventListener('change', () => {
             box.classList.toggle('active', parseFloat(input.value) > 0);
-            displayImages();
+            displayImages(IMAGE_DATA);
         });
     });
 
     tagSelect.addEventListener('click', (e) => {
         if (e.target.classList.contains('tag')) {
             e.target.classList.toggle('active');
-            displayImages();
+            displayImages(IMAGE_DATA);
         }
     });
-    displayImages()
+
+    displayImages(IMAGE_DATA)
 };
 
 // TODO - GREAT now it works but I've made it a bit messy again in fixing it.  Compartmentalize it more?
