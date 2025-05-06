@@ -35,6 +35,8 @@
             max-width: 40px;
             max-height: 40px;
             margin: 0 auto;
+            position: relative;
+            pointer-events: auto;
         }
 
         .filter-box img[src*="http"] {
@@ -47,6 +49,9 @@
         .filter-value {
             display: none;
             margin-top: 5px;
+            position: absolute;
+            z-index: 10;
+            pointer-events: auto;
         }
 
         .active .filter-value {

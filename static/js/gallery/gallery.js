@@ -59,7 +59,6 @@ export function initGallery(IMAGE_DATA) {
     displayImages(IMAGE_DATA)
 };
 
-// TODO - GREAT now it works but I've made it a bit messy again in fixing it.  Compartmentalize it more?
 // TODO - and redesign the boxes.  They're messy.
 
 // TODO - Keep in mind that currently, this updates EVERYTHING when something is changed.
