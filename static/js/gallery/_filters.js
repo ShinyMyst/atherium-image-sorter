@@ -7,7 +7,7 @@ function _getActiveTags() {
 
 function _getActiveLoras() {
     const active = [];
-    document.querySelectorAll('.filter-box.active').forEach(box => {
+    document.querySelectorAll('.lora-box.active').forEach(box => {
         const input = box.querySelector('.value-input');
         if (input) {
             active.push({

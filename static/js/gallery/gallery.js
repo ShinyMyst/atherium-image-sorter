@@ -8,7 +8,7 @@ export function initGallery(IMAGE_DATA) {
     // ========== Constants ==========
     const modelSelect = document.querySelector("select[name='model']");
     const samplingSelect = document.getElementById('sampling-method');
-    const loraSelect = document.querySelectorAll('.filter-box');
+    const loraSelect = document.querySelectorAll('.lora-box');
     const tagSelect = document.getElementById('tags-container');
 
 
