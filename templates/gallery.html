@@ -5,90 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery Page</title>
     <link rel="stylesheet" href="/static/css/style.css">
-    <style>
-        /* New toggle box styles */
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 10px 0;
-        }
+    <link rel="stylesheet" href="/static/css/gallery.css">
 
-        .filter-box {
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            padding: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            height: 80px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .filter-box.active {
-            border-color: #4CAF50;
-        }
-
-        .filter-box img {
-            max-width: 40px;
-            max-height: 40px;
-            margin: 0 auto;
-        }
-
-        .filter-value {
-            display: none;
-            margin-top: 5px;
-        }
-
-        .active .filter-value {
-            display: block;
-        }
-    </style>
-    <style>
-        .tags-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .tag {
-            padding: 4px 12px;
-            background: #3b4b5e;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .tag.active {
-            background:rgb(25, 100, 27);
-            color: white;
-        }
-
-        .tag-input-container {
-            display: flex;
-            gap: 5px;
-        }
-
-        #new-tag-input {
-            flex-grow: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        #add-tag-btn {
-            padding: 0 12px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
     {# Macros #}
@@ -113,12 +31,10 @@
     <!-- LoRA Toggle Boxes -->
     <fieldset>
         <legend>LoRA</legend>
-        <div class="filter-grid">
-            {{ lora_toggle('DMD2') }}
-            {{ lora_toggle('LCM') }}
-            {{ lora_toggle('Bold Outlines', 'bold.png') }}
-            {{ lora_toggle('Vivid Edge', 'edge.png') }}
-            {{ lora_toggle('Vivid Soft', 'soft.png') }}
+        <div class="lora-grid">
+            {% for name, icon_src in form.lora %}
+                {{ lora_toggle(name, icon_src) }}
+            {% endfor %}
         </div>
     </fieldset>
 
@@ -127,24 +43,16 @@
         <!-- Sampling Method -->
         <fieldset>
             <legend>Sampling</legend>
-            <select id="sampling-method" class="form-control">
-                <option value="any">Any</option>
-                <option value="euler a">Euler A</option>
-                <option value="euler">Euler</option>
-                <option value="ddim">DDIM</option>
-                <option value="lms">LMS</option>
-            </select>
+            {{ form.sampling(class="form-control", id="sampling-method") }}
         </fieldset>
 
         <!-- Tags -->
         <fieldset>
             <legend>Tags</legend>
             <div class="tags-container" id="tags-container">
-                <!-- Default tags will appear here -->
-                <span class="tag" data-tag="style">style</span>
-                <span class="tag" data-tag="kagerou">kagerou</span>
-                <span class="tag" data-tag="invalid">invalid</span>
-                <span class="tag" data-tag="test">test</span>
+                {% for tag in form.default_tags %}
+                    <span class="tag" data-tag="{{ tag }}">{{ tag }}</span>
+                {% endfor %}
             </div>
             <div class="tag-input-container">
                 <input type="text" id="new-tag-input" placeholder="Add new tag...">
@@ -155,204 +63,10 @@
 
     <div class="grid"><!-- Image containers will be inserted here --></div>
 
-    <script>
-        // SINGLE DOMContentLoaded listener
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM element references
-            const grid = document.querySelector(".grid");
-            const modelSelect = document.querySelector("select[name='model']");
-            const samplingSelect = document.getElementById('sampling-method');
-            const tagsContainer = document.getElementById('tags-container');
-            const newTagInput = document.getElementById('new-tag-input');
-            const addTagBtn = document.getElementById('add-tag-btn');
-
-            // Validate essential elements exist
-            if (!grid || !modelSelect || !samplingSelect || !tagsContainer) {
-                console.error("Critical elements missing from DOM");
-                return;
-            }
-
-            // Main function to display filtered images
-            function displayImages() {
-                try {
-                    grid.innerHTML = ""; // Clear existing images
-
-                    // Get active filters with fallbacks
-                    const filters = {
-                        model: modelSelect.value || "any",
-                        sampling: samplingSelect.value || "any",
-                        loras: getActiveLoras(),
-                        tags: getActiveTags()
-                    };
-
-                    console.log("Active filters:", filters);
-
-                    // Process and display images
-                    const images = JSON.parse({{ image_json|tojson|safe }});
-                    images.forEach(img => {
-                        console.log("Checking image:", img.url, "Tags:", img.Tags);
-                        if (passesFilters(img, filters)) {
-                            grid.appendChild(createImageContainer(img));
-                        }
-                    });
-                } catch (error) {
-                    console.error("Error displaying images:", error);
-                }
-            }
-
-            // Toggle Box Highlighting and Activation
-            function setupLoraBoxes() {
-                document.querySelectorAll('.filter-box').forEach(box => {
-                    box.addEventListener('click', function() {
-                        this.classList.toggle('active');
-                        const input = this.querySelector('.value-input');
-                        input.value = this.classList.contains('active') ? '0.7' : '0';
-                        displayImages();
-                    });
-                });
-            }
-
-            // Get currently active LoRA filters
-            function getActiveLoras() {
-                const active = [];
-                document.querySelectorAll('.filter-box.active').forEach(box => {
-                    const input = box.querySelector('.value-input');
-                    if (input) {
-                        active.push({
-                            name: box.dataset.lora,
-                            value: parseFloat(input.value) || 0
-                        });
-                    }
-                });
-                return active;
-            }
-
-            // Filter checking logic
-            function passesFilters(img, filters) {
-                // Model check
-                if (filters.model !== "any" && img.model.toLowerCase() !== filters.model.toLowerCase()) {
-                    console.log("Filtered by model");
-                    return false;
-                }
-
-                // Sampling check
-                if (filters.sampling !== "any" && img["Sampling Method"].toLowerCase() !== filters.sampling.toLowerCase()) {
-                    console.log("Filtered by sampling");
-                    return false;
-                }
-
-                // LoRA checks
-                if (filters.loras.length > 0) {
-                    for (const lora of filters.loras) {
-                        const loraNameMap = {
-                            'bold outlines': 'Bold & Soft',
-                            'vivid edge': 'Bold & Brash'
-                        };
-                        const loraName = loraNameMap[lora.name.toLowerCase()] || lora.name;
-
-                        const loraKey = Object.keys(img.LoRA).find(
-                            key => key.toLowerCase() === loraName.toLowerCase()
-                        );
-
-                        if (!loraKey || img.LoRA[loraKey] !== lora.value) {
-                            console.log("Filtered by LoRA");
-                            return false;
-                        }
-                    }
-                }
-
-                // Tag filtering
-                if (filters.tags.length > 0) {
-                    if (!img.Tags || !img.Tags.some(tag => filters.tags.includes(tag))) {
-                        console.log("Filtered by tags - Image tags:", img.Tags, "Active tags:", filters.tags);
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            // Create image container element
-            function createImageContainer(img) {
-                const container = document.createElement("div");
-                container.className = "image-container";
-
-                container.innerHTML = `
-                    <img src="${img.url}" alt="Generated Image" style="cursor:pointer">
-                    <div class="image-details" style="display:none">
-                        <p>Model: ${img.model}</p>
-                        <p>Sampling: ${img["Sampling Method"]}</p>
-                        ${Object.entries(img.LoRA).map(([k,v]) => `<p>${k}: ${v}</p>`).join('')}
-                        ${img.Tags ? `<p>Tags: ${img.Tags.join(', ')}</p>` : ''}
-                    </div>
-                `;
-
-                // Event handlers
-                container.querySelector('img').addEventListener('click', () => {
-                    window.open(img.url, "_blank");
-                });
-
-                container.addEventListener('mouseenter', () => {
-                    container.querySelector('.image-details').style.display = 'block';
-                });
-
-                container.addEventListener('mouseleave', () => {
-                    container.querySelector('.image-details').style.display = 'none';
-                });
-
-                return container;
-            }
-
-            // Get array of active tags
-            function getActiveTags() {
-                const activeTags = Array.from(document.querySelectorAll('#tags-container .tag.active'))
-                    .map(tag => tag.dataset.tag);
-                console.log("Current active tags:", activeTags);
-                return activeTags;
-            }
-
-            // Check if tag already exists
-            function tagExists(tagText) {
-                return Array.from(tagsContainer.querySelectorAll('.tag'))
-                    .some(tag => tag.dataset.tag === tagText.toLowerCase());
-            }
-
-            // Toggle tags on click
-            tagsContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('tag')) {
-                    e.target.classList.toggle('active');
-                    console.log("Tag toggled:", e.target.dataset.tag, "Active:", e.target.classList.contains('active'));
-                    displayImages();
-                }
-            });
-
-            // Add new tag
-            addTagBtn.addEventListener('click', function() {
-                const tagText = newTagInput.value.trim();
-                if (tagText && !tagExists(tagText)) {
-                    const newTag = document.createElement('span');
-                    newTag.className = 'tag';
-                    newTag.dataset.tag = tagText.toLowerCase();
-                    newTag.textContent = tagText;
-                    tagsContainer.appendChild(newTag);
-                    newTagInput.value = '';
-                }
-            });
-
-            newTagInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    addTagBtn.click();
-                }
-            });
-
-            // Initial setup
-            setupLoraBoxes();
-            displayImages();
-
-            // Event listeners
-            modelSelect.addEventListener('change', displayImages);
-            samplingSelect.addEventListener('change', displayImages);
-        });
-        </script>
+    <script type="module">
+        const IMAGE_DATA = {{ image_json | tojson | safe }};
+        import { initGallery } from "{{ url_for('static', filename='js/gallery/gallery.js') }}";
+        initGallery(IMAGE_DATA);
+    </script>
 </body>
 </html>

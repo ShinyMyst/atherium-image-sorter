@@ -8,8 +8,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 1
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 1
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -23,8 +23,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 1.5
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 1.5
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -38,8 +38,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 0.7
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 0.7
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -53,8 +53,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 0.7
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 0.7
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -68,8 +68,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 0
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 0
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -83,8 +83,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0,
-            "Bold & Brash": 1
+            "Bold Outlines": 0,
+            "Vivid Edge": 1
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -98,8 +98,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0,
-            "Bold & Brash": 0.7
+            "Bold Outlines": 0,
+            "Vivid Edge": 0.7
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -113,8 +113,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0,
-            "Bold & Brash": 1.5
+            "Bold Outlines": 0,
+            "Vivid Edge": 1.5
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -128,8 +128,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0,
-            "Bold & Brash": 1
+            "Bold Outlines": 0,
+            "Vivid Edge": 1
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -143,8 +143,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 0
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 0
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -158,8 +158,8 @@
         ],
         "LoRA": {
             "DMD2": 0.7,
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 0
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 0
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10
@@ -174,8 +174,8 @@
             "style"
         ],
         "LoRA": {
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 0.7,
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 0.7,
             "DMD2": 0.7
         },
         "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed"
@@ -190,8 +190,8 @@
             "style"
         ],
         "LoRA": {
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 0.7,
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 0.7,
             "DMD2": 0.7
         },
         "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile,"
@@ -206,8 +206,8 @@
             "style"
         ],
         "LoRA": {
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 1,
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 1,
             "DMD2": 0.7
         },
         "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile,"
@@ -222,8 +222,8 @@
             "style"
         ],
         "LoRA": {
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 0.7,
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 0.7,
             "DMD2": 0.7
         },
         "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile, maroon background,"
@@ -238,8 +238,8 @@
             "style"
         ],
         "LoRA": {
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 0.7,
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 0.7,
             "DMD2": 0.7
         },
         "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile, maroon background,"
@@ -254,8 +254,8 @@
             "style"
         ],
         "LoRA": {
-            "Bold & Soft": 0.7,
-            "Bold & Brash": 0.7,
+            "Bold Outlines": 0.7,
+            "Vivid Edge": 0.7,
             "LCM": 0.7
         },
         "Prompt": "imaizumi kagerou, freckles, fang, cross-eyed, light smile, smile, maroon background,,<lora:LCMTurboMix2fix:1>, "
@@ -271,8 +271,8 @@
             "Style - Holo"
         ],
         "LoRA": {
-            "Bold & Soft": 0.2,
-            "Bold & Brash": 0.3,
+            "Bold Outlines": 0.2,
+            "Vivid Edge": 0.3,
             "DMD2": 0.0
         },
         "Prompt": ""
@@ -287,8 +287,8 @@
             "style"
         ],
         "LoRA": {
-            "Bold & Soft": 0.3,
-            "Bold & Brash": 0.2,
+            "Bold Outlines": 0.3,
+            "Vivid Edge": 0.2,
             "DMD2": 0.5
         },
         "Prompt": ""
