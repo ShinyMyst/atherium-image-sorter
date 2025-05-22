@@ -12,9 +12,9 @@ from wtforms import (
 
 class SubmitForm(FlaskForm):
     # Data Sets
+    test_data = BooleanField('Test')
+    test_data_hidden = BooleanField('Test Ignore')
     gallery = BooleanField('Gallery')
-    style_kagerou = BooleanField('Style Kagerou')
-    style_holo = BooleanField('Style Holo')
 
     # Basic Information
     url = StringField('Image URL')
@@ -30,6 +30,9 @@ class SubmitForm(FlaskForm):
     bold_outlines = FloatField('Bold Outlines', default=0)
     vivid_edge = FloatField('Vivid Edge', default=0)
     vivid_soft = FloatField('Vivid Soft', default=0)
+    cartoony = FloatField('Cartoony', default=0)
+
+    lora_fields = [dmd2, lcm, bold_outlines, vivid_edge, vivid_soft, cartoony]
 
     # LoRA Details
     sampling_method = SelectField('Sampling Method', choices=[

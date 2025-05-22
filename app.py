@@ -43,13 +43,20 @@ def get_submit():
 def post_submit():
     form = SubmitForm()
     # TODO - Stucturing form needs elsewhere
+    # TODO - This also should only be changed in one place
+    # TODO - The HTML should not need hardcoded nor should this reference
+    # all the names should be in the submit.py only
+
     data_sets = []
-    if form.gallery:
+
+    # TODO - Needto change the form to avoid hardcoding but giving up for now
+    if form.test_data.data:
+        data_sets.append("Test Data")
+    if form.test_data_hidden.data:
+        data_sets.append("Test Data Ignore")
+    if form.gallery.data:
         data_sets.append("Gallery")
-    if form.style_kagerou:
-        data_sets.append("Style Kagerou")
-    if form.style_holo:
-        data_sets.append("Style Holo")
+    print(data_sets)
 
     structured_data = {
             # Direct access via form.field.data

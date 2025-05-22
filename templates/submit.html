@@ -16,9 +16,9 @@
 
         <fieldset>
             <legend>Data Sets</legend>
+            {{ form.test_data.label }} {{ form.test_data() }}<br>
+            {{ form.test_data_hidden.label }} {{ form.test_data_hidden() }}<br>
             {{ form.gallery.label }} {{ form.gallery() }}<br>
-            {{ form.style_kagerou.label }} {{ form.style_kagerou() }}<br>
-            {{ form.style_holo.label }} {{ form.style_holo() }}<br>
         </fieldset>
 
         <fieldset>
@@ -39,6 +39,7 @@
         {{ slider_field(form.bold_outlines) }}
         {{ slider_field(form.vivid_edge) }}
         {{ slider_field(form.vivid_soft) }}
+        {{ slider_field(form.cartoony) }}
     </fieldset>
 
         <fieldset>
