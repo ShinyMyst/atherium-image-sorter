@@ -42,6 +42,7 @@ class SubmitForm(FlaskForm):
         ('LMS', 'LMS')
         ])
     sampling_steps = IntegerField('Sampling Steps', default=10)
+    cfg_scale = IntegerField('Sampling Steps', default=2)
 
     # Submit
     submit = SubmitField('Submit')

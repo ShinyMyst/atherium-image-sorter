@@ -72,7 +72,7 @@ def post_submit():
             },
             "Sampling Method": form.sampling_method.data,
             "Sampling Steps": form.sampling_steps.data,
-            "Data Set": data_sets
+            "CFG Scale": form.cfg_scale.data
     }
     print(structured_data)
     data_set = set()

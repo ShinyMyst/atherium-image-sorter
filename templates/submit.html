@@ -11,7 +11,7 @@
     {% from "_macros.html" import slider_field %}
 
 {# Form #}
-    <form method="POST" action="{{ url_for('post_submit') }}">
+    <form method="POST" action="{{ url_for('post_submit') }}" target="_blank">
         {{ form.hidden_tag() }}
 
         <fieldset>
@@ -46,6 +46,7 @@
             <legend>LoRA Details</legend>
             {{ form.sampling_method.label }} {{ form.sampling_method() }}<br>
             {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
+            {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>
         </fieldset>
 
         {{ form.submit() }}
