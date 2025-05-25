@@ -31,6 +31,7 @@ class SubmitForm(FlaskForm):
     vivid_edge = FloatField('Vivid Edge', default=0)
     vivid_soft = FloatField('Vivid Soft', default=0)
     cartoony = FloatField('Cartoony', default=0)
+    # URL needs hardcoded into html for now
 
     lora_fields = [dmd2, lcm, bold_outlines, vivid_edge, vivid_soft, cartoony]
 
@@ -42,7 +43,7 @@ class SubmitForm(FlaskForm):
         ('LMS', 'LMS')
         ])
     sampling_steps = IntegerField('Sampling Steps', default=10)
-    cfg_scale = IntegerField('Sampling Steps', default=2)
+    cfg_scale = IntegerField('CFG Steps', default=2)
 
     # Submit
     submit = SubmitField('Submit')

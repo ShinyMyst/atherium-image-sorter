@@ -30,3 +30,27 @@
     border-radius: 4px;
     display: none;
 }
+
+/* LoRA fieldset */
+fieldset.lora-fieldset {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+fieldset.lora-fieldset .lora-submit {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+fieldset.lora-fieldset .lora-name {
+  min-width: 120px;
+  margin-right: 8px;
+}
+
+fieldset.lora-fieldset .lora-value input {
+  width: 50px !important;
+  padding: 3px !important;
+  margin: 0 !important;
+}

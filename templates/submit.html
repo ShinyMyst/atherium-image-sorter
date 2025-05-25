@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Processing Form</title>
     <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="stylesheet" href="/static/css/submit.css">
+
 </head>
 <body>
 {# Macros #}
     {% from "_macros.html" import slider_field %}
+    {% from "_macros.html" import lora_submit %}
 
 {# Form #}
     <form method="POST" action="{{ url_for('post_submit') }}" target="_blank">
@@ -32,15 +35,15 @@
         </fieldset>
 
 
-    <fieldset>
-        <legend>LoRA</legend>
-        {{ slider_field(form.dmd2) }}
-        {{ slider_field(form.lcm) }}
-        {{ slider_field(form.bold_outlines) }}
-        {{ slider_field(form.vivid_edge) }}
-        {{ slider_field(form.vivid_soft) }}
-        {{ slider_field(form.cartoony) }}
-    </fieldset>
+<fieldset class="lora-fieldset">
+    <legend>LoRA</legend>
+    {{ lora_submit(form.dmd2) }}
+    {{ lora_submit(form.lcm) }}
+    {{ lora_submit(form.bold_outlines) }}
+    {{ lora_submit(form.vivid_edge) }}
+    {{ lora_submit(form.vivid_soft) }}
+    {{ lora_submit(form.cartoony) }}
+</fieldset>
 
         <fieldset>
             <legend>LoRA Details</legend>
@@ -55,6 +58,5 @@
 {# Script #}
     <script src="{{ url_for('static', filename='js/img_preview.js') }}"></script>
     <script src="{{ url_for('static', filename='js/sliders.js') }}"></script>
-
 </body>
 </html>
