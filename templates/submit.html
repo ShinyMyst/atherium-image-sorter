@@ -45,8 +45,8 @@
     {{ lora_submit(form.cartoony) }}
 </fieldset>
 
-        <fieldset>
-            <legend>LoRA Details</legend>
+        <fieldset class="sampling-parameters">
+            <legend>Sampling</legend>
             {{ form.sampling_method.label }} {{ form.sampling_method() }}<br>
             {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
             {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>

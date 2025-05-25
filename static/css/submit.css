@@ -1,3 +1,4 @@
+/* MAIN FORM CONTAINER */
 .form-container {
     background-color: #34495e;
     border-radius: 8px;
@@ -6,51 +7,76 @@
     width: 45%;
     color: white;
 }
-.form-container h2 {
-    margin-bottom: 15px;
-}
-.form-wrapper {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-}
-.image-preview-container {
-    background-color: #3b4b5e;
-    width: 45%;
-    min-height: 300px;
-    margin-left: 20px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.image-preview-container img {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 4px;
-    display: none;
+
+/* FIELD HEADERS */
+fieldset legend {
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 0 8px;
 }
 
-/* LoRA fieldset */
+/* LORA SECTION */
 fieldset.lora-fieldset {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    border: 1px solid #3b4b5e;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #2c3e50;
 }
 
 fieldset.lora-fieldset .lora-submit {
-  display: flex;
-  align-items: center;
-  margin: 0;
+    display: flex;
+    align-items: center;
+    margin: 0;
 }
 
 fieldset.lora-fieldset .lora-name {
-  min-width: 120px;
-  margin-right: 8px;
+    min-width: 120px;
+    margin-right: 8px;
 }
 
+/* SAMPLING SECTION */
+fieldset.sampling-parameters {
+    border: 1px solid #3b4b5e;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #2c3e50;
+}
+
+/* INPUT CONTROLS */
 fieldset.lora-fieldset .lora-value input {
-  width: 50px !important;
-  padding: 3px !important;
-  margin: 0 !important;
+    width: 50px;
+    padding: 4px;
+    margin: 0;
+}
+
+fieldset.sampling-parameters select {
+    width: 140px; /* Expanded sampling method box */
+    padding: 4px;
+}
+
+fieldset.sampling-parameters input {
+    width: 60px;
+    padding: 4px;
+}
+
+/* SHARED STYLES */
+fieldset.lora-fieldset input,
+fieldset.sampling-parameters input,
+fieldset.sampling-parameters select {
+    background-color: #3b4b5e;
+    border: 1px solid #4a5d6e;
+    color: white;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+
+fieldset.lora-fieldset .lora-name,
+fieldset.sampling-parameters label {
+    min-width: 120px;
+    display: inline-block;
 }
