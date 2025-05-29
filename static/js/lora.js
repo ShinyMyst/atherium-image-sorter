@@ -33,14 +33,21 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
         const loraData = {};
 
-    document.querySelectorAll('#lora-container input[type="number"]').forEach(input => {
-        const name = input.name || input.dataset.loraName;
-        const value = parseFloat(input.value);
-        if (value !== 0) {
-            loraData[name] = value;
-        }
-    });
+        // Collect all LoRA inputs (both default and dynamic)
+        document.querySelectorAll('#lora-container input[type="number"]').forEach(input => {
+            const name = input.name || input.dataset.loraName;
+            const value = parseFloat(input.value);
 
+            // Only include if value exists and is not 0
+            if (!isNaN(value) && value !== 0) {
+                loraData[name] = value;
+            }
+
+            // Disable the original input to prevent duplicate submission
+            input.disabled = true;
+        });
+
+        // Add hidden field with JSON data
         const hiddenField = document.createElement('input');
         hiddenField.type = 'hidden';
         hiddenField.name = 'lora_data';
