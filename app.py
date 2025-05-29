@@ -48,7 +48,12 @@ def post_submit():
     # all the names should be in the submit.py only
 
     data_sets = []
-    print(request.form)
+    print(dict(request.form))
+    lora_json = request.form.get('lora_data', '{}')
+    lora_data = json.loads(lora_json)
+    print(lora_data)
+    for name, strength in lora_data.items():
+        print(name, strength)
 
     # TODO - Needto change the form to avoid hardcoding but giving up for now
     if form.test_data.data:
@@ -65,13 +70,7 @@ def post_submit():
             "model": form.model.data,
             "prompt": form.prompt.data,
             "Tags": tags,
-            "LoRA": {
-                "dmd2": form.dmd2.data,
-                "lcm": form.lcm.data,
-                "bold_outlines": form.bold_outlines.data,
-                "vivid_edge": form.vivid_edge.data,
-                "vivid_soft": form.vivid_soft.data
-            },
+            "LoRA": lora_data,
             "Sampling Method": form.sampling_method.data,
             "Sampling Steps": form.sampling_steps.data,
             "CFG Scale": form.cfg_scale.data
