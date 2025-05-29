@@ -6,7 +6,8 @@ from wtforms import (
     IntegerField,
     FloatField,
     TextAreaField,
-    BooleanField
+    BooleanField,
+    FieldList
 )
 
 
@@ -23,6 +24,7 @@ class SubmitForm(FlaskForm):
         ('Hoseki', 'Hoseki')
         ])
     prompt = TextAreaField('Prompt', default='...')
+    tags = FieldList(StringField('Tag'), min_entries=0)
 
     # LoRA
     dmd2 = FloatField('DMD2', default=0)

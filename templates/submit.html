@@ -32,13 +32,34 @@
 
             {{ form.model.label }} {{ form.model() }}<br>
             {{ form.prompt.label }} {{ form.prompt() }}<br>
+
         </fieldset>
 
+        <fieldset>
+    <legend>Tags</legend>
+    <div class="tag-container">
+        <div class="tag-input">
+            <input type="text" id="tag-input" placeholder="Add a tag...">
+            <button type="button" id="add-tag">+</button>
+        </div>
+        <div class="tags-list" id="tags-list">
+            {% for tag in form.tags %}
+                {% if tag.data %}
+                    <span class="tag-item">
+                        {{ tag.data }}
+                        <input type="hidden" name="tags-{{ loop.index0 }}" value="{{ tag.data }}">
+                        <span class="remove-tag">×</span>
+                    </span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</fieldset>
 
 <fieldset class="lora-fieldset">
     <legend>LoRA</legend>
-    {{ lora_submit(form.dmd2) }}
-    {{ lora_submit(form.lcm) }}
+    {{ lora_submit(form.dmd2, "URL TEST") }}
+    {{ lora_submit(form.lcm, "LCM Test") }}
     {{ lora_submit(form.bold_outlines) }}
     {{ lora_submit(form.vivid_edge) }}
     {{ lora_submit(form.vivid_soft) }}
@@ -57,6 +78,6 @@
 
 {# Script #}
     <script src="{{ url_for('static', filename='js/img_preview.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/sliders.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tags.js') }}"></script>
 </body>
 </html>

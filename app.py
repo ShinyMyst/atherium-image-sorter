@@ -48,6 +48,8 @@ def post_submit():
     # all the names should be in the submit.py only
 
     data_sets = []
+    print(dict(request.form))
+    print(form)
 
     # TODO - Needto change the form to avoid hardcoding but giving up for now
     if form.test_data.data:
@@ -57,12 +59,14 @@ def post_submit():
     if form.gallery.data:
         data_sets.append("Gallery")
     print(data_sets)
+    tags = [tag.data.lower() for tag in form.tags if tag.data]
 
     structured_data = {
             # Direct access via form.field.data
             "url": form.url.data,
             "model": form.model.data,
             "prompt": form.prompt.data,
+            "Tags": tags,
             "LoRA": {
                 "dmd2": form.dmd2.data,
                 "lcm": form.lcm.data,
