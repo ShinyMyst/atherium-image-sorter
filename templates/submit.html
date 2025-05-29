@@ -57,13 +57,20 @@
 </fieldset>
 
 <fieldset class="lora-fieldset">
-    <legend>LoRA</legend>
-    {{ lora_submit(form.dmd2, "URL TEST") }}
-    {{ lora_submit(form.lcm, "LCM Test") }}
-    {{ lora_submit(form.bold_outlines) }}
-    {{ lora_submit(form.vivid_edge) }}
-    {{ lora_submit(form.vivid_soft) }}
-    {{ lora_submit(form.cartoony) }}
+    <legend>LoRA
+        <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
+    </legend>
+
+    <div id="lora-container">
+        {{ lora_submit(form.dmd2) }}
+        {{ lora_submit(form.lcm) }}
+        {{ lora_submit(form.bold_outlines) }}
+        {{ lora_submit(form.vivid_edge) }}
+        {{ lora_submit(form.vivid_soft) }}
+        {{ lora_submit(form.cartoony) }}
+
+        <div id="dynamic-lora-container"></div>
+    </div>
 </fieldset>
 
         <fieldset class="sampling-parameters">
@@ -79,5 +86,6 @@
 {# Script #}
     <script src="{{ url_for('static', filename='js/img_preview.js') }}"></script>
     <script src="{{ url_for('static', filename='js/tags.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lora.js') }}"></script>
 </body>
 </html>

@@ -35,6 +35,9 @@ class SubmitForm(FlaskForm):
     cartoony = FloatField('Cartoony', default=0)
     # URL needs hardcoded into html for now
 
+    dynamic_loras = FieldList(StringField('LoRA Type'), min_entries=0)
+    dynamic_strengths = FieldList(FloatField('Strength'), min_entries=0)
+
     lora_fields = [dmd2, lcm, bold_outlines, vivid_edge, vivid_soft, cartoony]
 
     # LoRA Details
