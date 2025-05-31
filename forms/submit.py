@@ -7,16 +7,20 @@ from wtforms import (
     FloatField,
     TextAreaField,
     BooleanField,
-    FieldList
+    FieldList,
+    SelectMultipleField
 )
-
 
 class SubmitForm(FlaskForm):
     # Data Sets
-    test_data = BooleanField('Test')
-    test_data_hidden = BooleanField('Test Ignore')
-    gallery = BooleanField('Gallery')
-
+    data_sets = SelectMultipleField(
+        'Data Sets',
+        choices=[
+            ('test_data', 'Test Data'),
+            ('test_data_hidden', 'Test Data Ignore'),
+            ('gallery', 'Gallery')
+        ]
+    )
     # Basic Information
     url = StringField('Image URL')
     model = SelectField('Model', choices=[

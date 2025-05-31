@@ -63,17 +63,9 @@ def post_submit():
 
 # TODO - This should be seperate file.
 def write_json(form, json_data):
-    data_sets = []
     # TODO - The below should be integrated into SubmitForm()
-    if form.test_data.data:
-        data_sets.append("Test Data")
-    if form.test_data_hidden.data:
-        data_sets.append("Test Data Ignore")
-    if form.gallery.data:
-        data_sets.append("Gallery")
-        data_set = set()
-    for item in request.form.getlist('Data Set'):
-        data_set.add(item.split()[0])
+    selected_sets = form.data_sets.data  # NEW method
+    print(selected_sets)
 
 
 @app.route('/favicon.ico')
