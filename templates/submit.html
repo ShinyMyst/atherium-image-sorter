@@ -17,6 +17,10 @@
     <form method="POST" action="{{ url_for('post_submit') }}" target="_blank">
         {{ form.hidden_tag() }}
 
+    <div class="image-preview">
+        <img id="preview" src="">
+    </div>
+
     <fieldset>
         <legend>Data Sets</legend>
         {{ form.data_sets(size=3, multiple=True) }}
@@ -27,12 +31,13 @@
             <legend>Basic Info</legend>
             <label for="image-url">Image URL:</label>
             <input type="url" id="image-url" name="url" oninput="updatePreview(this.value)">
-            <img id="preview" src="">
 
             {{ form.model.label }} {{ form.model() }}<br>
             {{ form.prompt.label }} {{ form.prompt() }}<br>
 
         </fieldset>
+
+
 
         <fieldset>
     <legend>Tags</legend>
