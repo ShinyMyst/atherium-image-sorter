@@ -42,44 +42,38 @@ def get_submit():
 @app.route('/new', methods=['POST'])
 def post_submit():
     form = SubmitForm()
-    # TODO - Stucturing form needs elsewhere
-    # TODO - This also should only be changed in one place
-    # TODO - The HTML should not need hardcoded nor should this reference
-    # all the names should be in the submit.py only
-
-    data_sets = []
-    print(dict(request.form))
+    # TODO - The below should be integrated into SubmitForm()
     lora_json = request.form.get('lora_data', '{}')
     lora_data = json.loads(lora_json)
-    print(lora_data)
-    for name, strength in lora_data.items():
-        print(name, strength)
 
-    # TODO - Needto change the form to avoid hardcoding but giving up for now
+    json_data = {
+            "URL": form.url.data,
+            "Model": form.model.data,
+            "Prompt": form.prompt.data,
+            "Tags": [tag.data.lower() for tag in form.tags if tag.data],
+            "LoRA": lora_data,
+            "Sampling Method": form.sampling_method.data,
+            "Sampling Steps": form.sampling_steps.data,
+            "CFG Scale": form.cfg_scale.data
+    }
+    write_json(form, json_data)
+
+    return jsonify(json_data)
+
+
+# TODO - This should be seperate file.
+def write_json(form, json_data):
+    data_sets = []
+    # TODO - The below should be integrated into SubmitForm()
     if form.test_data.data:
         data_sets.append("Test Data")
     if form.test_data_hidden.data:
         data_sets.append("Test Data Ignore")
     if form.gallery.data:
         data_sets.append("Gallery")
-    tags = [tag.data.lower() for tag in form.tags if tag.data]
-
-    structured_data = {
-            # Direct access via form.field.data
-            "url": form.url.data,
-            "model": form.model.data,
-            "prompt": form.prompt.data,
-            "Tags": tags,
-            "LoRA": lora_data,
-            "Sampling Method": form.sampling_method.data,
-            "Sampling Steps": form.sampling_steps.data,
-            "CFG Scale": form.cfg_scale.data
-    }
-    data_set = set()
+        data_set = set()
     for item in request.form.getlist('Data Set'):
         data_set.add(item.split()[0])
-
-    return jsonify(structured_data)
 
 
 @app.route('/favicon.ico')
