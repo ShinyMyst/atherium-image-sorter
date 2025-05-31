@@ -6,15 +6,14 @@ from wtforms import (
     IntegerField,
     FloatField,
     TextAreaField,
-    BooleanField,
     FieldList,
     SelectMultipleField
 )
 
+
 class SubmitForm(FlaskForm):
     # Data Sets
     data_sets = SelectMultipleField(
-        'Data Sets',
         choices=[
             ('test_data', 'Test Data'),
             ('test_data_hidden', 'Test Data Ignore'),

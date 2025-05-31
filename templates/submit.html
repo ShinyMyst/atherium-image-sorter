@@ -17,12 +17,10 @@
     <form method="POST" action="{{ url_for('post_submit') }}" target="_blank">
         {{ form.hidden_tag() }}
 
-<fieldset>
-    <legend>Data Sets</legend>
-    {{ form.data_sets.label }}<br>
-    {{ form.data_sets(size=3, multiple=True) }}  <!-- 'size' shows N visible options -->
-    <small>(Hold Ctrl/Cmd to select multiple)</small>
-</fieldset>
+    <fieldset>
+        <legend>Data Sets</legend>
+        {{ form.data_sets(size=3, multiple=True) }}
+    </fieldset>
 
 
         <fieldset>
