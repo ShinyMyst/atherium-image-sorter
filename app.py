@@ -7,8 +7,11 @@ from forms.gallery import GalleryForm
 
 json_dict = {
     'Gallery': "data/images.json",
-    'Style': "data/styles.json"
+    'Style': "data/styles.json",
+    'Test': "data/test.json"
 }
+
+active_data = json_dict['Test']
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
@@ -23,7 +26,7 @@ def index():
 @app.route('/gallery')
 def gallery():
     form = GalleryForm()
-    with open('data/images.json') as f:
+    with open(active_data) as f:
         images = json.load(f)
     return render_template('gallery.html', form=form, image_json=images)
 
@@ -48,8 +51,8 @@ def post_submit():
     lora_data = json.loads(lora_json)
 
     json_data = {
-            "URL": form.url.data,
-            "Model": form.model.data,
+            "url": form.url.data,
+            "model": form.model.data,
             "Prompt": form.prompt.data,
             "Tags": [tag.data.lower() for tag in form.tags if tag.data],
             "LoRA": lora_data,
@@ -71,8 +74,15 @@ def write_json(form, json_data):
     json_dir = 'data'
     for name in selected_sets:
         file_path = os.path.join(json_dir, f"{name}.json")
+        try:
+            with open(file_path, 'r') as f:
+                existing_data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            print("ERROR")
+            break
+        existing_data.append(json_data)
         with open(file_path, 'w') as f:
-            json.dump(json_data, f, indent=4)
+            json.dump(existing_data, f, indent=4)
 
 
 @app.route('/favicon.ico')
