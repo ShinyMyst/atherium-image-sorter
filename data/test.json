@@ -1,0 +1,11 @@
+{
+    "URL": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+    "Model": "Hoshino",
+    "Prompt": "",
+    "Tags": [],
+    "LoRA": {},
+    "Sampling Method": "Euler A",
+    "Sampling Steps": 10,
+    "CFG Scale": 2,
+    "ranking": 0
+}

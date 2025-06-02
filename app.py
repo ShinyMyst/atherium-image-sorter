@@ -1,4 +1,5 @@
 import json
+import os
 from flask import Flask, render_template, jsonify, request
 from forms.submit import SubmitForm
 from forms.gallery import GalleryForm
@@ -54,7 +55,8 @@ def post_submit():
             "LoRA": lora_data,
             "Sampling Method": form.sampling_method.data,
             "Sampling Steps": form.sampling_steps.data,
-            "CFG Scale": form.cfg_scale.data
+            "CFG Scale": form.cfg_scale.data,
+            "ranking": 0
     }
     write_json(form, json_data)
 
@@ -63,9 +65,14 @@ def post_submit():
 
 # TODO - This should be seperate file.
 def write_json(form, json_data):
-    # TODO - The below should be integrated into SubmitForm()
     selected_sets = form.data_sets.data  # NEW method
     print(selected_sets)
+
+    json_dir = 'data'
+    for name in selected_sets:
+        file_path = os.path.join(json_dir, f"{name}.json")
+        with open(file_path, 'w') as f:
+            json.dump(json_data, f, indent=4)
 
 
 @app.route('/favicon.ico')

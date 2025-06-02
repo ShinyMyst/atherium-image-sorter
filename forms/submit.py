@@ -15,9 +15,7 @@ class SubmitForm(FlaskForm):
     # Data Sets
     data_sets = SelectMultipleField(
         choices=[
-            ('test_data', 'Test Data'),
-            ('test_data_hidden', 'Test Data Ignore'),
-            ('gallery', 'Gallery')
+            ('test', 'Test File')
         ]
     )
     # Basic Information
