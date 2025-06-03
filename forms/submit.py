@@ -15,14 +15,18 @@ class SubmitForm(FlaskForm):
     # Data Sets
     data_sets = SelectMultipleField(
         choices=[
-            ('test', 'Test File')
+            ('gallery', 'Gallery'),
+            ('test', 'Test File'),
+            ('llamas', 'Ill Llama')
         ]
     )
     # Basic Information
     url = StringField('Image URL')
     model = SelectField('Model', choices=[
         ('Hoshino', 'Hoshino'),
-        ('Hoseki', 'Hoseki')
+        ('Hoseki', 'Hoseki'),
+        ('KonpaEvo', 'KonpaEvo'),
+        ('KiwiMix-XL', 'KiwiMix-XL')
         ])
     prompt = TextAreaField('Prompt', default='...')
     tags = FieldList(StringField('Tag'), min_entries=0)
@@ -49,7 +53,7 @@ class SubmitForm(FlaskForm):
         ('LMS', 'LMS')
         ])
     sampling_steps = IntegerField('Sampling Steps', default=10)
-    cfg_scale = IntegerField('CFG Steps', default=2)
+    cfg_scale = FloatField('CFG Scale', default=2)
 
     # Submit
     submit = SubmitField('Submit')

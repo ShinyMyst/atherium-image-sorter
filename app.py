@@ -6,9 +6,9 @@ from forms.gallery import GalleryForm
 
 
 json_dict = {
-    'Gallery': "data/images.json",
-    'Style': "data/styles.json",
-    'Test': "data/test.json"
+    'Test': "data/test.json",
+    'Gallery': "data/gallery.json",
+    'Test2': "data/llamas.json"
 }
 
 active_data = json_dict['Test']
@@ -49,6 +49,7 @@ def post_submit():
     # TODO - The below should be integrated into SubmitForm()
     lora_json = request.form.get('lora_data', '{}')
     lora_data = json.loads(lora_json)
+    print(lora_data)
 
     json_data = {
             "url": form.url.data,
@@ -68,8 +69,8 @@ def post_submit():
 
 # TODO - This should be seperate file.
 def write_json(form, json_data):
-    selected_sets = form.data_sets.data  # NEW method
-    print(selected_sets)
+    selected_sets = form.data_sets.data
+    # print(selected_sets)
 
     json_dir = 'data'
     for name in selected_sets:
@@ -78,8 +79,7 @@ def write_json(form, json_data):
             with open(file_path, 'r') as f:
                 existing_data = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
-            print("ERROR")
-            break
+            existing_data = []
         existing_data.append(json_data)
         with open(file_path, 'w') as f:
             json.dump(existing_data, f, indent=4)

@@ -83,7 +83,7 @@
             {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
             {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>
         </fieldset>
-
+        <input type="hidden" name="lora_data" id="lora-data">
         {{ form.submit() }}
     </form>
 

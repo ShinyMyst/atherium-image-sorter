@@ -48,10 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Add hidden field with JSON data
-        const hiddenField = document.createElement('input');
-        hiddenField.type = 'hidden';
-        hiddenField.name = 'lora_data';
-        hiddenField.value = JSON.stringify(loraData);
-        form.appendChild(hiddenField);
+const hiddenField = document.getElementById('lora-data');
+if (hiddenField) {
+    hiddenField.value = JSON.stringify(loraData);
+}
     });
 });
