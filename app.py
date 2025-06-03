@@ -11,7 +11,7 @@ json_dict = {
     'Test2': "data/llamas.json"
 }
 
-active_data = json_dict['Test']
+active_data = json_dict['Test2']
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'

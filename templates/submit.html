@@ -29,15 +29,12 @@
 
         <fieldset>
             <legend>Basic Info</legend>
-            <label for="image-url">Image URL:</label>
-            <input type="url" id="image-url" name="url" oninput="updatePreview(this.value)">
 
-            {{ form.model.label }} {{ form.model() }}<br>
             {{ form.prompt.label }} {{ form.prompt() }}<br>
 
+            {{ form.model.label }} {{ form.model() }}<br>
+
         </fieldset>
-
-
 
         <fieldset>
     <legend>Tags</legend>
@@ -83,7 +80,12 @@
             {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
             {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>
         </fieldset>
+
+            <label for="image-url">Image URL:</label>
+            <input type="url" id="image-url" name="url" oninput="updatePreview(this.value)">
+<fieldset>
         <input type="hidden" name="lora_data" id="lora-data">
+</fieldset>
         {{ form.submit() }}
     </form>
 

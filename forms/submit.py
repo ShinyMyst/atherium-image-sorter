@@ -25,6 +25,7 @@ class SubmitForm(FlaskForm):
     model = SelectField('Model', choices=[
         ('Hoshino', 'Hoshino'),
         ('Hoseki', 'Hoseki'),
+        ('AniKawaXL', 'AniKawaXL'),
         ('KonpaEvo', 'KonpaEvo'),
         ('KiwiMix-XL', 'KiwiMix-XL')
         ])
