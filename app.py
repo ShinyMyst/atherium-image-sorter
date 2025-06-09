@@ -1,13 +1,17 @@
 import json
+import os
 from flask import Flask, render_template, jsonify, request
 from forms.submit import SubmitForm
 from forms.gallery import GalleryForm
 
 
 json_dict = {
-    'Gallery': "data/images.json",
-    'Style': "data/styles.json"
+    'Test': "data/test.json",
+    'Gallery': "data/gallery.json",
+    'Test2': "data/llamas.json"
 }
+
+active_data = json_dict['Test2']
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
@@ -22,7 +26,7 @@ def index():
 @app.route('/gallery')
 def gallery():
     form = GalleryForm()
-    with open('data/images.json') as f:
+    with open(active_data) as f:
         images = json.load(f)
     return render_template('gallery.html', form=form, image_json=images)
 
@@ -42,37 +46,43 @@ def get_submit():
 @app.route('/new', methods=['POST'])
 def post_submit():
     form = SubmitForm()
-    # TODO - Stucturing form needs elsewhere
-    data_sets = []
-    if form.gallery:
-        data_sets.append("Gallery")
-    if form.style_kagerou:
-        data_sets.append("Style Kagerou")
-    if form.style_holo:
-        data_sets.append("Style Holo")
+    # TODO - The below should be integrated into SubmitForm()
+    lora_json = request.form.get('lora_data', '{}')
+    lora_data = json.loads(lora_json)
+    print(lora_data)
 
-    structured_data = {
-            # Direct access via form.field.data
+    json_data = {
             "url": form.url.data,
             "model": form.model.data,
-            "prompt": form.prompt.data,
-            "LoRA": {
-                "dmd2": form.dmd2.data,
-                "lcm": form.lcm.data,
-                "bold_outlines": form.bold_outlines.data,
-                "vivid_edge": form.vivid_edge.data,
-                "vivid_soft": form.vivid_soft.data
-            },
+            "Prompt": form.prompt.data,
+            "Tags": [tag.data.lower() for tag in form.tags if tag.data],
+            "LoRA": lora_data,
             "Sampling Method": form.sampling_method.data,
             "Sampling Steps": form.sampling_steps.data,
-            "Data Set": data_sets
+            "CFG Scale": form.cfg_scale.data,
+            "ranking": 0
     }
-    print(structured_data)
-    data_set = set()
-    for item in request.form.getlist('Data Set'):
-        data_set.add(item.split()[0])
+    write_json(form, json_data)
 
-    return jsonify(structured_data)
+    return jsonify(json_data)
+
+
+# TODO - This should be seperate file.
+def write_json(form, json_data):
+    selected_sets = form.data_sets.data
+    # print(selected_sets)
+
+    json_dir = 'data'
+    for name in selected_sets:
+        file_path = os.path.join(json_dir, f"{name}.json")
+        try:
+            with open(file_path, 'r') as f:
+                existing_data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            existing_data = []
+        existing_data.append(json_data)
+        with open(file_path, 'w') as f:
+            json.dump(existing_data, f, indent=4)
 
 
 @app.route('/favicon.ico')

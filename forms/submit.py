@@ -6,23 +6,31 @@ from wtforms import (
     IntegerField,
     FloatField,
     TextAreaField,
-    BooleanField
+    FieldList,
+    SelectMultipleField
 )
 
 
 class SubmitForm(FlaskForm):
     # Data Sets
-    gallery = BooleanField('Gallery')
-    style_kagerou = BooleanField('Style Kagerou')
-    style_holo = BooleanField('Style Holo')
-
+    data_sets = SelectMultipleField(
+        choices=[
+            ('gallery', 'Gallery'),
+            ('test', 'Test File'),
+            ('llamas', 'Ill Llama')
+        ]
+    )
     # Basic Information
     url = StringField('Image URL')
     model = SelectField('Model', choices=[
         ('Hoshino', 'Hoshino'),
-        ('Hoseki', 'Hoseki')
+        ('Hoseki', 'Hoseki'),
+        ('AniKawaXL', 'AniKawaXL'),
+        ('KonpaEvo', 'KonpaEvo'),
+        ('KiwiMix-XL', 'KiwiMix-XL')
         ])
     prompt = TextAreaField('Prompt', default='...')
+    tags = FieldList(StringField('Tag'), min_entries=0)
 
     # LoRA
     dmd2 = FloatField('DMD2', default=0)
@@ -30,6 +38,13 @@ class SubmitForm(FlaskForm):
     bold_outlines = FloatField('Bold Outlines', default=0)
     vivid_edge = FloatField('Vivid Edge', default=0)
     vivid_soft = FloatField('Vivid Soft', default=0)
+    cartoony = FloatField('Cartoony', default=0)
+    # URL needs hardcoded into html for now
+
+    dynamic_loras = FieldList(StringField('LoRA Type'), min_entries=0)
+    dynamic_strengths = FieldList(FloatField('Strength'), min_entries=0)
+
+    lora_fields = [dmd2, lcm, bold_outlines, vivid_edge, vivid_soft, cartoony]
 
     # LoRA Details
     sampling_method = SelectField('Sampling Method', choices=[
@@ -39,6 +54,7 @@ class SubmitForm(FlaskForm):
         ('LMS', 'LMS')
         ])
     sampling_steps = IntegerField('Sampling Steps', default=10)
+    cfg_scale = FloatField('CFG Scale', default=2)
 
     # Submit
     submit = SubmitField('Submit')
