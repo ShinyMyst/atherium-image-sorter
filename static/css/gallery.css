@@ -139,3 +139,35 @@
     font-size: 14px;
     margin-top: 8px;
 }
+
+        /* Image Rating */
+        .rating-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .rating-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+        .plus-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .minus-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        .rating-value {
+            width: 30px;
+            text-align: center;
+            font-weight: bold;
+        }

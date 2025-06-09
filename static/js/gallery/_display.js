@@ -7,10 +7,18 @@ function _imageContainer(img) {
     container.innerHTML = `
         <img src="${img.url}" alt="Generated Image" style="cursor:pointer">
         <div class="image-details" style="display:none">
+            // Image Score (used to push it up or down the page)
+            <div class="rating-controls">
+                <button class="rating-btn minus-btn">-</button>
+                <span class="rating-value">${img.rating || 0}</span>
+                <button class="rating-btn plus-btn">+</button>
+            </div>
+        // Image Data
             <p>Model: ${img.model}</p>
             <p>Sampling: ${img["Sampling Method"]}</p>
             ${Object.entries(img.LoRA).map(([k,v]) => `<p>${k}: ${v}</p>`).join('')}
             ${img.Tags ? `<p>Tags: ${img.Tags.join(', ')}</p>` : ''}
+
         </div>
     `;
 
