@@ -85,6 +85,16 @@ def write_json(form, json_data):
             json.dump(existing_data, f, indent=4)
 
 
+@app.route('/update-rating', methods=['POST'])
+def update_rating():
+    image_url = request.args.get('image_url')
+    change = int(request.args.get('change'))
+
+    print(f"Received: Image URL - {image_url}, Change - {change}")
+
+    return '', 200
+
+
 @app.route('/favicon.ico')
 def favicon():
     return "", 204  # No content response to stop the 404

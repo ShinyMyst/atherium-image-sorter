@@ -1,5 +1,6 @@
 import { passesFilters } from './_filters.js';
 
+
 function _imageContainer(img) {
     const container = document.createElement("div");
     container.className = "image-container";
@@ -21,6 +22,16 @@ function _imageContainer(img) {
 
         </div>
     `;
+    // Button event handlers
+    container.querySelector('.plus-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        updateRating(img.url, 1);
+    });
+
+    container.querySelector('.minus-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        updateRating(img.url, -1);
+    });
 
     // Event handlers
     container.querySelector('img').addEventListener('click', () => {
@@ -52,4 +63,11 @@ export function displayImages(image_data) {
     } catch (error) {
         console.error("RENDER ERROR:", error);
     }
+}
+
+// TODO - Maybe jsut add this to event handler directly?
+function updateRating(imageUrl, change) {
+    fetch(`/update-rating?image_url=${encodeURIComponent(imageUrl)}&change=${change}`, {
+        method: 'POST'
+    });
 }
