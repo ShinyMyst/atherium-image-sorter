@@ -11,7 +11,7 @@ json_dict = {
     'Test2': "data/llamas.json"
 }
 
-active_data = json_dict['Test2']
+active_data = json_dict['Test']
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
@@ -35,6 +35,7 @@ def gallery():
 def get_images():
     with open('data/images.json') as f:
         image_data = json.load(f)
+
     return jsonify(image_data)
 
 
@@ -62,13 +63,13 @@ def post_submit():
             "CFG Scale": form.cfg_scale.data,
             "ranking": 0
     }
-    write_json(form, json_data)
+    append_json(form, json_data)
 
     return jsonify(json_data)
 
 
 # TODO - This should be seperate file.
-def write_json(form, json_data):
+def append_json(form, json_data):
     selected_sets = form.data_sets.data
     # print(selected_sets)
 
@@ -91,6 +92,14 @@ def update_rating():
     change = int(request.args.get('change'))
 
     print(f"Received: Image URL - {image_url}, Change - {change}")
+    with open(active_data) as f:
+        image_data = json.load(f)
+    for image in image_data:
+        if image['url'] == image_url:
+            image['ranking'] += change
+
+    with open(active_data, 'w') as f:
+        json.dump(image_data, f, indent=4)
 
     return '', 200
 
@@ -102,3 +111,10 @@ def favicon():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# TODO - This whole page needs refactored
+# TODO - Consider making this a class to avoid loading the same data
+# TODO - Restructure JSON as a dict with the URL as main key.
+# Make sure to only write if key is unique
+# TODO - More dynamic way to save elements of the JSON

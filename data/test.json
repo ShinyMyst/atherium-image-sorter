@@ -8,6 +8,17 @@
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "CFG Scale": 2,
+        "ranking": 1
+    },
+    {
+        "url": "https://rapi.pixai.art/img/media/555892938650569840/orig",
+        "model": "Hoshino",
+        "Prompt": "...",
+        "Tags": [],
+        "LoRA": {},
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "CFG Scale": 2.0,
         "ranking": 0
     }
 ]
