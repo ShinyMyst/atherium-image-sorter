@@ -28,6 +28,7 @@ def gallery():
     form = GalleryForm()
     with open(active_data) as f:
         images = json.load(f)
+    images = sorted(images, key=lambda x: x.get("ranking", 0), reverse=True)
     return render_template('gallery.html', form=form, image_json=images)
 
 
@@ -118,3 +119,4 @@ if __name__ == '__main__':
 # TODO - Restructure JSON as a dict with the URL as main key.
 # Make sure to only write if key is unique
 # TODO - More dynamic way to save elements of the JSON
+# TODO - Pagination??
