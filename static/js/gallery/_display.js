@@ -11,7 +11,7 @@ function _imageContainer(img) {
             // Image Score (used to push it up or down the page)
             <div class="rating-controls">
                 <button class="rating-btn minus-btn">-</button>
-                <span class="rating-value">${img.rating || 0}</span>
+                <span class="rating-value">${img.ranking || 0}</span>
                 <button class="rating-btn plus-btn">+</button>
             </div>
         // Image Data
@@ -25,11 +25,15 @@ function _imageContainer(img) {
     // Button event handlers
     container.querySelector('.plus-btn').addEventListener('click', (e) => {
         e.stopPropagation();
+        const ratingEl = container.querySelector('.rating-value');  // live changes b4 file updates
+        ratingEl.textContent = parseInt(ratingEl.textContent) + 1;  // live changes
         updateRating(img.url, 1);
     });
 
     container.querySelector('.minus-btn').addEventListener('click', (e) => {
         e.stopPropagation();
+        const ratingEl = container.querySelector('.rating-value');  // live changes
+        ratingEl.textContent = parseInt(ratingEl.textContent) + 1;  // live changes
         updateRating(img.url, -1);
     });
 
