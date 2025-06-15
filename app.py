@@ -116,24 +116,6 @@ def post_submit():
     return jsonify(new_entry)
 
 
-# TODO - This should be seperate file.
-def append_json(form, json_data):
-    selected_sets = form.data_sets.data
-    # print(selected_sets)
-
-    json_dir = 'data'
-    for name in selected_sets:
-        file_path = os.path.join(json_dir, f"{name}.json")
-        try:
-            with open(file_path, 'r') as f:
-                existing_data = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            existing_data = []
-        existing_data.append(json_data)
-        with open(file_path, 'w') as f:
-            json.dump(existing_data, f, indent=4)
-
-
 @app.route('/update-rating', methods=['POST'])
 def update_rating():
     image_url = request.args.get('image_url')
