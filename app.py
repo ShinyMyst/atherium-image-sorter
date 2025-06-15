@@ -12,16 +12,21 @@ class AppData():
             'Gallery': "collections/gallery.json",
             'Test2': "collections/llamas.json"
             }
+        self.stale = True  # Tracks if active_collection is up-to-date
         self.active_route = self.route_dict[collection_name]
         self.active_collect = self._prep_collect(self.active_route)
         # Note- Use arg bc _prep_collect may use dif routes elsewhere
 
+    # TODO - Make a set active route function rather than setting in init.
+
     def get_collection(self):
-        """Returns the active collection"""
+        """Returns the ACTIVE collection"""
+        if self.stale:
+            self.active_collect = self._prep_collect(self.active_route)
         return self.active_collect
 
     def update_ranking(self, key_url, change):
-        """Changes the ranking of one collection element.
+        """Changes the ranking of one ACTIVE collection element.
         URL used to determine the target element/image."""
         for image in self.active_collect:
             if image['url'] == key_url:
@@ -29,11 +34,13 @@ class AppData():
                 break
         with open(self.active_route, 'w') as f:
             json.dump(self.active_collect, f, indent=4)
+        self.stale = True
 
     def _prep_collect(self, route):
-        """Given a route, returns a sorted collection"""
+        """Given a route, returns an up-to-date sorted collection"""
         collect = self._open_collect(route)
         sorted_collect = self._sort_collect(collect)
+        self.stale = False
         return sorted_collect
 
     def _open_collect(self, route):
@@ -61,7 +68,6 @@ def index():
 
 @app.route('/gallery')
 def gallery():
-    # TODO - Needs a way to update collection if it has changed.
     collection = app_data.get_collection()
     return render_template('gallery.html',
                            form=GalleryForm(),
