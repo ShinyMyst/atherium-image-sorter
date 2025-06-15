@@ -32,9 +32,7 @@ class AppData():
             if image['url'] == key_url:
                 image['ranking'] += change
                 break
-        with open(self.active_route, 'w') as f:
-            json.dump(self.active_collect, f, indent=4)
-        self.stale = True
+        self._write_changes()
 
     def _prep_collect(self, route):
         """Given a route, returns an up-to-date sorted collection"""
@@ -55,6 +53,33 @@ class AppData():
                       key=lambda x: x.get("ranking", 0),
                       reverse=True)
 
+    def format_entry(self, form: SubmitForm, lora_json):
+        """Given data from submit form, structures it into a new JSON entry."""
+        lora_data = json.loads(lora_json)
+        entry_data = {
+            "url": form.url.data,
+            "model": form.model.data,
+            "Prompt": form.prompt.data,
+            "Tags": [tag.data.lower() for tag in form.tags if tag.data],
+            "LoRA": lora_data,
+            "Sampling Method": form.sampling_method.data,
+            "Sampling Steps": form.sampling_steps.data,
+            "CFG Scale": form.cfg_scale.data,
+            "ranking": 0
+        }
+        return entry_data
+
+    def add_entry(self, entry_data):
+        """Adds a new entry to the active collection."""
+        self.active_collect.append(entry_data)
+        self._write_changes()
+
+    def _write_changes(self):
+        """Writes pending changes to active JSON.  Change status to stale"""
+        with open(self.active_route, 'w') as f:
+            json.dump(self.active_collect, f, indent=4)
+        self.stale = True
+
 
 app_data = AppData("Test")
 app = Flask(__name__)
@@ -74,14 +99,6 @@ def gallery():
                            image_json=collection)
 
 
-@app.route('/api/images')
-def get_images():
-    with open('data/images.json') as f:
-        image_data = json.load(f)
-
-    return jsonify(image_data)
-
-
 @app.route('/submit')
 def get_submit():
     return render_template('submit.html', form=SubmitForm())
@@ -89,26 +106,14 @@ def get_submit():
 
 @app.route('/new', methods=['POST'])
 def post_submit():
+    """Adds entry to active collection.  Displays entry in a new tab."""
     form = SubmitForm()
-    # TODO - The below should be integrated into SubmitForm()
     lora_json = request.form.get('lora_data', '{}')
-    lora_data = json.loads(lora_json)
-    print(lora_data)
+    # TODO - Integrate this into the form instead?
 
-    json_data = {
-            "url": form.url.data,
-            "model": form.model.data,
-            "Prompt": form.prompt.data,
-            "Tags": [tag.data.lower() for tag in form.tags if tag.data],
-            "LoRA": lora_data,
-            "Sampling Method": form.sampling_method.data,
-            "Sampling Steps": form.sampling_steps.data,
-            "CFG Scale": form.cfg_scale.data,
-            "ranking": 0
-    }
-    append_json(form, json_data)
-
-    return jsonify(json_data)
+    new_entry = app_data.format_entry(form, lora_json)
+    app_data.add_entry(new_entry)
+    return jsonify(new_entry)
 
 
 # TODO - This should be seperate file.
@@ -139,7 +144,7 @@ def update_rating():
 
 @app.route('/favicon.ico')
 def favicon():
-    return "", 204  # No content response to stop the 404
+    return "", 204
 
 
 if __name__ == '__main__':
@@ -147,9 +152,7 @@ if __name__ == '__main__':
 
 
 # TODO - This whole page needs refactored
-# TODO - Consider making this a class to avoid loading the same data
 # TODO - Restructure JSON as a dict with the URL as main key.
 # Make sure to only write if key is unique
 # TODO - More dynamic way to save elements of the JSON
 # TODO - Pagination??
-# TODO -
