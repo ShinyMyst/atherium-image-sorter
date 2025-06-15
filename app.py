@@ -12,11 +12,23 @@ class AppData():
             'Gallery': "collections/gallery.json",
             'Test2': "collections/llamas.json"
             }
-        target_route = self.route_dict[collection_name]
-        self.active_collect = self._prep_collect(target_route)
+        self.active_route = self.route_dict[collection_name]
+        self.active_collect = self._prep_collect(self.active_route)
+        # Note- Use arg bc _prep_collect may use dif routes elsewhere
 
-    def get_active_collection(self):
+    def get_collection(self):
+        """Returns the active collection"""
         return self.active_collect
+
+    def update_ranking(self, key_url, change):
+        """Changes the ranking of one collection element.
+        URL used to determine the target element/image."""
+        for image in self.active_collect:
+            if image['url'] == key_url:
+                image['ranking'] += change
+                break
+        with open(self.active_route, 'w') as f:
+            json.dump(self.active_collect, f, indent=4)
 
     def _prep_collect(self, route):
         """Given a route, returns a sorted collection"""
@@ -49,8 +61,11 @@ def index():
 
 @app.route('/gallery')
 def gallery():
-    collection = app_data.get_active_collection()
-    return render_template('gallery.html', form=GalleryForm(), image_json=collection)
+    # TODO - Needs a way to update collection if it has changed.
+    collection = app_data.get_collection()
+    return render_template('gallery.html',
+                           form=GalleryForm(),
+                           image_json=collection)
 
 
 @app.route('/api/images')
@@ -112,17 +127,7 @@ def append_json(form, json_data):
 def update_rating():
     image_url = request.args.get('image_url')
     change = int(request.args.get('change'))
-
-    print(f"Received: Image URL - {image_url}, Change - {change}")
-    with open(active_data) as f:
-        image_data = json.load(f)
-    for image in image_data:
-        if image['url'] == image_url:
-            image['ranking'] += change
-
-    with open(active_data, 'w') as f:
-        json.dump(image_data, f, indent=4)
-
+    app_data.update_ranking(image_url, change)
     return '', 200
 
 
