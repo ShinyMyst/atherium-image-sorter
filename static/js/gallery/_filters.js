@@ -39,8 +39,13 @@ function _checkLoras(imageLoras, activeLoras) {
     });
 }
 
-function _checkTags(imageTags, activeTags) {
-    return imageTags && imageTags.some(tag => activeTags.includes(tag));
+function _checkTags(imageTags, selectedTags) {
+    if (!imageTags || !Array.isArray(imageTags)) return false;
+
+    const lowerImageTags = imageTags.map(tag => tag.toLowerCase());
+    return selectedTags.every(selectedTag =>
+        lowerImageTags.includes(selectedTag.toLowerCase())
+    );
 }
 
 export function passesFilters(img) {

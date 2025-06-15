@@ -33,7 +33,7 @@ function _imageContainer(img) {
     container.querySelector('.minus-btn').addEventListener('click', (e) => {
         e.stopPropagation();
         const ratingEl = container.querySelector('.rating-value');  // live changes
-        ratingEl.textContent = parseInt(ratingEl.textContent) + 1;  // live changes
+        ratingEl.textContent = parseInt(ratingEl.textContent) - 1;  // live changes
         updateRating(img.url, -1);
     });
 
