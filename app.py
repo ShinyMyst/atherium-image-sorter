@@ -1,21 +1,45 @@
 import json
 import os
 from flask import Flask, render_template, jsonify, request
-from forms.submit import SubmitForm
-from forms.gallery import GalleryForm
+from python.submit import SubmitForm
+from python.gallery import GalleryForm
 
 
-json_dict = {
-    'Test': "data/test.json",
-    'Gallery': "data/gallery.json",
-    'Test2': "data/llamas.json"
-}
+class AppData():
+    def __init__(self, collection_name: str):
+        self.route_dict = {
+            'Test': "collections/test.json",
+            'Gallery': "collections/gallery.json",
+            'Test2': "collections/llamas.json"
+            }
+        target_route = self.route_dict[collection_name]
+        self.active_collect = self._prep_collect(target_route)
 
-active_data = json_dict['Test']
+    def get_active_collection(self):
+        return self.active_collect
 
+    def _prep_collect(self, route):
+        """Given a route, returns a sorted collection"""
+        collect = self._open_collect(route)
+        sorted_collect = self._sort_collect(collect)
+        return sorted_collect
+
+    def _open_collect(self, route):
+        """Opens, loads, saves, and returns a JSON collection."""
+        with open(route) as f:
+            collection = json.load(f)
+        return collection
+
+    def _sort_collect(self, collection: list):
+        """Sorts a collection by 'ranking' and returns the sorted list."""
+        return sorted(collection,
+                      key=lambda x: x.get("ranking", 0),
+                      reverse=True)
+
+
+app_data = AppData("Test")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
-# TODO - This is a place holder since it's required for forms
 
 
 @app.route('/')
@@ -25,11 +49,8 @@ def index():
 
 @app.route('/gallery')
 def gallery():
-    form = GalleryForm()
-    with open(active_data) as f:
-        images = json.load(f)
-    images = sorted(images, key=lambda x: x.get("ranking", 0), reverse=True)
-    return render_template('gallery.html', form=form, image_json=images)
+    collection = app_data.get_active_collection()
+    return render_template('gallery.html', form=GalleryForm(), image_json=collection)
 
 
 @app.route('/api/images')
@@ -120,3 +141,4 @@ if __name__ == '__main__':
 # Make sure to only write if key is unique
 # TODO - More dynamic way to save elements of the JSON
 # TODO - Pagination??
+# TODO -
