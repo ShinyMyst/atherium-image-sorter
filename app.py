@@ -17,8 +17,9 @@ def index():
 @app.route('/gallery')
 def gallery():
     collection = app_data.get_collection()
+    tags = app_data.get_tag_frequency()
     return render_template('gallery.html',
-                           form=GalleryForm(),
+                           form=GalleryForm(tags),
                            image_json=collection)
 
 

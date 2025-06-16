@@ -12,7 +12,8 @@ class CollectionManager():
             }
         self.stale = True  # Tracks if active_collection is up-to-date
         self.active_route = self.route_dict[collection_name]
-        self.active_collect = self._prep_collect(self.active_route)
+        self.active_collection = self._prep_collect(self.active_route)
+        self.tag_frequency = self._count_tags()
         # Note- Use arg bc _prep_collect may use dif routes elsewhere
 
     # TODO - Make a set active route function rather than setting in init.
@@ -20,13 +21,13 @@ class CollectionManager():
     def get_collection(self):
         """Returns the ACTIVE collection"""
         if self.stale:
-            self.active_collect = self._prep_collect(self.active_route)
-        return self.active_collect
+            self.active_collection = self._prep_collect(self.active_route)
+        return self.active_collection
 
     def update_ranking(self, key_url, change):
         """Changes the ranking of one ACTIVE collection element.
         URL used to determine the target element/image."""
-        for image in self.active_collect:
+        for image in self.active_collection:
             if image['url'] == key_url:
                 image['ranking'] += change
                 break
@@ -69,11 +70,26 @@ class CollectionManager():
 
     def add_entry(self, entry_data):
         """Adds a new entry to the active collection."""
-        self.active_collect.append(entry_data)
+        self.active_collection.append(entry_data)
         self._write_changes()
 
     def _write_changes(self):
         """Writes pending changes to active JSON.  Change status to stale"""
         with open(self.active_route, 'w') as f:
-            json.dump(self.active_collect, f, indent=4)
+            json.dump(self.active_collection, f, indent=4)
         self.stale = True
+
+    def _count_tags(self):
+        """Counts frequency of each tag in the active collection
+        Sorts with most frequent at top."""
+        tag_frequency = dict()
+        for entry in self.active_collection:
+            for tag in entry.get("Tags", []):
+                tag_frequency[tag] = tag_frequency.get(tag, 0) + 1
+        tag_frequency = dict(sorted(tag_frequency.items(),
+                                    key=lambda x: x[1],
+                                    reverse=True))
+        return tag_frequency
+
+    def get_tag_frequency(self):
+        return self.tag_frequency
