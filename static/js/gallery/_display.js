@@ -50,6 +50,18 @@ function _imageContainer(img) {
         container.querySelector('.image-details').style.display = 'none';
     });
 
+    const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.className = "edit-btn";
+
+editButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    alert("Edit clicked for: " + img.url);
+});
+
+container.style.position = "relative";  // Needed for absolute positioning inside
+container.appendChild(editButton);
+
     return container;
 }
 
