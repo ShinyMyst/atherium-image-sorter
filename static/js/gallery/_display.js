@@ -15,13 +15,14 @@ function _imageContainer(img) {
         </div>
 
         <div class="image-details">
-
             <p>Model: ${img.model}</p>
             <p>Sampling: ${img["Sampling Method"]}</p>
             ${Object.entries(img.LoRA).map(([k,v]) => `<p>${k}: ${v}</p>`).join('')}
             ${img.Tags ? `<p>Tags: ${img.Tags.join(', ')}</p>` : ''}
         </div>
     `;
+    // TODO - Add more details into the image details?
+
     // Button event handlers
     container.querySelector('.plus-btn').addEventListener('click', (e) => {
         e.stopPropagation();
@@ -56,8 +57,44 @@ editButton.addEventListener("click", (e) => {
 container.style.position = "relative";  // Needed for absolute positioning inside
 container.appendChild(editButton);
 
+// Check Box
+const checkbox = document.createElement("input");
+checkbox.type = "checkbox";
+checkbox.className = "select-checkbox";
+container.appendChild(checkbox);
+checkbox.addEventListener("change", () => {
+const anyChecked = document.querySelectorAll(".select-checkbox:checked").length > 0;
+const actionBar = document.querySelector("#action-bar");
+
+if (anyChecked) {
+actionBar.style.display = "block";
+} else {
+actionBar.style.display = "none";
+}
+});
+
+
     return container;
 }
+
+document.getElementById("bulk-action-btn").addEventListener("click", () => {
+    const checkedBoxes = document.querySelectorAll(".select-checkbox:checked");
+    const urls = [];
+
+    checkedBoxes.forEach(checkbox => {
+        const container = checkbox.closest(".image-container");
+        const img = container.querySelector("img");
+        if (img && img.src) {
+            urls.push(img.src);
+        }
+    });
+
+    if (urls.length > 0) {
+        alert("Selected image URLs:\n\n" + urls.join("\n"));
+    } else {
+        alert("No images selected.");
+    }
+});
 
 
 export function displayImages(image_data) {
@@ -81,3 +118,5 @@ function updateRating(imageUrl, change) {
         method: 'POST'
     });
 }
+
+// TODO - Some of this does not actually need to be dynamic and could be moved to HTML?

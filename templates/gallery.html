@@ -11,6 +11,8 @@
 <body>
     {# Macros #}
     {% from "_macros.html" import lora_toggle %}
+
+
     <div class="sidebar">
         <div class="navbar">
             <a href="{{ url_for('index') }}">Home</a>
@@ -67,7 +69,14 @@
         </fieldset>
     </div>
 
+    <div class="main-content">
+    <div id="action-bar">
+        <button id="bulk-action-btn">Apply to Selected</button>
+    </div>
+
     <div class="grid"><!-- Image containers will be inserted here --></div>
+
+</div>
 
     <script type="module">
         const IMAGE_DATA = {{ image_json | tojson | safe }};

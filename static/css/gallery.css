@@ -272,3 +272,25 @@ input:checked + .slider:before {
   opacity: 1;
 }
 
+#action-bar {
+    position: sticky;
+    top: 0;
+    margin-left: 220px;
+    width: calc(100% - 220px);
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ccc;
+    padding: 12px 20px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Check Box */
+.select-checkbox {
+  display: none
+}
+
+/* Show checkboxes only in Edit Mode */
+:has(.switch input:checked) .select-checkbox {
+  display: inline-block
+}
