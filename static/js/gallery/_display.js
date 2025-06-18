@@ -14,7 +14,7 @@ function _imageContainer(img) {
             <button class="rating-btn plus-btn">+</button>
         </div>
 
-        <div class="image-details" style="display:none">
+        <div class="image-details">
 
             <p>Model: ${img.model}</p>
             <p>Sampling: ${img["Sampling Method"]}</p>
@@ -42,13 +42,7 @@ function _imageContainer(img) {
         window.open(img.url, "_blank");
     });
 
-    container.addEventListener('mouseenter', () => {
-        container.querySelector('.image-details').style.display = 'block';
-    });
 
-    container.addEventListener('mouseleave', () => {
-        container.querySelector('.image-details').style.display = 'none';
-    });
 
     const editButton = document.createElement("button");
     editButton.textContent = "Edit";
