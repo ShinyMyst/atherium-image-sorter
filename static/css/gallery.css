@@ -398,3 +398,16 @@ input:checked + .slider:before {
 .action-bar-corner-btn.bottom-right:hover {
     background-color: #c82333;
 }
+
+
+.image-container {
+    border: 2px solid transparent;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+
+.image-container:has(.select-checkbox:checked) {
+    border-color: #007bff;
+}
