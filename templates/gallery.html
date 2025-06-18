@@ -71,9 +71,17 @@
 
     <div class="main-content">
     <div id="action-bar">
-        <button id="bulk-action-btn">Apply to Selected</button>
-    </div>
+        <div class="action-bar-tag-input-group">
+            <input type="text" id="action-bar-tag-input" placeholder="Enter tag for selected...">
+            <button id="action-bar-tag-btn">+</button>
+        </div>
 
+        <div id="action-bar-tags-display">
+            </div>
+
+        <button id="bulk-action-btn" class="action-bar-corner-btn bottom-left">Apply to Selected</button>
+        <button id="close-action-bar-btn" class="action-bar-corner-btn bottom-right">Close</button>
+    </div>
     <div class="grid"><!-- Image containers will be inserted here --></div>
 
 </div>

@@ -77,24 +77,7 @@ actionBar.style.display = "none";
     return container;
 }
 
-document.getElementById("bulk-action-btn").addEventListener("click", () => {
-    const checkedBoxes = document.querySelectorAll(".select-checkbox:checked");
-    const urls = [];
 
-    checkedBoxes.forEach(checkbox => {
-        const container = checkbox.closest(".image-container");
-        const img = container.querySelector("img");
-        if (img && img.src) {
-            urls.push(img.src);
-        }
-    });
-
-    if (urls.length > 0) {
-        alert("Selected image URLs:\n\n" + urls.join("\n"));
-    } else {
-        alert("No images selected.");
-    }
-});
 
 
 export function displayImages(image_data) {
@@ -115,6 +98,13 @@ export function displayImages(image_data) {
 // TODO - Maybe jsut add this to event handler directly?
 function updateRating(imageUrl, change) {
     fetch(`/update-rating?image_url=${encodeURIComponent(imageUrl)}&change=${change}`, {
+        method: 'POST'
+    });
+}
+
+// Tags is list
+function updateTags(imageUrls, tags) {
+    fetch(`/update-tags?image_url=${encodeURIComponent(imageUrl)}&change=${change}`, {
         method: 'POST'
     });
 }
