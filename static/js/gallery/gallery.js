@@ -1,5 +1,5 @@
 import { initTags } from './_elements.js';
-import { displayImages } from './_display.js';
+import { displayImages } from './_img_container.js';
 
 export function initGallery(IMAGE_DATA) {
     // ========== Constants ==========
@@ -116,6 +116,7 @@ export function initGallery(IMAGE_DATA) {
         } else {
             alert("No images selected.");
         }
+        updateTags(imageUrl, tags)
     });
 
     // Close Action Bar Button
@@ -131,4 +132,11 @@ export function initGallery(IMAGE_DATA) {
     });
 
     displayImages(IMAGE_DATA);
+}
+
+// Tags is list
+function updateTags(imageUrls, tags) {
+    fetch(`/update-tags?image_url=${encodeURIComponent(imageUrl)}&change=${change}`, {
+        method: 'POST'
+    });
 }
