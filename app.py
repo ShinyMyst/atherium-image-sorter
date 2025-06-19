@@ -54,8 +54,11 @@ def update_rating():
 @app.route('/update-tags-bulk', methods=['POST'])
 def update_tags_bulk():
     data = request.get_json()
-    print(data.get('imageUrls'))
-    print(data.get('tags'))
+    urls = data.get('imageUrls')
+    tags = data.get('tags')
+    for url in urls:
+        app_data.add_tags(url, tags)
+
     return '', 200
 
 

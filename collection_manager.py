@@ -101,5 +101,13 @@ class CollectionManager():
                 return entry
         return False
 
+    def add_tags(self, url, tags):
+        """Adds tags from list to entry with given url"""
+        tags = [tag.lower() for tag in tags]
+        entry = self.get_entry(url)
+        combined_tags = list(set(entry["Tags"] + tags))
+        entry["Tags"] = combined_tags
+        self._write_changes()
+
 
 # TODO - Be more intentional and careful with stale.

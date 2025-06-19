@@ -3,7 +3,11 @@
         "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
         "model": "Hoshino",
         "Prompt": "...",
-        "Tags": [],
+        "Tags": [
+            "new1",
+            "new",
+            "new2"
+        ],
         "LoRA": {},
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
@@ -15,6 +19,9 @@
         "model": "Hoshino",
         "Prompt": "...",
         "Tags": [
+            "new1",
+            "new",
+            "new2",
             "kagerou"
         ],
         "LoRA": {},
@@ -28,8 +35,11 @@
         "model": "Hoshino",
         "Prompt": "...",
         "Tags": [
+            "new2",
+            "test",
             "kagerou",
-            "test"
+            "new1",
+            "new"
         ],
         "LoRA": {},
         "Sampling Method": "Euler A",
@@ -42,7 +52,10 @@
         "model": "Hoseki",
         "Prompt": "PROMPT",
         "Tags": [
-            "tag1"
+            "new1",
+            "tag1",
+            "new",
+            "new2"
         ],
         "LoRA": {
             "DMD2": 1,
