@@ -1,20 +1,5 @@
 [
     {
-        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [
-            "new1",
-            "new",
-            "new2"
-        ],
-        "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2,
-        "ranking": 3
-    },
-    {
         "url": "https://rapi.pixai.art/img/media/556188957993753129/orig",
         "model": "Hoshino",
         "Prompt": "...",
@@ -63,6 +48,17 @@
         "Sampling Method": "DDIM",
         "Sampling Steps": 20,
         "CFG Scale": 7.0,
+        "ranking": 0
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "model": "Hoshino",
+        "Prompt": "...",
+        "Tags": [],
+        "LoRA": {},
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "CFG Scale": 2.0,
         "ranking": 0
     }
 ]

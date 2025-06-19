@@ -119,3 +119,5 @@ if __name__ == '__main__':
 
 # TODO - Make the app function do the data format internally?
 # TODO - It could return the entry info for the return display json
+# TODO - Editing image also resets ranking at the moment.
+# TODO - Pop-ups from testing still present.  Repurpose or remove

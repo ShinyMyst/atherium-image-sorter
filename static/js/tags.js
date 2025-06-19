@@ -3,6 +3,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const addTagButton = document.getElementById('add-tag');
     const tagsList = document.getElementById('tags-list');
 
+    // Function to re-index hidden tag inputs
+    function reIndexTags() {
+        const hiddenInputs = tagsList.querySelectorAll('[name^="tags-"]');
+        hiddenInputs.forEach((input, index) => {
+            input.name = `tags-${index}`;
+        });
+    }
+
+    // Function to attach remove functionality to a tag element
+    function attachRemoveFunctionality(tagElement) {
+        tagElement.querySelector('.remove-tag').addEventListener('click', function() {
+            tagElement.remove();
+            reIndexTags();
+        });
+    }
+
     function addTag(tagText) {
         if (!tagText.trim()) return;
 
@@ -23,14 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         tagInput.value = '';
 
         // Add remove functionality
-        tagElement.querySelector('.remove-tag').addEventListener('click', function() {
-            tagElement.remove();
-            // Re-index remaining tags
-            const hiddenInputs = tagsList.querySelectorAll('[name^="tags-"]');
-            hiddenInputs.forEach((input, index) => {
-                input.name = `tags-${index}`;
-            });
-        });
+        attachRemoveFunctionality(tagElement);
     }
 
     // Add tag on button click
@@ -45,4 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
             addTag(tagInput.value);
         }
     });
+
+    // Attach remove functionality to any tags already in the HTML on page load
+    const existingTagElements = tagsList.querySelectorAll('.tag-item');
+    existingTagElements.forEach(attachRemoveFunctionality);
+
+    // Ensure initial indexing is correct after pre-population
+    reIndexTags();
 });
