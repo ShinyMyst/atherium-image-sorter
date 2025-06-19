@@ -1,3 +1,4 @@
 __pycache__/
 venv/
 /data/llamas.json
+/collections/llamas.json
