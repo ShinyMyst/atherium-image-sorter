@@ -36,5 +36,25 @@
         "Sampling Steps": 10,
         "CFG Scale": 2.0,
         "ranking": 0
+    },
+    {
+        "url": "https://rapi.pixai.art/img/media/567086382015036172/orig",
+        "model": "Hoseki",
+        "Prompt": "PROMPT",
+        "Tags": [
+            "tag1"
+        ],
+        "LoRA": {
+            "DMD2": 1,
+            "LCM": 2,
+            "Bold Outlines": 3,
+            "Vivid Edge": 4,
+            "Vivid Soft": 5,
+            "Cartoony": 6
+        },
+        "Sampling Method": "DDIM",
+        "Sampling Steps": 20,
+        "CFG Scale": 7.0,
+        "ranking": 0
     }
 ]

@@ -14,7 +14,7 @@
     {% from "_macros.html" import lora_submit %}
 
 {# Form #}
-    <form method="POST" action="{{ url_for('post_submit') }}" target="_blank">
+    <form method="POST" action="{{ submit_url }}" target="_blank">
         {{ form.hidden_tag() }}
 
     <div class="image-preview">

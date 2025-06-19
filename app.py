@@ -25,7 +25,7 @@ def gallery():
 
 @app.route('/submit')
 def get_submit():
-    return render_template('submit.html', form=SubmitForm())
+    return render_template('submit.html', form=SubmitForm(), submit_url='/new')
 
 
 @app.route('/new', methods=['POST'])
@@ -49,6 +49,49 @@ def update_rating():
     change = int(request.args.get('change'))
     app_data.update_ranking(image_url, change)
     return '', 200
+
+
+@app.route('/update-tags-bulk', methods=['POST'])
+def update_tags_bulk():
+    data = request.get_json()
+    print(data.get('imageUrls'))
+    print(data.get('tags'))
+    return '', 200
+
+
+@app.route('/api/update-details', methods=['GET'])
+def update_details():
+    image_url = request.args.get('image_url')
+    entry_form = SubmitForm()
+    entry_data = app_data.get_entry(image_url)
+
+    entry_form.url.data = entry_data.get('url', '')
+    entry_form.model.data = entry_data.get('model', '')
+    entry_form.prompt.data = entry_data.get('Prompt', '')
+    entry_form.sampling_method.data = entry_data.get('Sampling Method', '')
+    entry_form.sampling_steps.data = entry_data.get('Sampling Steps', 10)
+    entry_form.cfg_scale.data = entry_data.get('CFG Scale', 2.0)
+
+    # TODO - The submit form needs rewritten a bit.
+    # That should make this section look much better as well.
+    lora_data = entry_data.get('LoRA', {})
+    lora_form_field_to_data_key_map = {
+        'dmd2': 'DMD2',
+        'lcm': 'LCM',
+        'bold_outlines': 'Bold Outlines',
+        'vivid_edge': 'Vivid Edge',
+        'vivid_soft': 'Vivid Soft',
+        'cartoony': 'Cartoony'
+    }
+    for field_name, data_key_name in lora_form_field_to_data_key_map.items():
+        getattr(entry_form, field_name).data = lora_data.get(data_key_name, 0.0)  # noqa
+
+    return render_template('submit.html', form=entry_form, submit_url='/edit')
+
+
+@app.route('/edit', methods=['GET'])
+def change_entry():
+    print("Nothing here.")
 
 
 @app.route('/favicon.ico')

@@ -93,3 +93,13 @@ class CollectionManager():
 
     def get_tag_frequency(self):
         return self.tag_frequency
+
+    def get_entry(self, url):
+        """Returns a single entry from active collection by URL"""
+        for entry in self.active_collection:
+            if entry["url"] == url:
+                return entry
+        return False
+
+
+# TODO - Be more intentional and careful with stale.

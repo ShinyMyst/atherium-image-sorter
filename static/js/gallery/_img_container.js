@@ -1,5 +1,5 @@
 import { passesFilters } from './_filters.js';
-import { updateRating } from './_api.js';
+import { updateRating, updateDetails } from './_api.js';
 import { updateActionBarVisibility } from './_action_bar.js';
 
 
@@ -59,6 +59,7 @@ function _imageContainer(img) {
         editButton.addEventListener("click", (e) => {
             e.stopPropagation();
             alert("Edit clicked for: " + img.url);
+            updateDetails(img.url);
         });
     }
 

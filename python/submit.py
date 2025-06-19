@@ -51,7 +51,7 @@ class SubmitForm(FlaskForm):
         ('Euler A', 'Euler A'),
         ('Euler', 'Euler'),
         ('DDIM', 'DDIM'),
-        ('LMS', 'LMS')
+        ('LMS', 'LMS'),
         ])
     sampling_steps = IntegerField('Sampling Steps', default=10)
     cfg_scale = FloatField('CFG Scale', default=2)

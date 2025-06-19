@@ -30,3 +30,17 @@ export function updateTags(imageUrls, tags) {
     })
     .catch(error => console.error('Error updating tags:', error));
 }
+
+
+export function updateDetails(imageUrl) {
+    fetch(`/api/update-details?image_url=${encodeURIComponent(imageUrl)}`, {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.error('Failed to update image:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error updating image:', error));
+    window.open(`/api/update-details?image_url=${encodeURIComponent(imageUrl)}`, '_blank');
+}
