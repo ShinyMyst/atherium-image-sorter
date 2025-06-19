@@ -101,6 +101,12 @@ class CollectionManager():
                 return entry
         return False
 
+    def get_entry_index(self, url):
+        for i, entry in enumerate(self.active_collection):
+            if entry["url"] == url:
+                return i
+        return False
+
     def add_tags(self, url, tags):
         """Adds tags from list to entry with given url"""
         tags = [tag.lower() for tag in tags]
@@ -109,5 +115,17 @@ class CollectionManager():
         entry["Tags"] = combined_tags
         self._write_changes()
 
+    def edit_entry(self, entry_data):
+        """Replaces an existing an entry with the given data."""
+        self.delete_entry(entry_data["url"])
+        self.add_entry(entry_data)
+        # Changes are written with add_entry
+
+    def delete_entry(self, url):
+        """Removes entry from collection."""
+        del self.active_collection[self.get_entry_index(url)]
+        print("Deleted Entry:", url)
+
 
 # TODO - Be more intentional and careful with stale.
+# TODO - Also assume set is always active unless changed

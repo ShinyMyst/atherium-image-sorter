@@ -65,18 +65,20 @@ def update_tags_bulk():
 @app.route('/api/update-details', methods=['GET'])
 def update_details():
     image_url = request.args.get('image_url')
-    entry_form = SubmitForm()
     entry_data = app_data.get_entry(image_url)
 
-    entry_form.url.data = entry_data.get('url', '')
-    entry_form.model.data = entry_data.get('model', '')
-    entry_form.prompt.data = entry_data.get('Prompt', '')
-    entry_form.sampling_method.data = entry_data.get('Sampling Method', '')
-    entry_form.sampling_steps.data = entry_data.get('Sampling Steps', 10)
-    entry_form.cfg_scale.data = entry_data.get('CFG Scale', 2.0)
+    form_data = {
+        'url': entry_data.get('url', ''),
+        'model': entry_data.get('model', ''),
+        'prompt': entry_data.get('Prompt', ''),
+        'sampling_method': entry_data.get('Sampling Method', ''),
+        'sampling_steps': entry_data.get('Sampling Steps', 10),
+        'cfg_scale': entry_data.get('CFG Scale', 2.0),
+        'tags': entry_data.get('Tags', []),
+    }
 
-    # TODO - The submit form needs rewritten a bit.
-    # That should make this section look much better as well.
+    entry_form = SubmitForm(data=form_data)
+
     lora_data = entry_data.get('LoRA', {})
     lora_form_field_to_data_key_map = {
         'dmd2': 'DMD2',
@@ -92,9 +94,13 @@ def update_details():
     return render_template('submit.html', form=entry_form, submit_url='/edit')
 
 
-@app.route('/edit', methods=['GET'])
+@app.route('/edit', methods=['POST'])
 def change_entry():
-    print("Nothing here.")
+    form = SubmitForm()
+    lora_json = request.form.get('lora_data', '{}')
+    entry_data = app_data.format_entry(form, lora_json)
+    app_data.edit_entry(entry_data)
+    return jsonify(entry_data)
 
 
 @app.route('/favicon.ico')
@@ -110,3 +116,6 @@ if __name__ == '__main__':
 # Make sure to only write if key is unique
 # TODO - More dynamic way to save elements of the JSON
 # TODO - Pagination??
+
+# TODO - Make the app function do the data format internally?
+# TODO - It could return the entry info for the return display json

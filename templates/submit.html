@@ -82,8 +82,8 @@
         </fieldset>
 
             <label for="image-url">Image URL:</label>
-            <input type="url" id="image-url" name="url" oninput="updatePreview(this.value)">
-<fieldset>
+            <input type="url" id="image-url" name="url" value="{{ form.url.data | default('') }}" oninput="updatePreview(this.value)">
+        <fieldset>
         <input type="hidden" name="lora_data" id="lora-data">
 </fieldset>
         {{ form.submit() }}
@@ -93,5 +93,12 @@
     <script src="{{ url_for('static', filename='js/img_preview.js') }}"></script>
     <script src="{{ url_for('static', filename='js/tags.js') }}"></script>
     <script src="{{ url_for('static', filename='js/lora.js') }}"></script>
+    <script>
+        // Updates image when loading this form with a pre-loaded URL
+        const initialUrl = document.getElementById('image-url').value;
+        if (initialUrl) {
+            updatePreview(initialUrl);
+        }
+    </script>
 </body>
 </html>

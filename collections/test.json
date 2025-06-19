@@ -50,13 +50,8 @@
     {
         "url": "https://rapi.pixai.art/img/media/567086382015036172/orig",
         "model": "Hoseki",
-        "Prompt": "PROMPT",
-        "Tags": [
-            "new1",
-            "tag1",
-            "new",
-            "new2"
-        ],
+        "Prompt": "EDITED IMAGE",
+        "Tags": [],
         "LoRA": {
             "DMD2": 1,
             "LCM": 2,
