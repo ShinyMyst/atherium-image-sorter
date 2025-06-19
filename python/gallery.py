@@ -30,8 +30,16 @@ class GalleryForm(FlaskForm):
         ('lms', 'LMS')
     ])
 
+    # default_tags = ["style", "kagerou", "invalid", "test"]
+
+    def __init__(self, tag_frequency: dict, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._default_tags = list(tag_frequency.keys())
+
     # Tags - Toggle Box
-    default_tags = ["style", "kagerou", "invalid", "test"]
+    @property
+    def default_tags(self):
+        return self._default_tags
 
 
 """

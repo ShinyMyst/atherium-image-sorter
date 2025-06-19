@@ -1,21 +1,12 @@
-import json
-import os
 from flask import Flask, render_template, jsonify, request
-from forms.submit import SubmitForm
-from forms.gallery import GalleryForm
+from python.submit import SubmitForm
+from python.gallery import GalleryForm
+from collection_manager import CollectionManager
 
 
-json_dict = {
-    'Test': "data/test.json",
-    'Gallery': "data/gallery.json",
-    'Test2': "data/llamas.json"
-}
-
-active_data = json_dict['Test2']
-
+app_data = CollectionManager("Test")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
-# TODO - This is a place holder since it's required for forms
 
 
 @app.route('/')
@@ -25,70 +16,108 @@ def index():
 
 @app.route('/gallery')
 def gallery():
-    form = GalleryForm()
-    with open(active_data) as f:
-        images = json.load(f)
-    return render_template('gallery.html', form=form, image_json=images)
-
-
-@app.route('/api/images')
-def get_images():
-    with open('data/images.json') as f:
-        image_data = json.load(f)
-    return jsonify(image_data)
+    collection = app_data.get_collection()
+    tags = app_data.get_tag_frequency()
+    return render_template('gallery.html',
+                           form=GalleryForm(tags),
+                           image_json=collection)
 
 
 @app.route('/submit')
 def get_submit():
-    return render_template('submit.html', form=SubmitForm())
+    return render_template('submit.html', form=SubmitForm(), submit_url='/new')
 
 
 @app.route('/new', methods=['POST'])
 def post_submit():
+    """Adds entry to active collection.  Displays entry in a new tab."""
+    # TODO - Collection is choice but this only write to the active.
+    # Update this again to account for different or multiple collection updates
+
     form = SubmitForm()
-    # TODO - The below should be integrated into SubmitForm()
     lora_json = request.form.get('lora_data', '{}')
-    lora_data = json.loads(lora_json)
-    print(lora_data)
+    # TODO - Integrate this into the form instead?
 
-    json_data = {
-            "url": form.url.data,
-            "model": form.model.data,
-            "Prompt": form.prompt.data,
-            "Tags": [tag.data.lower() for tag in form.tags if tag.data],
-            "LoRA": lora_data,
-            "Sampling Method": form.sampling_method.data,
-            "Sampling Steps": form.sampling_steps.data,
-            "CFG Scale": form.cfg_scale.data,
-            "ranking": 0
+    new_entry = app_data.format_entry(form, lora_json)
+    app_data.add_entry(new_entry)
+    return jsonify(new_entry)
+
+
+@app.route('/update-rating', methods=['POST'])
+def update_rating():
+    image_url = request.args.get('image_url')
+    change = int(request.args.get('change'))
+    app_data.update_ranking(image_url, change)
+    return '', 200
+
+
+@app.route('/update-tags-bulk', methods=['POST'])
+def update_tags_bulk():
+    data = request.get_json()
+    urls = data.get('imageUrls')
+    tags = data.get('tags')
+    for url in urls:
+        app_data.add_tags(url, tags)
+
+    return '', 200
+
+
+@app.route('/api/update-details', methods=['GET'])
+def update_details():
+    image_url = request.args.get('image_url')
+    entry_data = app_data.get_entry(image_url)
+
+    form_data = {
+        'url': entry_data.get('url', ''),
+        'model': entry_data.get('model', ''),
+        'prompt': entry_data.get('Prompt', ''),
+        'sampling_method': entry_data.get('Sampling Method', ''),
+        'sampling_steps': entry_data.get('Sampling Steps', 10),
+        'cfg_scale': entry_data.get('CFG Scale', 2.0),
+        'tags': entry_data.get('Tags', []),
     }
-    write_json(form, json_data)
 
-    return jsonify(json_data)
+    entry_form = SubmitForm(data=form_data)
+
+    lora_data = entry_data.get('LoRA', {})
+    lora_form_field_to_data_key_map = {
+        'dmd2': 'DMD2',
+        'lcm': 'LCM',
+        'bold_outlines': 'Bold Outlines',
+        'vivid_edge': 'Vivid Edge',
+        'vivid_soft': 'Vivid Soft',
+        'cartoony': 'Cartoony'
+    }
+    for field_name, data_key_name in lora_form_field_to_data_key_map.items():
+        getattr(entry_form, field_name).data = lora_data.get(data_key_name, 0.0)  # noqa
+
+    return render_template('submit.html', form=entry_form, submit_url='/edit')
 
 
-# TODO - This should be seperate file.
-def write_json(form, json_data):
-    selected_sets = form.data_sets.data
-    # print(selected_sets)
-
-    json_dir = 'data'
-    for name in selected_sets:
-        file_path = os.path.join(json_dir, f"{name}.json")
-        try:
-            with open(file_path, 'r') as f:
-                existing_data = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            existing_data = []
-        existing_data.append(json_data)
-        with open(file_path, 'w') as f:
-            json.dump(existing_data, f, indent=4)
+@app.route('/edit', methods=['POST'])
+def change_entry():
+    form = SubmitForm()
+    lora_json = request.form.get('lora_data', '{}')
+    entry_data = app_data.format_entry(form, lora_json)
+    app_data.edit_entry(entry_data)
+    return jsonify(entry_data)
 
 
 @app.route('/favicon.ico')
 def favicon():
-    return "", 204  # No content response to stop the 404
+    return "", 204
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# TODO - Restructure JSON as a dict with the URL as main key.
+# Make sure to only write if key is unique
+# TODO - More dynamic way to save elements of the JSON
+# TODO - Pagination??
+
+# TODO - Make the app function do the data format internally?
+# TODO - It could return the entry info for the return display json
+# TODO - Editing image also resets ranking at the moment.
+# TODO - Pop-ups from testing still present.  Repurpose or remove

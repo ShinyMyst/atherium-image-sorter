@@ -1,5 +1,6 @@
 // TODO - Rewrite initTags()
 // TODO - Could any single use macros be rewritten here instead for consistency?
+// TODO - Wouldn't tags be a better name if that's all I do here?
 
 export function initTags() {
     const tagsContainer = document.getElementById('tags-container');
