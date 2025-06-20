@@ -13,11 +13,11 @@ export function passesFilters(img) {
         return false;
     }
     // LoRA checks
-    if (filters.loras.length > 0 && !_checkLoras(img.LoRA, filters.loras)) {
+    if (filters.loras.length > 0 && !checkLoras(img.LoRA, filters.loras)) {
         return false;
     }
     // Tag checks
-    if (filters.tags.length > 0 && !_checkTags(img.Tags, filters.tags)) {
+    if (filters.tags.length > 0 && !checkTags(img.Tags, filters.tags)) {
         return false;
     }
 
