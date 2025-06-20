@@ -1,9 +1,13 @@
+/******************************
+ * Image Containers           *
+ ******************************/
+
 import { passesFilters } from './_filters.js';
 import { updateRating, updateDetails } from './_api.js';
 import { updateActionBarVisibility } from './_action_bar.js';
 
 
-function _imageContainer(img) {
+function imageContainer(img) {
     const container = document.createElement("div");
     container.className = "image-container";
 
@@ -38,7 +42,7 @@ function _imageContainer(img) {
     });
 
 
-    // Rating Button Event Handlers
+    // Rating Event Handlers
     container.querySelector('.plus-btn').addEventListener('click', (e) => {
         e.stopPropagation();
         const ratingEl = container.querySelector('.rating-value');
@@ -53,7 +57,7 @@ function _imageContainer(img) {
         updateRating(img.url, -1);
     });
 
-    // Edit Button Event Handlers
+    // Edit Event Handlers
     const editButton = container.querySelector(".edit-btn");
     if (editButton) {
         editButton.addEventListener("click", (e) => {
@@ -66,14 +70,16 @@ function _imageContainer(img) {
     // CheckBox Event Handlers
     const checkbox = container.querySelector(".select-checkbox");
     if (checkbox) {
+        // Activate Action Bar
         checkbox.addEventListener("change", () => {
             const anyChecked = document.querySelectorAll(".select-checkbox:checked").length > 0;
-            updateActionBarVisibility(anyChecked);
+            if (anyChecked) {
+                updateActionBarVisibility(true); // Can only make bar appear but not disappear
+            }
         });
     }
-
     return container;
-}
+};
 
 
 export function displayImages(image_data) {
@@ -87,7 +93,7 @@ export function displayImages(image_data) {
 
         image_data.forEach(img => {
             if (passesFilters(img)) {
-                grid.appendChild(_imageContainer(img));
+                grid.appendChild(imageContainer(img));
             }
         });
     } catch (error) {

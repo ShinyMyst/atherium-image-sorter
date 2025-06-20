@@ -1,7 +1,7 @@
 import { initTags } from './_elements.js';
 import { displayImages } from './_img_container.js';
 import { initActionBar } from './_action_bar.js';
-import { updateTags } from './_api.js';
+
 
 export function initGallery(IMAGE_DATA) {
     // ========== Constants ==========

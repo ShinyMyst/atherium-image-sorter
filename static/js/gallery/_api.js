@@ -1,3 +1,7 @@
+/******************************
+ * API    *
+ ******************************/
+
 export function updateRating(imageUrl, change) {
     fetch(`/update-rating?image_url=${encodeURIComponent(imageUrl)}&change=${change}`, {
         method: 'POST'
