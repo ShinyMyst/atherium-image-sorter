@@ -5,6 +5,24 @@ import { passesFilters } from './_filters.js';
 import { updateRating, updateDetails } from './_api.js';
 import { updateActionBarVisibility } from './_action_bar.js';
 
+export function initImageContainers(image_data) {
+    const grid = document.querySelector(".grid");
+    if (!grid) {
+        console.error("Error: .grid element not found in the DOM. Images cannot be displayed.");
+        return;
+    }
+    try {
+        grid.innerHTML = "";
+
+        image_data.forEach(img => {
+            if (passesFilters(img)) {
+                grid.appendChild(imageContainer(img));
+            }
+        });
+    } catch (error) {
+        console.error("RENDER ERROR:", error);
+    }
+}
 
 function imageContainer(img) {
     const container = document.createElement("div");
@@ -78,23 +96,3 @@ function imageContainer(img) {
     }
     return container;
 };
-
-
-export function initImageContainers(image_data) {
-    const grid = document.querySelector(".grid");
-    if (!grid) {
-        console.error("Error: .grid element not found in the DOM. Images cannot be displayed.");
-        return;
-    }
-    try {
-        grid.innerHTML = "";
-
-        image_data.forEach(img => {
-            if (passesFilters(img)) {
-                grid.appendChild(imageContainer(img));
-            }
-        });
-    } catch (error) {
-        console.error("RENDER ERROR:", error);
-    }
-}
