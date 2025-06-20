@@ -40,7 +40,7 @@
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "CFG Scale": 2.0,
-        "ranking": 0
+        "ranking": 2
     },
     {
         "url": "https://rapi.pixai.art/img/media/556188957993753129/orig",

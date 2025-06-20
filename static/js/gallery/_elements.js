@@ -1,37 +1,61 @@
-// TODO - Rewrite initTags()
-// TODO - Could any single use macros be rewritten here instead for consistency?
-// TODO - Wouldn't tags be a better name if that's all I do here?
+//////////////////////////////////
+// Sidebar
+//////////////////////////////////
+let tagsContainer;
+let newTagInput;
+let addTagBtn;
 
 export function initTags() {
-    const tagsContainer = document.getElementById('tags-container');
-    const newTagInput = document.getElementById('new-tag-input');
-    const addTagBtn = document.getElementById('add-tag-btn');
+    // Init after DOMContentLoaded to assign DOM elements.
+    tagsContainer = document.getElementById('tags-container');
+    newTagInput = document.getElementById('new-tag-input');
+    addTagBtn = document.getElementById('add-tag-btn');
 
-// Check if tag exists (case-insensitive)
-    function tagExists(tagText) {
-        return Array.from(tagsContainer.querySelectorAll('.tag'))
-                   .some(tag => tag.textContent.toLowerCase() === tagText.toLowerCase());
-    }
-
-// Create new tag element
-    function createTagElement(tagText) {
-        const tag = document.createElement('span');
-        tag.className = 'tag';
-        tag.textContent = tagText;
-        tag.dataset.tag = tagText;
-        return tag;
-    }
-// Add new tag
-    function addNewTag() {
-        const tagText = newTagInput.value.trim();
-        if (tagText && !tagExists(tagText)) {
-            tagsContainer.appendChild(createTagElement(tagText));
-            newTagInput.value = '';
-        }
-    }
-
+    // Add Tag Event Listener
     addTagBtn.addEventListener('click', addNewTag);
     newTagInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') addNewTag();
     });
-};
+
+    // Attach remove functionality to any existing tags on page load
+    const existingTagElements = tagsContainer.querySelectorAll('.tag');
+    existingTagElements.forEach(removeFunctionality);
+}
+
+//////////////////////////////////
+// Tag Helper Functions
+//////////////////////////////////
+function tagExists(tagText) {
+    return Array.from(tagsContainer.querySelectorAll('.tag'))
+                   .some(tag => tag.textContent.toLowerCase().replace('×', '').trim() === tagText.toLowerCase());
+}
+
+function createTagElement(tagText) {
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.dataset.tag = tagText;
+    tag.innerHTML = `${tagText}<span class="remove-tag">×</span>`;
+    return tag;
+}
+
+function addNewTag() {
+    const tagText = newTagInput.value.trim();
+    if (tagText && !tagExists(tagText)) {
+        const newTagElement = createTagElement(tagText);
+        tagsContainer.appendChild(newTagElement);
+        removeFunctionality(newTagElement);
+        newTagInput.value = ''; // Clear the input field
+    }
+}
+
+function removeFunctionality(tagElement) {
+    const removeBtn = tagElement.querySelector('.remove-tag');
+
+    if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+            tagElement.remove();
+        });
+    } else {
+        console.warn("Tag element found without a .remove-tag span:", tagElement);
+    }
+}

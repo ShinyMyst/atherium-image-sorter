@@ -115,11 +115,11 @@ function _bulkActionButton(){
 };
 
 //////////////////////////////////
-// Other Helper Functions
+// Tag Management Helper Functions
 //////////////////////////////////
 // Checks for duplicate tags
 function tagExists(tagText) {
-    if (!actionBarTagsDisplay) return false; // Safety check
+    if (!actionBarTagsDisplay) return false;
     return Array.from(actionBarTagsDisplay.querySelectorAll('.action-bar-tag'))
                    .some(tag => tag.textContent.toLowerCase() === tagText.toLowerCase());
 }
@@ -132,7 +132,7 @@ function createActionBarTagElement(tagText) {
 }
 
 function addActionBarTag() {
-    if (!actionBarTagInput || !actionBarTagsDisplay) return; // Safety check
+    if (!actionBarTagInput || !actionBarTagsDisplay) return;
     const tagText = actionBarTagInput.value.trim();
     if (tagText && !tagExists(tagText)) {
         actionBarTagsDisplay.appendChild(createActionBarTagElement(tagText));
