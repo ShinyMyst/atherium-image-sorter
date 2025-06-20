@@ -1,21 +1,5 @@
 [
     {
-        "url": "https://rapi.pixai.art/img/media/556188957993753129/orig",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [
-            "still here",
-            "12345",
-            "a tag",
-            "kagerou"
-        ],
-        "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 1
-    },
-    {
         "url": "https://rapi.pixai.art/img/media/567086382015036172/orig",
         "model": "Hoseki",
         "Prompt": "EDITED IMAGE",
@@ -51,6 +35,23 @@
         "Tags": [
             "new1",
             "kagerou"
+        ],
+        "LoRA": {},
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "CFG Scale": 2.0,
+        "ranking": 0
+    },
+    {
+        "url": "https://rapi.pixai.art/img/media/556188957993753129/orig",
+        "model": "Hoshino",
+        "Prompt": "...",
+        "Tags": [
+            "still here",
+            "12345",
+            "a tag",
+            "kagerou",
+            "tupac"
         ],
         "LoRA": {},
         "Sampling Method": "Euler A",
