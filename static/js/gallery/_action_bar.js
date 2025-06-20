@@ -1,7 +1,6 @@
 /******************************
  * Action Bar     *
  ******************************/
-
 import { updateTags } from './_api.js';
 
 // Variables need to be declared in order to use them in functions.

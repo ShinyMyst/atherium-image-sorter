@@ -1,7 +1,6 @@
 /******************************
  * Image Containers           *
  ******************************/
-
 import { passesFilters } from './_filters.js';
 import { updateRating, updateDetails } from './_api.js';
 import { updateActionBarVisibility } from './_action_bar.js';
@@ -81,7 +80,7 @@ function imageContainer(img) {
 };
 
 
-export function displayImages(image_data) {
+export function initImageContainers(image_data) {
     const grid = document.querySelector(".grid");
     if (!grid) {
         console.error("Error: .grid element not found in the DOM. Images cannot be displayed.");
