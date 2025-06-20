@@ -1,6 +1,8 @@
 //////////////////////////////////
 // Sidebar
 //////////////////////////////////
+import { initImageContainers } from './_img_container.js';
+
 let tagsContainer;
 let newTagInput;
 let addTagBtn;
@@ -17,10 +19,19 @@ export function initTags() {
         if (e.key === 'Enter') addNewTag();
     });
 
-    // Attach remove functionality to any existing tags on page load
+    // Update Pre-Generated Tags
     const existingTagElements = tagsContainer.querySelectorAll('.tag');
     existingTagElements.forEach(removeFunctionality);
+
+    // Update display when tags toggled
+    tagsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('tag')) {
+            e.target.classList.toggle('active');
+            initImageContainers(IMAGE_DATA);
+        }
+    });
 }
+
 
 //////////////////////////////////
 // Tag Helper Functions
