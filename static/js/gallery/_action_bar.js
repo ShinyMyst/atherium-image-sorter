@@ -13,37 +13,6 @@ let actionBarTagsDisplay;
 let bulkActionBtn;
 let closeActionBarBtn;
 
-// Checks for duplicate tags
-function tagExists(tagText) {
-    if (!actionBarTagsDisplay) return false; // Safety check
-    return Array.from(actionBarTagsDisplay.querySelectorAll('.action-bar-tag'))
-                   .some(tag => tag.textContent.toLowerCase() === tagText.toLowerCase());
-}
-
-function createActionBarTagElement(tagText) {
-    const tag = document.createElement('span');
-    tag.className = 'action-bar-tag';
-    tag.textContent = tagText;
-    return tag;
-}
-
-function addActionBarTag() {
-    if (!actionBarTagInput || !actionBarTagsDisplay) return; // Safety check
-    const tagText = actionBarTagInput.value.trim();
-    if (tagText && !tagExists(tagText)) {
-        actionBarTagsDisplay.appendChild(createActionBarTagElement(tagText));
-        actionBarTagInput.value = '';
-    }
-}
-
-export function updateActionBarVisibility(isVisible) {
-    // Function also used by _img_container.js to activate bar when checkbox is clicked.
-    if (actionBar) {
-        actionBar.style.display = isVisible ? "flex" : "none";
-
-    }
-}
-
 export function initActionBar() {
     // Init after DOMContentLoaded to assign DOM elements.
     actionBar = document.querySelector("#action-bar");
@@ -63,8 +32,16 @@ export function initActionBar() {
     updateActionBarVisibility(false);  // Bar starts invisible
 };
 
+export function updateActionBarVisibility(isVisible) {
+    // Function also used by _img_container.js to activate bar when checkbox is clicked.
+    if (actionBar) {
+        actionBar.style.display = isVisible ? "flex" : "none";
+
+    }
+}
+
 //////////////////////////////////
-// === //Helper Functions// === //
+// Action Bar Helper Functions
 //////////////////////////////////
 // Add Tag Event Listener
 function _addTagEvent(){
@@ -136,3 +113,29 @@ function _bulkActionButton(){
         });
     }
 };
+
+//////////////////////////////////
+// Other Helper Functions
+//////////////////////////////////
+// Checks for duplicate tags
+function tagExists(tagText) {
+    if (!actionBarTagsDisplay) return false; // Safety check
+    return Array.from(actionBarTagsDisplay.querySelectorAll('.action-bar-tag'))
+                   .some(tag => tag.textContent.toLowerCase() === tagText.toLowerCase());
+}
+
+function createActionBarTagElement(tagText) {
+    const tag = document.createElement('span');
+    tag.className = 'action-bar-tag';
+    tag.textContent = tagText;
+    return tag;
+}
+
+function addActionBarTag() {
+    if (!actionBarTagInput || !actionBarTagsDisplay) return; // Safety check
+    const tagText = actionBarTagInput.value.trim();
+    if (tagText && !tagExists(tagText)) {
+        actionBarTagsDisplay.appendChild(createActionBarTagElement(tagText));
+        actionBarTagInput.value = '';
+    }
+}
