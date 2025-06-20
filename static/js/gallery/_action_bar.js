@@ -1,5 +1,5 @@
 /******************************
- * Your Script Title Here     *
+ * Action Bar     *
  ******************************/
 
 import { updateTags } from './_api.js';
@@ -108,6 +108,7 @@ function _applyTags(urls, tagsToApply) {
         const userConfirmed = confirm(`Apply these tags?\n\n${tagsToApply.join(', ')}`);
         if (userConfirmed) {
             updateTags(urls, tagsToApply)
+            location.reload();
         }
     } else {
         alert("No images selected.");

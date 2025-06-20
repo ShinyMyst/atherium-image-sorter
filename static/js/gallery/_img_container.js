@@ -62,7 +62,6 @@ function imageContainer(img) {
     if (editButton) {
         editButton.addEventListener("click", (e) => {
             e.stopPropagation();
-            alert("Edit clicked for: " + img.url);
             updateDetails(img.url);
         });
     }
