@@ -1,3 +1,6 @@
+/******************************
+ * Gallery         *
+ ******************************/
 import { initTags } from './_tags.js';
 import { initImageContainers } from './_img_container.js';
 import { initActionBar } from './_action_bar.js';

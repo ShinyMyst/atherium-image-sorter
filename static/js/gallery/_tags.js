@@ -7,7 +7,7 @@ let tagsContainer;
 let newTagInput;
 let addTagBtn;
 
-export function initTags() {
+export function initTags(IMAGE_DATA) {
     // Init after DOMContentLoaded to assign DOM elements.
     tagsContainer = document.getElementById('tags-container');
     newTagInput = document.getElementById('new-tag-input');

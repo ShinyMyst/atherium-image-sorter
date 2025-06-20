@@ -1,3 +1,6 @@
+/******************************
+ * Image Containers           *
+ ******************************/
 import { initImageContainers } from './_img_container.js';
 
 export function initSidebar(IMAGE_DATA) {
