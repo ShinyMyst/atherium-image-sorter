@@ -5,74 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Processing Form</title>
     <link rel="stylesheet" href="/static/css/style.css">
-        <link rel="stylesheet" href="/static/css/submit.css">
-
+    <link rel="stylesheet" href="/static/css/submit.css">
 </head>
 <body>
-{# Macros #}
-    {% from "_macros.html" import slider_field %}
-    {% from "_macros.html" import lora_submit %}
+    {# Macros #}
+    {% from "_macros.html" import slider_field, lora_submit %}
 
-{# Form #}
+    {# Form #}
     <form method="POST" action="{{ submit_url }}" target="_blank">
         {{ form.hidden_tag() }}
 
-    <div class="image-preview">
-        <img id="preview" src="">
-    </div>
-
-    <fieldset>
-        <legend>Data Sets</legend>
-        {{ form.data_sets(size=3, multiple=True) }}
-    </fieldset>
-
+        <div class="image-preview">
+            <img id="preview" src="">
+        </div>
 
         <fieldset>
-            <legend>Basic Info</legend>
-
-            {{ form.prompt.label }} {{ form.prompt() }}<br>
-
-            {{ form.model.label }} {{ form.model() }}<br>
-
+            <legend>Data Sets</legend>
+            {{ form.data_sets(size=3, multiple=True) }}
         </fieldset>
 
         <fieldset>
-    <legend>Tags</legend>
-    <div class="tag-container">
-        <div class="tag-input">
-            <input type="text" id="tag-input" placeholder="Add a tag...">
-            <button type="button" id="add-tag">+</button>
-        </div>
-        <div class="tags-list" id="tags-list">
-            {% for tag in form.tags %}
-                {% if tag.data %}
-                    <span class="tag-item">
-                        {{ tag.data }}
-                        <input type="hidden" name="tags-{{ loop.index0 }}" value="{{ tag.data }}">
-                        <span class="remove-tag">×</span>
-                    </span>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-</fieldset>
+            <legend>Basic Info</legend>
+            {{ form.prompt.label }} {{ form.prompt() }}<br>
+            {{ form.model.label }} {{ form.model() }}<br>
+        </fieldset>
 
-<fieldset class="lora-fieldset">
-    <legend>LoRA
-        <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
-    </legend>
+        <fieldset>
+            <legend>Tags</legend>
+            <div class="tag-container">
+                <div class="tag-input">
+                    <input type="text" id="tag-input" placeholder="Add a tag...">
+                    <button type="button" id="add-tag">+</button>
+                </div>
+                <div class="tags-list" id="tags-list">
+                    </div>
+            </div>
+        </fieldset>
 
-    <div id="lora-container">
-        {{ lora_submit(form.dmd2) }}
-        {{ lora_submit(form.lcm) }}
-        {{ lora_submit(form.bold_outlines) }}
-        {{ lora_submit(form.vivid_edge) }}
-        {{ lora_submit(form.vivid_soft) }}
-        {{ lora_submit(form.cartoony) }}
-
-        <div id="dynamic-lora-container"></div>
-    </div>
-</fieldset>
+        <fieldset class="lora-fieldset">
+            <legend>LoRA
+                <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
+            </legend>
+            <div id="lora-container">
+                {{ lora_submit(form.dmd2) }}
+                {{ lora_submit(form.lcm) }}
+                {{ lora_submit(form.bold_outlines) }}
+                {{ lora_submit(form.vivid_edge) }}
+                {{ lora_submit(form.vivid_soft) }}
+                {{ lora_submit(form.cartoony) }}
+                <div id="dynamic-lora-container"></div>
+            </div>
+        </fieldset>
 
         <fieldset class="sampling-parameters">
             <legend>Sampling</legend>
@@ -81,20 +64,22 @@
             {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>
         </fieldset>
 
-            <label for="image-url">Image URL:</label>
-            <input type="url" id="image-url" name="url" value="{{ form.url.data | default('') }}" oninput="updatePreview(this.value)">
-        <fieldset>
+        <label for="image-url">Image URL:</label>
+        <input type="url" id="image-url" name="url" value="{{ form.url.data | default('') }}" oninput="updatePreview(this.value)">
+
         <input type="hidden" name="lora_data" id="lora-data">
-</fieldset>
         {{ form.submit() }}
     </form>
 
-{# Script #}
+    {# Scripts #}
+    <!-- YOU KNOW WHAT FINE.  I'd like to use initSubmit similar to what I did in gallery
+    BUT it's refusing to cooperate.  Leaving it as if for now since it functions and isn't worth time.-->
     <script src="{{ url_for('static', filename='js/submit/img_preview.js') }}"></script>
     <script src="{{ url_for('static', filename='js/submit/tags.js') }}"></script>
     <script src="{{ url_for('static', filename='js/submit/lora.js') }}"></script>
+
+    <!-- Initialize image preview if URL exists -->
     <script>
-        // Updates image when loading this form with a pre-loaded URL
         const initialUrl = document.getElementById('image-url').value;
         if (initialUrl) {
             updatePreview(initialUrl);

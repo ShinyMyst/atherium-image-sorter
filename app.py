@@ -36,7 +36,6 @@ def post_submit():
 
     form = SubmitForm()
     lora_json = request.form.get('lora_data', '{}')
-    # TODO - Integrate this into the form instead?
 
     new_entry = app_data.format_entry(form, lora_json)
     app_data.add_entry(new_entry)
