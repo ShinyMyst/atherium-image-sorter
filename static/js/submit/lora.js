@@ -1,56 +1,43 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form');
     const addButton = document.getElementById('add-lora');
     const container = document.getElementById('dynamic-lora-container');
 
     // Add new LoRA entry
-    addButton.addEventListener('click', function() {
+    addButton.addEventListener('click', () => {
         const loraName = prompt("Enter LoRA name:");
         if (!loraName) return;
 
-        const newEntry = document.createElement('div');
-        newEntry.className = 'dynamic-lora-entry';
-        newEntry.innerHTML = `
-            <div class="lora-name">
-                <span>${loraName}</span>
-            </div>
-            <div class="lora-value">
-                <input type="number"
-                       data-lora-name="${loraName}"
-                       value="0.7" min="0" max="8" step="0.1">
-            </div>
+        const entry = document.createElement('div');
+        entry.className = 'dynamic-lora-entry';
+        entry.innerHTML = `
+            <div class="lora-name">${loraName}</div>
+            <input type="number" name="lora-${loraName}"
+                   value="0.7" min="0" max="2" step="0.1">
             <button type="button" class="remove-lora">×</button>
         `;
 
-        newEntry.querySelector('.remove-lora').addEventListener('click', function() {
-            container.removeChild(newEntry);
+        entry.querySelector('.remove-lora').addEventListener('click', () => {
+            entry.remove();
         });
 
-        container.appendChild(newEntry);
+        container.appendChild(entry);
     });
 
     // Process form submission
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', (e) => {
         const loraData = {};
 
-        // Collect all LoRA inputs (both default and dynamic)
+        // Collect all LoRA values
         document.querySelectorAll('#lora-container input[type="number"]').forEach(input => {
-            const name = input.name || input.dataset.loraName;
             const value = parseFloat(input.value);
-
-            // Only include if value exists and is not 0
             if (!isNaN(value) && value !== 0) {
-                loraData[name] = value;
+                loraData[input.name.replace('lora-', '')] = value;
             }
-
-            // Disable the original input to prevent duplicate submission
-            input.disabled = true;
         });
 
-        // Add hidden field with JSON data
-const hiddenField = document.getElementById('lora-data');
-if (hiddenField) {
-    hiddenField.value = JSON.stringify(loraData);
-}
+        // Store data in hidden field
+        const hiddenField = document.getElementById('lora-data');
+        if (hiddenField) hiddenField.value = JSON.stringify(loraData);
     });
 });
