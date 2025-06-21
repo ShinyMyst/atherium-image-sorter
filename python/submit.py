@@ -44,8 +44,16 @@ class SubmitForm(FlaskForm):
     dynamic_loras = FieldList(StringField('LoRA Type'), min_entries=0)
     dynamic_strengths = FieldList(FloatField('Strength'), min_entries=0)
 
-    lora_fields = [dmd2, lcm, bold_outlines, vivid_edge, vivid_soft, cartoony]
-
+    @property
+    def lora_fields(self):
+        return [
+            self.dmd2,
+            self.lcm,
+            self.bold_outlines,
+            self.vivid_edge,
+            self.vivid_soft,
+            self.cartoony
+        ]
     # LoRA Details
     sampling_method = SelectField('Sampling Method', choices=[
         ('Euler A', 'Euler A'),

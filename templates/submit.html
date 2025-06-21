@@ -47,12 +47,9 @@
                 <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
             </legend>
             <div id="lora-container">
-                {{ lora_submit(form.dmd2) }}
-                {{ lora_submit(form.lcm) }}
-                {{ lora_submit(form.bold_outlines) }}
-                {{ lora_submit(form.vivid_edge) }}
-                {{ lora_submit(form.vivid_soft) }}
-                {{ lora_submit(form.cartoony) }}
+                {% for field in form.lora_fields %}
+                    {{ lora_submit(field) }}
+                {% endfor %}
                 <div id="dynamic-lora-container"></div>
             </div>
         </fieldset>
