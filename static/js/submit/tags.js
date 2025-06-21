@@ -3,62 +3,40 @@ document.addEventListener('DOMContentLoaded', function() {
     const addTagButton = document.getElementById('add-tag');
     const tagsList = document.getElementById('tags-list');
 
-    // Function to re-index hidden tag inputs
-    function reIndexTags() {
-        const hiddenInputs = tagsList.querySelectorAll('[name^="tags-"]');
-        hiddenInputs.forEach((input, index) => {
-            input.name = `tags-${index}`;
-        });
-    }
+    // Add a new tag
+    function addTag(text) {
+        if (!text.trim()) return;
 
-    // Function to attach remove functionality to a tag element
-    function attachRemoveFunctionality(tagElement) {
-        tagElement.querySelector('.remove-tag').addEventListener('click', function() {
-            tagElement.remove();
-            reIndexTags();
-        });
-    }
-
-    function addTag(tagText) {
-        if (!tagText.trim()) return;
-
-        // Create the tag element
-        const tagIndex = document.querySelectorAll('[name^="tags-"]').length;
-        const tagElement = document.createElement('span');
-        tagElement.className = 'tag-item';
-        tagElement.innerHTML = `
-            ${tagText}
-            <input type="hidden" name="tags-${tagIndex}" value="${tagText}">
+        const tag = document.createElement('span');
+        tag.className = 'tag-item';
+        tag.innerHTML = `
+            ${text}
+            <input type="hidden" name="tags[]" value="${text}"> <!-- Using [] for array submission -->
             <span class="remove-tag">×</span>
         `;
 
-        // Add to the list
-        tagsList.appendChild(tagElement);
-
-        // Clear input
+        tagsList.appendChild(tag);
         tagInput.value = '';
 
-        // Add remove functionality
-        attachRemoveFunctionality(tagElement);
+        // Remove tag on click
+        tag.querySelector('.remove-tag').addEventListener('click', () => tag.remove());
     }
 
     // Add tag on button click
-    addTagButton.addEventListener('click', function() {
-        addTag(tagInput.value);
-    });
+    addTagButton.addEventListener('click', () => addTag(tagInput.value));
 
     // Add tag on Enter key
-    tagInput.addEventListener('keypress', function(e) {
+    tagInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
             addTag(tagInput.value);
         }
     });
 
-    // Attach remove functionality to any tags already in the HTML on page load
-    const existingTagElements = tagsList.querySelectorAll('.tag-item');
-    existingTagElements.forEach(attachRemoveFunctionality);
-
-    // Ensure initial indexing is correct after pre-population
-    reIndexTags();
+    // Initialize existing tags (remove functionality)
+    document.querySelectorAll('.tag-item .remove-tag').forEach(removeBtn => {
+        removeBtn.addEventListener('click', function() {
+            this.parentElement.remove();
+        });
+    });
 });
