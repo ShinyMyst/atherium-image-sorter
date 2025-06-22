@@ -44,25 +44,29 @@
     <fieldset>
         <legend>LoRA</legend>
         <div class="lora-grid">
-            {% for name, icon_src in form.lora %}
-                {{ lora_toggle(name, icon_src) }}
+            {% for lora_name, lora_details in loras_data.items() %}
+                {{ lora_toggle(lora_name, lora_details.img_url) }}
             {% endfor %}
         </div>
     </fieldset>
 
-        <div class="divider"></div>
+    <div class="divider"></div>
 
-        <!-- Sampling Method -->
-        <fieldset>
-            <legend>Sampling</legend>
-            {{ form.sampling(class="form-control", id="sampling-method") }}
-        </fieldset>
+    <!-- Sampling Method -->
+    <fieldset>
+        <legend>Sampling</legend>
+        <select name="sampling" id="sampling-method" class="form-control">
+            {% for sampling_method in sampling_methods %}
+                <option value="{{ sampling_method }}">{{ sampling_method }}</option>
+            {% endfor %}
+        </select>
+    </fieldset>
 
         <!-- Tags -->
-        <fieldset>
+    <fieldset>
             <legend>Tags</legend>
             <div class="tags-container" id="tags-container">
-                {% for tag in form.default_tags %}
+                {% for tag in tag_frequency.keys() %}
                     <span class="tag" data-tag="{{ tag }}">
                         {{ tag }}
                         <span class="remove-tag">×</span>
@@ -72,7 +76,7 @@
             <div class="tag-input-container">
                 <input type="text" id="new-tag-input" placeholder="Add new tag...">
                 <button id="add-tag-btn">+</button>
-            </div>
+        </div>
         </fieldset>
     </div>
 

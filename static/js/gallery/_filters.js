@@ -9,7 +9,7 @@ export function passesFilters(img) {
         return false;
     }
     // Sampling check
-    if (filters.sampling !== "any" && img["Sampling Method"].toLowerCase() !== filters.sampling.toLowerCase()) {
+    if (filters.sampling.toLowerCase() !== "any" && img["Sampling Method"].toLowerCase() !== filters.sampling.toLowerCase()) {
         return false;
     }
     // LoRA checks
