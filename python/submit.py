@@ -9,26 +9,18 @@ from wtforms import (
     FieldList,
     SelectMultipleField
 )
+from config.config import COLLECTIONS, MODELS, SAMPLING_METHODS
 
 
 class SubmitForm(FlaskForm):
     # Data Sets
     data_sets = SelectMultipleField(
-        choices=[
-            ('gallery', 'Gallery'),
-            ('test', 'Test File'),
-            ('llamas', 'Ill Llama')
-        ]
+        choices=[name for name in COLLECTIONS.keys()]
     )
+
     # Basic Information
     url = StringField('Image URL')
-    model = SelectField('Model', choices=[
-        ('Hoshino', 'Hoshino'),
-        ('Hoseki', 'Hoseki'),
-        ('AniKawaXL', 'AniKawaXL'),
-        ('KonpaEvo', 'KonpaEvo'),
-        ('KiwiMix-XL', 'KiwiMix-XL')
-        ])
+    model = SelectField('Model', choices=MODELS)
     prompt = TextAreaField('Prompt', default='...')
     tags = FieldList(StringField('Tag'), min_entries=0)
 
@@ -54,13 +46,8 @@ class SubmitForm(FlaskForm):
             self.vivid_soft,
             self.cartoony
         ]
-    # LoRA Details
-    sampling_method = SelectField('Sampling Method', choices=[
-        ('Euler A', 'Euler A'),
-        ('Euler', 'Euler'),
-        ('DDIM', 'DDIM'),
-        ('LMS', 'LMS'),
-        ])
+    # Sampling Details
+    sampling_method = SelectField('Sampling Method', choices=SAMPLING_METHODS)
     sampling_steps = IntegerField('Sampling Steps', default=10)
     cfg_scale = FloatField('CFG Scale', default=2)
 

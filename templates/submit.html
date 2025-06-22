@@ -8,10 +8,8 @@
     <link rel="stylesheet" href="/static/css/submit.css">
 </head>
 <body>
-    {# Macros #}
     {% from "_macros.html" import slider_field, lora_submit %}
 
-    {# Form #}
     <form method="POST" action="{{ submit_url }}" target="_blank">
         {{ form.hidden_tag() }}
 
@@ -68,14 +66,10 @@
         {{ form.submit() }}
     </form>
 
-    {# Scripts #}
-    <!-- YOU KNOW WHAT FINE.  I'd like to use initSubmit similar to what I did in gallery
-    BUT it's refusing to cooperate.  Leaving it as if for now since it functions and isn't worth time.-->
     <script src="{{ url_for('static', filename='js/submit/img_preview.js') }}"></script>
     <script src="{{ url_for('static', filename='js/submit/tags.js') }}"></script>
     <script src="{{ url_for('static', filename='js/submit/lora.js') }}"></script>
 
-    <!-- Initialize image preview if URL exists -->
     <script>
         const initialUrl = document.getElementById('image-url').value;
         if (initialUrl) {
