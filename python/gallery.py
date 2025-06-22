@@ -4,13 +4,6 @@ from wtforms import SelectField  # , FloatField
 
 
 class GalleryForm(FlaskForm):
-    # Model - Dropdown
-    model = SelectField('Model', choices=[
-        ('any', 'Any'),
-        ('hoseki', 'Hoseki'),
-        ('hoshino', 'Hoshino')
-    ])
-
     # LoRA - Sliders
     # (Macro is used to format these)
     lora = [

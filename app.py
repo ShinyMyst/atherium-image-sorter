@@ -2,9 +2,10 @@ from flask import Flask, render_template, jsonify, request
 from python.submit import SubmitForm
 from python.gallery import GalleryForm
 from collection_manager import CollectionManager
+from config.config import MODELS
 
 
-app_data = CollectionManager("Test")
+app_data = CollectionManager("Gallery")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
 
@@ -18,9 +19,14 @@ def index():
 def gallery():
     collection = app_data.get_collection()
     tags = app_data.get_tag_frequency()
+    model_choices = MODELS
+    MODELS.insert(0, 'Any')
+
     return render_template('gallery.html',
                            form=GalleryForm(tags),
-                           image_json=collection)
+                           image_json=collection,
+                           model_choices=model_choices
+                           )
 
 
 @app.route('/submit')

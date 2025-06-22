@@ -31,7 +31,11 @@
     <!-- Model Select -->
     <fieldset>
         <legend>Model</legend>
-        {{ form.model(class="form-control") }}
+        <select name="model" id="model" class="form-control">
+            {% for model_name in model_choices %}
+                <option value="{{ model_name }}">{{ model_name }}</option>
+            {% endfor %}
+        </select>
     </fieldset>
 
     <div class="divider"></div>

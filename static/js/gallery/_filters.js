@@ -5,7 +5,7 @@ export function passesFilters(img) {
     const filters = getCurrentFilters()
 
     // Model check
-    if (filters.model !== "any" && img.model.toLowerCase() !== filters.model.toLowerCase()) {
+    if (filters.model.toLowerCase() !== "any" && img.model.toLowerCase() !== filters.model.toLowerCase()) {
         return false;
     }
     // Sampling check
