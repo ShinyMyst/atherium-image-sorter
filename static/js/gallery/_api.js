@@ -2,7 +2,7 @@
  * API    *
  ******************************/
 export function updateRating(imageUrl, change) {
-    fetch(`/update-rating?image_url=${encodeURIComponent(imageUrl)}&change=${change}`, {
+    fetch(`/entry/rating?image_url=${encodeURIComponent(imageUrl)}&change=${change}`, {
         method: 'POST'
     })
     .then(response => {
@@ -14,8 +14,7 @@ export function updateRating(imageUrl, change) {
 }
 
 export function updateTags(imageUrls, tags) {
-    console.warn("The updateTags function needs review and a proper endpoint for bulk operations.");
-    fetch('/update-tags-bulk', {
+    fetch('/entries/tags', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -34,7 +33,7 @@ export function updateTags(imageUrls, tags) {
 }
 
 export function updateDetails(imageUrl) {
-    fetch(`/api/update-details?image_url=${encodeURIComponent(imageUrl)}`, {
+    fetch(`/submit/edit?image_url=${encodeURIComponent(imageUrl)}`, {
         method: 'GET'
     })
     .then(response => {
@@ -43,5 +42,5 @@ export function updateDetails(imageUrl) {
         }
     })
     .catch(error => console.error('Error updating image:', error));
-    window.open(`/api/update-details?image_url=${encodeURIComponent(imageUrl)}`, '_blank');
+    window.open(`/submit/edit?image_url=${encodeURIComponent(imageUrl)}`, '_blank');
 }
