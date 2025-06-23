@@ -258,7 +258,8 @@
         "Prompt": "...",
         "Tags": [],
         "LoRA": {
-            "Vivid Soft": 7
+            "Vivid Soft": 7,
+            "NEW ROUET HERE": 1
         },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,

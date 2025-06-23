@@ -4,9 +4,10 @@ from collection_manager import CollectionManager
 from config.config import MODELS, LORAS, SAMPLING_METHODS
 
 
-app_data = CollectionManager("Gallery")
+app_data = CollectionManager("Test")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
+
 
 ##############################
 #     GET ROUTES
@@ -43,33 +44,12 @@ def submit_new():
 @app.route('/submit/edit', methods=['GET'])
 def submit_edit():
     image_url = request.args.get('image_url')
-    entry_data = app_data.get_entry(image_url)
+    entry_form = app_data.prepare_form(image_url)
 
-    form_data = {
-        'url': entry_data.get('url', ''),
-        'model': entry_data.get('model', ''),
-        'prompt': entry_data.get('Prompt', ''),
-        'sampling_method': entry_data.get('Sampling Method', ''),
-        'sampling_steps': entry_data.get('Sampling Steps', 10),
-        'cfg_scale': entry_data.get('CFG Scale', 2.0),
-        'tags': entry_data.get('Tags', []),
-    }
-
-    entry_form = SubmitForm(data=form_data)
-
-    lora_data = entry_data.get('LoRA', {})
-    lora_form_field_to_data_key_map = {
-        'dmd2': 'DMD2',
-        'lcm': 'LCM',
-        'bold_outlines': 'Bold Outlines',
-        'vivid_edge': 'Vivid Edge',
-        'vivid_soft': 'Vivid Soft',
-        'cartoony': 'Cartoony'
-    }
-    for field_name, data_key_name in lora_form_field_to_data_key_map.items():
-        getattr(entry_form, field_name).data = lora_data.get(data_key_name, 0.0)  # noqa
-
-    return render_template('submit.html', form=entry_form, submit_url='/entry/edit')
+    return render_template('submit.html',
+                           form=entry_form,
+                           submit_url='/entry/edit'
+                           )
 
 
 ##############################
@@ -91,7 +71,7 @@ def new_entry():
 ##############################
 #     PUT ROUTES
 ##############################
-@app.route('/entry/edit', methods=['PUT'])
+@app.route('/entry/edit', methods=['PUT', 'POST'])
 def edit_entry():
     form = SubmitForm()
     lora_json = request.form.get('lora_data', '{}')
@@ -120,6 +100,7 @@ def update_tags():
         app_data.add_tags(url, tags)
 
     return '', 200
+
 
 ##############################
 #     UTILITY ROUTES

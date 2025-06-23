@@ -1,6 +1,7 @@
 # TODO Organize this class better?
 import json
 from python.submit import SubmitForm
+from config.config import LORAS
 
 
 class CollectionManager():
@@ -126,6 +127,37 @@ class CollectionManager():
         del self.active_collection[self.get_entry_index(url)]
         print("Deleted Entry:", url)
 
+    def prepare_form(self, url):
+        """Returns entry in the style of a submit form."""
+        entry_data = self.get_entry(url)
 
+        lora_data_from_entry = entry_data.get('LoRA', {})
+
+        form_data = {
+            'url': entry_data.get('url', ''),
+            'model': entry_data.get('model', ''),
+            'prompt': entry_data.get('Prompt', ''),
+            'sampling_method': entry_data.get('Sampling Method', ''),
+            'sampling_steps': entry_data.get('Sampling Steps', 10),
+            'cfg_scale': entry_data.get('CFG Scale', 2.0),
+            'tags': entry_data.get('Tags', []),
+            **{key: value for key, value in lora_data_from_entry.items() if key in LORAS.keys()}
+        }
+
+        entry_form = SubmitForm(data=form_data)
+
+        # --- Correctly Handling Dynamic LoRAs ---
+        for lora_name, lora_strength in lora_data_from_entry.items():
+            if lora_name not in LORAS.keys():
+                # If it's a dynamic LoRA, append it to the FieldList
+                # You call append_entry() without arguments,
+                # then set the .data attribute of the *newly created subfield*.
+                name_field = entry_form.dynamic_loras.append_entry()
+                name_field.data = lora_name
+
+                strength_field = entry_form.dynamic_strengths.append_entry()
+                strength_field.data = lora_strength
+
+        return entry_form
 # TODO - Be more intentional and careful with stale.
 # TODO - Also assume set is always active unless changed
