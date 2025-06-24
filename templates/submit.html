@@ -40,34 +40,22 @@
             </div>
         </fieldset>
 
-<fieldset class="lora-fieldset">
-    <legend>LoRA
-        <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
-    </legend>
-    <div id="lora-container">
-        {% for field in form.lora_fields %}
-            <div class="lora-field-row">
-                {{ lora_submit(field) }}
-            </div>
-        {% endfor %}
+        <fieldset class="lora-fieldset">
+            <legend>LoRA
+                <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
+            </legend>
+            <div id="lora-container">
+                {% for field in form.lora_fields %}
+                    {{ lora_submit(field, field, is_dynamic_entry=False) }}
+                {% endfor %}
 
-        <div id="dynamic-lora-list-container">
-            {% for i in range(form.dynamic_loras|length) %}
-                <div class="lora-field-row dynamic-lora-entry">
-                    <div class="lora-submit">
-                        <div class="lora-name">
-                            <span>{{ form.dynamic_loras[i].data }}</span>
-                        </div>
-                        <div class="lora-value">
-                            <input type="number" name="{{ form.dynamic_loras[i].data }}"
-                                   value="{{ form.dynamic_strengths[i].data }}" min="0" max="8" step="0.1">
-                        </div>
-                    </div>
+                <div id="dynamic-lora-list-container">
+                    {% for i in range(form.dynamic_loras|length) %}
+                        {{ lora_submit(form.dynamic_loras[i].data, form.dynamic_strengths[i], is_dynamic_entry=True) }}
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>
-    </div>
-</fieldset>
+            </div>
+        </fieldset>
 
         <fieldset class="sampling-parameters">
             <legend>Sampling</legend>

@@ -22,14 +22,18 @@
     </div>
 {% endmacro %}
 
-{% macro lora_submit(field) %}
-<div class="lora-submit">
-    <div class="lora-name">
-        <span>{{ field.label.text }}</span>
+{% macro lora_submit(name_source, value_field_obj, is_dynamic_entry=False) %}
+    <div class="lora-field-row {% if is_dynamic_entry %}dynamic-lora-entry{% endif %}">
+        <div class="lora-submit">
+            <div class="lora-name">
+                <span>{{ name_source.label.text if not is_dynamic_entry else name_source }}</span>
+            </div>
+            <div class="lora-value">
+                <input type="number"
+                       name="{{ value_field_obj.name }}"
+                       value="{{ value_field_obj.data if value_field_obj.data is not none else 0 }}"
+                       min="0" max="8" step="0.1">
+            </div>
+        </div>
     </div>
-    <div class="lora-value">
-        <input type="number" name="{{ field.label.text }}"
-               value="{{ field.data }}" min="0" max="8" step="0.1">
-    </div>
-</div>
 {% endmacro %}
