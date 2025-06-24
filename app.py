@@ -33,7 +33,7 @@ def gallery():
                            )
 
 
-@app.route('/submit/new', methods=['GET'])  #
+@app.route('/submit/new', methods=['GET'])
 def submit_new():
     return render_template('submit.html',
                            form=SubmitForm(),
@@ -58,8 +58,6 @@ def submit_edit():
 @app.route('/entry/new', methods=['POST'])
 def new_entry():
     """Adds entry to active collection.  Displays entry in a new tab."""
-    # TODO - Make the app function do the data format internally?
-
     form = SubmitForm()
     lora_json = request.form.get('lora_data', '{}')
 
@@ -75,6 +73,7 @@ def new_entry():
 def edit_entry():
     form = SubmitForm()
     lora_json = request.form.get('lora_data', '{}')
+
     entry_data = app_data.format_entry(form, lora_json)
     app_data.edit_entry(entry_data)
     return jsonify(entry_data)
@@ -98,7 +97,6 @@ def update_tags():
     tags = data.get('tags')
     for url in urls:
         app_data.add_tags(url, tags)
-
     return '', 200
 
 

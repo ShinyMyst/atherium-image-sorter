@@ -12,7 +12,10 @@ COLLECTIONS = {
 
 MODELS = [
     'Hoshino',
+    'Hakura',
     'Hoseki',
+    'Otome',
+    'Tsubaki',
     'AniKawaXL',
     'KonpaEvo',
     'KiwiMix-XL'

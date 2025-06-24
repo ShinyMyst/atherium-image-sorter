@@ -19,6 +19,15 @@ class CollectionManager():
 
     # TODO - Make a set active route function rather than setting in init.
 
+    # REFRESH collection any time collection is read.
+    # Refresh method
+
+    # One class for loading/saving files and one for managing ops?
+    # Storage vs manage
+
+    # Put @propery above active_collection so any time it's called state updated
+    # Basically when you type self.active_col it runs the method tagged with @prop
+
     def get_collection(self):
         """Returns the ACTIVE collection"""
         if self.stale:
@@ -158,6 +167,6 @@ class CollectionManager():
                 strength_field = entry_form.dynamic_strengths.append_entry()
                 strength_field.data = lora_strength
 
-        return entry_form
+        return entry_form#
 # TODO - Be more intentional and careful with stale.
 # TODO - Also assume set is always active unless changed
