@@ -4,7 +4,7 @@ from collection_manager import CollectionManager
 from config.config import MODELS, LORAS, SAMPLING_METHODS
 
 
-app_data = CollectionManager("Gallery")
+app_data = CollectionManager("Test")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
 
@@ -82,7 +82,7 @@ def edit_entry():
 ##############################
 #     PATCH ROUTES
 ##############################
-@app.route('/entry/rating', methods=['PATCH'])
+@app.route('/entry/rating', methods=['POST', 'PATCH'])
 def update_rating():
     image_url = request.args.get('image_url')
     change = int(request.args.get('change'))

@@ -8,20 +8,30 @@ class CollectionManager():
     def __init__(self, collection_name: str = "Test"):
         self._stale = False
         self.route = None
+        self._collection_list = []  # Initialize the backing field
         # Collection is stale if class data != JSON data.
-        self.collection = self.set_collection(collection_name)
+        self.set_collection(collection_name)
 
     # --------------------
     # Properties
     # --------------------
-    @property  # noqa
+    @property
     def collection(self) -> list:
         """This function will run whenever collection is called.
         Updates JSON if collection is stale."""
+        print("UPDATE")
         if self._stale:
             with open(self.route, 'w') as f:
-                json.dump(self.collection, f, indent=4)
+                json.dump(self._collection_list, f, indent=4)
             self._stale = False
+        return self._collection_list
+
+    @collection.setter
+    def collection(self, new_collection: list):
+        if not isinstance(new_collection, list):
+            raise ValueError("Collection must be a list.")
+        self._collection_list = new_collection
+        self._stale = True
 
     # --------------------
     # Public Setters
@@ -31,6 +41,7 @@ class CollectionManager():
         with open(self.route) as f:
             collection = json.load(f)
         collection.sort(key=lambda x: x.get("ranking", 0), reverse=True)
+        self.collection = collection
         self._stale = True
 
     # --------------------
@@ -58,8 +69,7 @@ class CollectionManager():
         entry_data = self._get_entry(url)[0]
         form_data = self._helper_prepare_form_data(entry_data)
         entry_form = SubmitForm(data=form_data)
-        self._helper_add_dynamic_lora(entry_data, entry_form)
-        return entry_form
+        return self._helper_add_dynamic_loras(entry_data, entry_form)
 
     # --------------------
     # Public Methods
@@ -124,14 +134,16 @@ class CollectionManager():
         return entry_data
 
     @staticmethod
-    def _helper_add__dynamic_loras(entry_data: dict, submit_form: SubmitForm):
+    def _helper_add_dynamic_loras(entry_data: dict, submit_form: SubmitForm):
         """Add dynamic LoRAs to the form"""
         entry_lora_data = entry_data.get('LoRA', {})
 
         for lora_name, lora_strength in entry_lora_data.items():
             if lora_name not in LORAS.keys():
-                submit_form.dynamic_loras.append_entry(data=lora_name)
-                submit_form.dynamic_strengths.append_entry(data=lora_strength)
+                name_field = submit_form.dynamic_loras.append_entry()
+                name_field.data = lora_name
+                strength_field = submit_form.dynamic_strengths.append_entry()
+                strength_field.data = lora_strength
 
         return submit_form
 
@@ -155,4 +167,5 @@ class CollectionManager():
         for lora_name, lora_strength in lora_data_from_entry.items():
             if lora_name in LORAS.keys():
                 form_data[lora_name] = lora_strength
+
         return form_data

@@ -1,17 +1,36 @@
 [
     {
-        "url": "https://rapi.pixai.art/img/media/555892938650569840/orig",
+        "url": "https://rapi.pixai.art/img/media/556188957993753129/orig",
         "model": "Hoshino",
         "Prompt": "...",
         "Tags": [
             "new1",
+            "new",
+            "new2",
             "kagerou"
         ],
         "LoRA": {},
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "CFG Scale": 2.0,
-        "ranking": 2
+        "ranking": 3
+    },
+    {
+        "url": "https://rapi.pixai.art/img/media/555892938650569840/orig",
+        "model": "Hoshino",
+        "Prompt": "...",
+        "Tags": [
+            "new2",
+            "test",
+            "kagerou",
+            "new1",
+            "new"
+        ],
+        "LoRA": {},
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "CFG Scale": 2.0,
+        "ranking": 0
     },
     {
         "url": "https://rapi.pixai.art/img/media/567086382015036172/orig",
@@ -24,7 +43,8 @@
             "Bold Outlines": 3,
             "Vivid Edge": 4,
             "Vivid Soft": 5,
-            "Cartoony": 6
+            "Cartoony": 6,
+            "SAMPLE": 4
         },
         "Sampling Method": "DDIM",
         "Sampling Steps": 20,
@@ -37,232 +57,6 @@
         "Prompt": "...",
         "Tags": [],
         "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://rapi.pixai.art/img/media/556188957993753129/orig",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [
-            "still here",
-            "12345",
-            "a tag",
-            "kagerou",
-            "tupac"
-        ],
-        "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {
-            "LCM": 5,
-            "Bold Outlines": 4,
-            "Vivid Edge": 3,
-            "Vivid Soft": 2,
-            "Cartoony": 1,
-            "New Tag": 0.7
-        },
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {
-            "LCM": 5,
-            "Bold Outlines": 4,
-            "Vivid Edge": 3,
-            "Vivid Soft": 2,
-            "Cartoony": 1,
-            "New Lora": 8
-        },
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {
-            "LCM": 5,
-            "Bold Outlines": 4,
-            "Vivid Edge": 3,
-            "Vivid Soft": 2,
-            "Cartoony": 1,
-            "New Lora": 8
-        },
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {
-            "LCM": 5,
-            "Bold Outlines": 4,
-            "Vivid Edge": 3,
-            "Vivid Soft": 2,
-            "Cartoony": 1,
-            "New Lora": 8
-        },
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {
-            "LCM": 5,
-            "Bold Outlines": 4,
-            "Vivid Edge": 3,
-            "Vivid Soft": 2,
-            "Cartoony": 1,
-            "New Lora": 8
-        },
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {
-            "LCM": 5,
-            "Bold Outlines": 4,
-            "Vivid Edge": 3,
-            "Vivid Soft": 2,
-            "Cartoony": 1,
-            "New Lora": 8
-        },
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [
-            "gggggggggg"
-        ],
-        "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/e6d1ed7d-6dc8-4d00-86e2-32a1e83fd047",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [],
-        "LoRA": {
-            "Vivid Soft": 7,
-            "NEW ROUET HERE": 1
-        },
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
-        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [
-            "new tag"
-        ],
-        "LoRA": {
-            "LCM": 5,
-            "Bold Outlines": 4,
-            "Vivid Edge": 3,
-            "Vivid Soft": 2,
-            "Cartoony": 1
-        },
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "CFG Scale": 2.0,

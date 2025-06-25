@@ -66,13 +66,12 @@
     <fieldset>
             <legend>Tags</legend>
             <div class="tags-container" id="tags-container">
-                {% for tag in tag_frequency %}
+                {% for tag in sorted_tags %}
                     <span class="tag" data-tag="{{ tag }}">
                         {{ tag }}
                         <span class="remove-tag">×</span>
                     </span>
                 {% endfor %}
-            </div>
             </div>
             <div class="tag-input-container">
                 <input type="text" id="new-tag-input" placeholder="Add new tag...">
