@@ -1,21 +1,20 @@
-# TODO Organize this class better?
 import json
+from collections import Counter
 from python.submit import SubmitForm
 from config.config import LORAS
 
 
 class CollectionManager():
-    def __init__(self, collection_name: str):
-        self.route_dict = {
-            'Test': "collections/test.json",
-            'Gallery': "collections/gallery.json",
-            'Test2': "collections/llamas.json"
-            }
-        self.stale = True  # Tracks if active_collection is up-to-date
-        self.active_route = self.route_dict[collection_name]
-        self.active_collection = self._prep_collect(self.active_route)
-        self.tag_frequency = self._count_tags()
-        # Note- Use arg bc _prep_collect may use dif routes elsewhere
+    def __init__(self, collection_name: str = "Test"):
+        self._stale = False  # Tracks if active_collection is up-to-date
+        self.active_route = None
+        self.collection = None
+        self.set_collection(collection_name)
+
+        self.tag_frequency = self._count_tags()   # TODO IDK rather than a var just do this when it's called?
+
+
+
 
     # TODO - Make a set active route function rather than setting in init.
 
@@ -28,16 +27,45 @@ class CollectionManager():
     # Put @propery above active_collection so any time it's called state updated
     # Basically when you type self.active_col it runs the method tagged with @prop
 
-    def get_collection(self):
-        """Returns the ACTIVE collection"""
-        if self.stale:
-            self.active_collection = self._prep_collect(self.active_route)
-        return self.active_collection
+    # --------------------
+    # Properties
+    # --------------------
+    @property  # noqa
+    def collection(self) -> list:
+        """This function will run whenever collection is called.
+        Refreshes collection if marked as stale."""
+        if self._stale:
+            pass
+
+    # --------------------
+    # Public Setters
+    # --------------------
+    def set_collection(self, file_name):
+        self.active_route = f"collections/{file_name.lower()}.json"
+        self.collection = self._prep_collect(self.active_route)
+
+    # --------------------
+    # Public Getters
+    # --------------------
+    def get_collection(self) -> list:
+        """Returns the collection"""
+        return self.collection
+
+    def get_tag_frequency(self) -> dict:
+        """Returns list of tags sorted by most common"""
+        tags = []
+        for entry in self.collection:
+            tags.extend(entry.get("Tags", []))
+
+        tag_counts = Counter(tags)
+        frequency = [tag for tag, count in tag_counts.most_common()]
+
+        return frequency
 
     def update_ranking(self, key_url, change):
         """Changes the ranking of one ACTIVE collection element.
         URL used to determine the target element/image."""
-        for image in self.active_collection:
+        for image in self.collection:
             if image['url'] == key_url:
                 image['ranking'] += change
                 break
@@ -47,7 +75,7 @@ class CollectionManager():
         """Given a route, returns an up-to-date sorted collection"""
         collect = self._open_collect(route)
         sorted_collect = self._sort_collect(collect)
-        self.stale = False
+        self._stale = False
         return sorted_collect
 
     def _open_collect(self, route):
@@ -80,20 +108,20 @@ class CollectionManager():
 
     def add_entry(self, entry_data):
         """Adds a new entry to the active collection."""
-        self.active_collection.append(entry_data)
+        self.collection.append(entry_data)
         self._write_changes()
 
     def _write_changes(self):
         """Writes pending changes to active JSON.  Change status to stale"""
         with open(self.active_route, 'w') as f:
-            json.dump(self.active_collection, f, indent=4)
-        self.stale = True
+            json.dump(self.collection, f, indent=4)
+        self._stale = True
 
     def _count_tags(self):
         """Counts frequency of each tag in the active collection
         Sorts with most frequent at top."""
         tag_frequency = dict()
-        for entry in self.active_collection:
+        for entry in self.collection:
             for tag in entry.get("Tags", []):
                 tag_frequency[tag] = tag_frequency.get(tag, 0) + 1
         tag_frequency = dict(sorted(tag_frequency.items(),
@@ -106,13 +134,13 @@ class CollectionManager():
 
     def get_entry(self, url):
         """Returns a single entry from active collection by URL"""
-        for entry in self.active_collection:
+        for entry in self.collection:
             if entry["url"] == url:
                 return entry
         return False
 
     def get_entry_index(self, url):
-        for i, entry in enumerate(self.active_collection):
+        for i, entry in enumerate(self.collection):
             if entry["url"] == url:
                 return i
         return False
@@ -133,7 +161,7 @@ class CollectionManager():
 
     def delete_entry(self, url):
         """Removes entry from collection."""
-        del self.active_collection[self.get_entry_index(url)]
+        del self.collection[self.get_entry_index(url)]
         print("Deleted Entry:", url)
 
     def prepare_form(self, url):
@@ -155,18 +183,15 @@ class CollectionManager():
 
         entry_form = SubmitForm(data=form_data)
 
-        # --- Correctly Handling Dynamic LoRAs ---
         for lora_name, lora_strength in lora_data_from_entry.items():
             if lora_name not in LORAS.keys():
-                # If it's a dynamic LoRA, append it to the FieldList
-                # You call append_entry() without arguments,
-                # then set the .data attribute of the *newly created subfield*.
                 name_field = entry_form.dynamic_loras.append_entry()
                 name_field.data = lora_name
 
                 strength_field = entry_form.dynamic_strengths.append_entry()
                 strength_field.data = lora_strength
 
-        return entry_form#
+        return entry_form
+
 # TODO - Be more intentional and careful with stale.
 # TODO - Also assume set is always active unless changed
