@@ -44,7 +44,7 @@ def submit_new():
 @app.route('/submit/edit', methods=['GET'])
 def submit_edit():
     image_url = request.args.get('image_url')
-    entry_form = app_data.prepare_form(image_url)
+    entry_form = app_data.get_submit_form(image_url)
 
     return render_template('submit.html',
                            form=entry_form,
@@ -86,7 +86,7 @@ def edit_entry():
 def update_rating():
     image_url = request.args.get('image_url')
     change = int(request.args.get('change'))
-    app_data.update_ranking(image_url, change)
+    app_data.edit_ranking(image_url, change)
     return '', 200
 
 
