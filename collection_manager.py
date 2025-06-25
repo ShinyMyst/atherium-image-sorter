@@ -19,7 +19,6 @@ class CollectionManager():
     def collection(self) -> list:
         """This function will run whenever collection is called.
         Updates JSON if collection is stale."""
-        print("UPDATE")
         if self._stale:
             with open(self.route, 'w') as f:
                 json.dump(self._collection_list, f, indent=4)
@@ -79,6 +78,7 @@ class CollectionManager():
         self._stale = True
 
     def add_tags(self, url, tags):
+        print("ADD STUFF I GUESS")
         entry = self._get_entry(url)[0]
         added_tags = [tag.lower() for tag in tags]
         all_tags = list(set(entry["Tags"] + added_tags))

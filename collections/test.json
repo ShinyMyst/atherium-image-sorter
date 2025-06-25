@@ -13,7 +13,7 @@
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "CFG Scale": 2.0,
-        "ranking": 3
+        "ranking": 4
     },
     {
         "url": "https://rapi.pixai.art/img/media/555892938650569840/orig",
@@ -30,7 +30,7 @@
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "CFG Scale": 2.0,
-        "ranking": 0
+        "ranking": 3
     },
     {
         "url": "https://rapi.pixai.art/img/media/567086382015036172/orig",
@@ -49,7 +49,7 @@
         "Sampling Method": "DDIM",
         "Sampling Steps": 20,
         "CFG Scale": 7.0,
-        "ranking": 0
+        "ranking": 2
     },
     {
         "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
@@ -60,6 +60,6 @@
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "CFG Scale": 2.0,
-        "ranking": 0
+        "ranking": 1
     }
 ]

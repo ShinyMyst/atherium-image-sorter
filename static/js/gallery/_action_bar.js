@@ -80,11 +80,12 @@ function _closeBarEvent(){
 };
 // Apply Tags Dialogue Box
 function _applyTags(urls, tagsToApply) {
+    updateTags(urls, tagsToApply)
     if (urls.length > 0) {
         const userConfirmed = confirm(`Apply these tags?\n\n${tagsToApply.join(', ')}`);
         if (userConfirmed) {
             updateTags(urls, tagsToApply)
-            location.reload();
+            //location.reload();  This line breaks everything
         }
     } else {
         alert("No images selected.");

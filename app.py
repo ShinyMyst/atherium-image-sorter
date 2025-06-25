@@ -3,7 +3,6 @@ from python.submit import SubmitForm
 from collection_manager import CollectionManager
 from config.config import MODELS, LORAS, SAMPLING_METHODS
 
-
 app_data = CollectionManager("Test")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
@@ -29,7 +28,7 @@ def gallery():
                            model_choices=model_choices,
                            loras_data=LORAS,
                            sampling_methods=sampling_methods,
-                           tag_frequency=tags
+                           sorted_tags=tags
                            )
 
 
@@ -82,7 +81,7 @@ def edit_entry():
 ##############################
 #     PATCH ROUTES
 ##############################
-@app.route('/entry/rating', methods=['POST', 'PATCH'])
+@app.route('/entry/rating', methods=['PATCH', 'POST'])
 def update_rating():
     image_url = request.args.get('image_url')
     change = int(request.args.get('change'))
@@ -90,8 +89,9 @@ def update_rating():
     return '', 200
 
 
-@app.route('/entries/tags', methods=['PATCH'])
+@app.route('/entries/tags', methods=['PATCH', 'POST'])
 def update_tags():
+    print('?????????')
     data = request.get_json()
     urls = data.get('imageUrls')
     tags = data.get('tags')
