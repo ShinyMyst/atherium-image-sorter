@@ -7,25 +7,8 @@ from config.config import LORAS
 class CollectionManager():
     def __init__(self, collection_name: str = "Test"):
         self._stale = False  # Tracks if active_collection is up-to-date
-        self.active_route = None
         self.collection = None
         self.set_collection(collection_name)
-
-        self.tag_frequency = self._count_tags()   # TODO IDK rather than a var just do this when it's called?
-
-
-
-
-    # TODO - Make a set active route function rather than setting in init.
-
-    # REFRESH collection any time collection is read.
-    # Refresh method
-
-    # One class for loading/saving files and one for managing ops?
-    # Storage vs manage
-
-    # Put @propery above active_collection so any time it's called state updated
-    # Basically when you type self.active_col it runs the method tagged with @prop
 
     # --------------------
     # Properties
@@ -41,8 +24,10 @@ class CollectionManager():
     # Public Setters
     # --------------------
     def set_collection(self, file_name):
-        self.active_route = f"collections/{file_name.lower()}.json"
-        self.collection = self._prep_collect(self.active_route)
+        with open(f"collections/{file_name.lower()}.json") as f:
+            collection = json.load(f)
+        collection.sort(key=lambda x: x.get("ranking", 0), reverse=True)
+        self._stale = False
 
     # --------------------
     # Public Getters
@@ -51,8 +36,10 @@ class CollectionManager():
         """Returns the collection"""
         return self.collection
 
-    def get_tag_frequency(self) -> dict:
+    def get_tags(self) -> dict:
         """Returns list of tags sorted by most common"""
+        # Technically, it's better to keep a dict of tags and counts
+        # Then increment when new tags added but this simplifies it.
         tags = []
         for entry in self.collection:
             tags.extend(entry.get("Tags", []))
@@ -62,6 +49,14 @@ class CollectionManager():
 
         return frequency
 
+    # --------------------
+    # Collection CRUD Operations
+    # --------------------
+
+    # --------------------
+    # Private Getters
+    # --------------------
+
     def update_ranking(self, key_url, change):
         """Changes the ranking of one ACTIVE collection element.
         URL used to determine the target element/image."""
@@ -70,25 +65,6 @@ class CollectionManager():
                 image['ranking'] += change
                 break
         self._write_changes()
-
-    def _prep_collect(self, route):
-        """Given a route, returns an up-to-date sorted collection"""
-        collect = self._open_collect(route)
-        sorted_collect = self._sort_collect(collect)
-        self._stale = False
-        return sorted_collect
-
-    def _open_collect(self, route):
-        """Opens, loads, saves, and returns a JSON collection."""
-        with open(route) as f:
-            collection = json.load(f)
-        return collection
-
-    def _sort_collect(self, collection: list):
-        """Sorts a collection by 'ranking' and returns the sorted list."""
-        return sorted(collection,
-                      key=lambda x: x.get("ranking", 0),
-                      reverse=True)
 
     def format_entry(self, form: SubmitForm, lora_json):
         """Given data from submit form, structures it into a new JSON entry."""
@@ -128,9 +104,6 @@ class CollectionManager():
                                     key=lambda x: x[1],
                                     reverse=True))
         return tag_frequency
-
-    def get_tag_frequency(self):
-        return self.tag_frequency
 
     def get_entry(self, url):
         """Returns a single entry from active collection by URL"""

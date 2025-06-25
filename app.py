@@ -20,7 +20,7 @@ def index():
 @app.route('/gallery', methods=['GET'])
 def gallery():
     collection = app_data.get_collection()
-    tags = app_data.get_tag_frequency()
+    tags = app_data.get_tags()
     model_choices = ['Any'] + MODELS
     sampling_methods = ['Any'] + SAMPLING_METHODS
 
