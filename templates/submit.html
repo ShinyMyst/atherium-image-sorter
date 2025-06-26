@@ -26,6 +26,7 @@
         </div>
 
         <div class="quick-entry-box">
+            <button type="button" id="copy-quick-entry">COPY SCRIPT</button>
             <label for="quick-entry-textarea">Quick Entry:</label>
             <textarea id="quick-entry-textarea" name="quick_entry_data" placeholder="Paste full image metadata here..."></textarea>
         </div>
@@ -89,6 +90,8 @@
     <script src="{{ url_for('static', filename='js/submit/img_preview.js') }}"></script>
     <script src="{{ url_for('static', filename='js/submit/tags.js') }}"></script>
     <script src="{{ url_for('static', filename='js/submit/lora.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/submit/copy_script.js') }}"></script>
+
 
     <script>
         const initialUrl = document.getElementById('image-url').value;
