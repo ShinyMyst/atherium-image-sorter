@@ -1,5 +1,5 @@
 /******************************
- * Image Containers           *
+ * Image Containers             *
  ******************************/
 import { passesFilters } from './_filters.js';
 import { updateRating, updateDetails } from './_api.js';
@@ -53,11 +53,28 @@ function imageContainer(img) {
         </div>
     `;
 
-    // Image Event Handler
-    container.querySelector('img').addEventListener('click', () => {
-        window.open(img.url, "_blank");
-    });
+    // Clicking box and check box.
+    const checkbox = container.querySelector(".select-checkbox");
 
+    container.addEventListener("click", (e) => {
+        // Prevent immediate bubbling if a child element like a button was clicked.
+        if (e.target.closest('.edit-btn') || e.target.closest('.select-checkbox') || e.target.closest('.rating-controls')) {
+            return;
+        }
+
+        const editModeCheckbox = document.querySelector('.sidebar .switch input[type="checkbox"]');
+        if (editModeCheckbox && editModeCheckbox.checked) {
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                // Manually trigger the change event to ensure the action bar updates
+                const changeEvent = new Event('change');
+                checkbox.dispatchEvent(changeEvent);
+            }
+        } else {
+            // Open image in new tab if edit mode is off
+            window.open(img.url, "_blank");
+        }
+    });
 
     // Rating Event Handlers
     container.querySelector('.plus-btn').addEventListener('click', (e) => {
@@ -84,15 +101,16 @@ function imageContainer(img) {
     }
 
     // CheckBox Event Handlers
-    const checkbox = container.querySelector(".select-checkbox");
     if (checkbox) {
         // Activate Action Bar
         checkbox.addEventListener("change", () => {
             const anyChecked = document.querySelectorAll(".select-checkbox:checked").length > 0;
             if (anyChecked) {
-                updateActionBarVisibility(true); // Can only make bar appear but not disappear
+                updateActionBarVisibility(true);
+            } else {
+                updateActionBarVisibility(false);
             }
         });
     }
     return container;
-};
+}
