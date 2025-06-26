@@ -65,6 +65,18 @@ def new_entry():
     return jsonify(new_entry)
 
 
+@app.route('/entry/quick', methods=['POST'])
+def quick_entry():
+    """Adds entry to active collection using JSON entry."""
+    quick_entry_content = request.form.get('quick_entry_data')
+    image_url = request.form.get('url')
+
+    print(f"Content from Quick Entry Box: {quick_entry_content}")
+    print(f"Image URL: {image_url}")
+
+    return '', 200
+
+
 ##############################
 #     PUT ROUTES
 ##############################
