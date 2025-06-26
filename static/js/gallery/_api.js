@@ -44,3 +44,27 @@ export function updateDetails(imageUrl) {
     .catch(error => console.error('Error updating image:', error));
     window.open(`/submit/edit?image_url=${encodeURIComponent(imageUrl)}`, '_blank');
 }
+
+export function deleteEntries(imageUrls) {
+    fetch('/entries/delete', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ urls: imageUrls })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Images successfully deleted:', imageUrls);
+            // Reload the page
+            location.reload();
+        } else {
+            console.error('Failed to delete images:', response.statusText);
+            alert('Failed to delete images. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting images:', error);
+        alert('An error occurred while deleting images.');
+    });
+}

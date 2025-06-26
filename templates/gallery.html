@@ -82,16 +82,22 @@
 
     <div class="main-content">
     <div id="action-bar">
-        <div class="action-bar-tag-input-group">
-            <input type="text" id="action-bar-tag-input" placeholder="Enter tag for selected...">
-            <button id="action-bar-tag-btn">+</button>
-        </div>
-
-        <div id="action-bar-tags-display">
+        <div class="action-controls-group"> {# Main left-side group #}
+            <div class="action-bar-tag-input-group">
+                <input type="text" id="action-bar-tag-input" placeholder="Enter tag for selected...">
+                <button id="action-bar-tag-btn">+</button>
             </div>
 
-        <button id="bulk-action-btn" class="action-bar-corner-btn bottom-left">Apply to Selected</button>
-        <button id="close-action-bar-btn" class="action-bar-corner-btn bottom-right">Close</button>
+            <div class="action-bar-buttons"> {# Apply/Delete buttons #}
+                <button id="bulk-action-btn" class="action-bar-btn">Apply Tags</button> {# Renamed for clarity #}
+                <button id="delete-selected-btn" class="action-bar-btn delete-btn">Delete Entries</button>
+            </div>
+
+            <button id="close-action-bar-btn" class="action-bar-btn close-btn">Close</button> {# Moved inside group, new class #}
+        </div>
+
+        <div id="action-bar-tags-display"> {# Right-side tags display #}
+        </div>
     </div>
     <div class="grid"><!-- Image containers will be inserted here --></div>
 

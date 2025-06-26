@@ -1,7 +1,7 @@
 /******************************
  * Action Bar     *
  ******************************/
-import { updateTags } from './_api.js';
+import { updateTags, deleteEntries } from './_api.js';
 
 // Variables need to be declared in order to use them in functions.
 // However, they can't be assigned until bar is initialized.
@@ -11,6 +11,7 @@ let actionBarTagInput;
 let addActionBarTagBtn;
 let actionBarTagsDisplay;
 let bulkActionBtn;
+let deleteSelectedBtn;
 let closeActionBarBtn;
 
 export function initActionBar() {
@@ -20,12 +21,14 @@ export function initActionBar() {
     addActionBarTagBtn = document.getElementById('action-bar-tag-btn');
     actionBarTagsDisplay = document.getElementById('action-bar-tags-display');
     bulkActionBtn = document.getElementById("bulk-action-btn");
+    deleteSelectedBtn = document.getElementById("delete-selected-btn"); // Initialize new button
     closeActionBarBtn = document.getElementById("close-action-bar-btn");
 
     if (actionBar) {
         _addTagEvent();
         _removeTagEvent();
-        _bulkActionButton();
+        _addTagsButton();
+        _deleteSelectedButton();
         _closeBarEvent();
     }
 
@@ -91,26 +94,53 @@ function _applyTags(urls, tagsToApply) {
         alert("No images selected.");
     }
 };
+
+// Delete Tags Dialogue Box
+function _deleteImages(urls) {
+    if (urls.length > 0) {
+        const confirmation = confirm(`Are you sure you want to delete ${urls.length} selected image(s)? This action cannot be undone.`);
+        if (confirmation) {
+            deleteEntries(urls);
+        }
+    } else {
+        alert("No images selected for deletion.");
+    }
+};
+
+// Get URLs
+function _getUrls() {
+    const checkedBoxes = document.querySelectorAll(".select-checkbox:checked");
+    const urls = [];
+
+    checkedBoxes.forEach(checkbox => {
+        const container = checkbox.closest(".image-container");
+        const img = container.querySelector("img");
+        if (img && img.src) {
+            urls.push(img.src);
+        }
+    });
+
+    return urls
+}
+
 // Bulk Action Button (Adds Tags)
-function _bulkActionButton(){
+function _addTagsButton(){
     if (bulkActionBtn) {
         bulkActionBtn.addEventListener("click", () => {
-            const checkedBoxes = document.querySelectorAll(".select-checkbox:checked");
-            const urls = [];
-
-            // Get the URLs
-            checkedBoxes.forEach(checkbox => {
-                const container = checkbox.closest(".image-container");
-                const img = container.querySelector("img");
-                if (img && img.src) {
-                    urls.push(img.src);
-                }
-            });
-            // Get the Tags
+            const urls = _getUrls()
             const tagsToApply = Array.from(actionBarTagsDisplay.querySelectorAll('.action-bar-tag'))
                                         .map(tag => tag.textContent);
-            // Apply Tags
             _applyTags(urls, tagsToApply)
+        });
+    }
+};
+
+// Delete Button
+function _deleteSelectedButton() {
+    if (deleteSelectedBtn) {
+        deleteSelectedBtn.addEventListener("click", () => {
+            const urls = _getUrls()
+            _deleteImages(urls)
         });
     }
 };
@@ -140,3 +170,6 @@ function addActionBarTag() {
         actionBarTagInput.value = '';
     }
 }
+
+// TODO - Bulk Action Button could be renamed like the function to something about tags.
+// TODO - Delete/Add Tags share similar structure for getting URLs.  Make it a helper.

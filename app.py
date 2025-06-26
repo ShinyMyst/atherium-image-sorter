@@ -110,6 +110,17 @@ def update_tags():
 
 
 ##############################
+#     DELETE ROUTES
+##############################
+@app.route('/entries/delete', methods=['DELETE'])
+def delete_tags():
+    image_urls = request.get_json().get('urls')
+    for url in image_urls:
+        app_data.delete_entry(url)
+    return '', 200
+
+
+##############################
 #     UTILITY ROUTES
 ##############################
 @app.route('/favicon.ico')
