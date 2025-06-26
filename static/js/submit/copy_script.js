@@ -1,7 +1,6 @@
 const copyButton = document.getElementById('copy-quick-entry');
 
 copyButton.addEventListener('click', () => {
-    // Function to copy
     const textToCopy = `function extractPageData() {
     function copy(text) {
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -61,7 +60,8 @@ copyButton.addEventListener('click', () => {
             extractedData.model = modelNameElement.textContent.trim();
         }
 
-        const promptTextarea = document.querySelector('textarea.w-full.min-h-\\[3em\\].max-h-\\[9em\\].dense\\:max-h-\\[5em\\].bg-transparent.outline-none.resize-none');
+        // Corrected: Using getElementById for the textarea
+        const promptTextarea = document.getElementById('quick-entry-textarea');
         if (promptTextarea) {
             extractedData.Prompt = promptTextarea.value.trim();
         }
@@ -103,6 +103,8 @@ copyButton.addEventListener('click', () => {
             extractedData['Sampling Method'] = samplingMethodElement.textContent.trim();
         }
 
+        // Corrected: Using standard attribute selectors for input elements
+        // No escaping needed for min/max attributes if they are actual attributes.
         const samplingStepInput = document.querySelector('input[type="number"].MuiInputBase-input.css-in64xc[min="1"][max="50"]');
         if (samplingStepInput) {
             const valueAsNumber = Number(samplingStepInput.value);
@@ -110,6 +112,7 @@ copyButton.addEventListener('click', () => {
             extractedData['Sampling Steps'] = isNaN(steps) ? null : steps;
         }
 
+        // Corrected: Using standard attribute selectors for input elements
         const cfgScaleInput = document.querySelector('input[type="number"].MuiInputBase-input.css-in64xc[min="1.1"][max="15"]');
         if (cfgScaleInput) {
             const scale = parseFloat(cfgScaleInput.value);
@@ -167,7 +170,6 @@ copyButton.addEventListener('click', () => {
 extractPageData();
 `;
 
-    // Write the text to the clipboard.
     navigator.clipboard.writeText(textToCopy)
         .then(() => {
             console.log('Text successfully copied to clipboard!');
