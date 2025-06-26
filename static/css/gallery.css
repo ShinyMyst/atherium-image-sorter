@@ -207,6 +207,10 @@
     align-items: center;
 }
 
+.image-container:hover .image-overlay-details {
+    display: flex;
+}
+
 .rating-btn {
     width: 24px;
     height: 24px;
@@ -318,28 +322,27 @@ input:checked + .slider:before {
     bottom: 0;
     left: 220px;
     width: calc(100% - 220px);
-    height: auto; /* Height will adjust to content */
+    height: auto;
     background-color: #5f7a9f;
     border-top: 1px solid #4a6382;
     padding: 15px 20px;
-    display: flex; /* Make it a flex container for left and right sections */
-    flex-direction: row; /* Arrange children in a row */
-    justify-content: space-between; /* Push left and right sections to opposite ends */
-    align-items: flex-start; /* Align content to the top */
-    gap: 20px; /* Space between the left controls and right tags */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
     z-index: 1000;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
 }
 
-/* Main left-side group for input, buttons, and close */
 .action-controls-group {
     display: flex;
-    flex-direction: column; /* Stack elements inside this group vertically */
-    gap: 10px; /* Space between the input group, buttons group, and close button */
-    flex-shrink: 0; /* Prevent it from shrinking */
-    width: 350px; /* Give it a defined width, adjust as needed */
-    max-width: 45%; /* Max width relative to action bar */
+    flex-direction: column;
+    gap: 10px;
+    flex-shrink: 0;
+    width: 350px;
+    max-width: 45%; /
 }
 
 /* --- Input Bar and Add Button (within Action Bar) --- */
