@@ -13,56 +13,71 @@
     <form method="POST" action="{{ submit_url }}" target="_blank">
         {{ form.hidden_tag() }}
 
+        <div class="quick-entry-switch-container">
+            <label class="switch">
+                <input type="checkbox" id="quick-entry-toggle">
+                <span class="slider"></span>
+                <span class="switch-text">Quick Entry Mode</span>
+            </label>
+        </div>
+
         <div class="image-preview">
             <img id="preview" src="">
         </div>
 
-        <fieldset>
-            <legend>Data Sets</legend>
-            {{ form.data_sets(size=3, multiple=True) }}
-        </fieldset>
+        <div class="quick-entry-box">
+            <label for="quick-entry-textarea">Quick Entry:</label>
+            <textarea id="quick-entry-textarea" name="quick_entry_data" placeholder="Paste full image metadata here..."></textarea>
+        </div>
 
-        <fieldset>
-            <legend>Basic Info</legend>
-            {{ form.prompt.label }} {{ form.prompt() }}<br>
-            {{ form.model.label }} {{ form.model() }}<br>
-        </fieldset>
+        <div class="detailed-entry-fields">
+            <fieldset>
+                <legend>Data Sets</legend>
+                {{ form.data_sets(size=3, multiple=True) }}
+            </fieldset>
 
-        <fieldset>
-            <legend>Tags</legend>
-            <div class="tag-container">
-                <div class="tag-input">
-                    <input type="text" id="tag-input" placeholder="Add a tag...">
-                    <button type="button" id="add-tag">+</button>
-                </div>
-                <div class="tags-list" id="tags-list">
+            <fieldset>
+                <legend>Basic Info</legend>
+                {{ form.prompt.label }} {{ form.prompt() }}<br>
+                {{ form.model.label }} {{ form.model() }}<br>
+            </fieldset>
+
+            <fieldset>
+                <legend>Tags</legend>
+                <div class="tag-container">
+                    <div class="tag-input">
+                        <input type="text" id="tag-input" placeholder="Add a tag...">
+                        <button type="button" id="add-tag">+</button>
                     </div>
-            </div>
-        </fieldset>
-
-        <fieldset class="lora-fieldset">
-            <legend>LoRA
-                <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
-            </legend>
-            <div id="lora-container">
-                {% for field in form.lora_fields %}
-                    {{ lora_submit(field, field, is_dynamic_entry=False) }}
-                {% endfor %}
-
-                <div id="dynamic-lora-list-container">
-                    {% for i in range(form.dynamic_loras|length) %}
-                        {{ lora_submit(form.dynamic_loras[i].data, form.dynamic_strengths[i], is_dynamic_entry=True) }}
-                    {% endfor %}
+                    <div class="tags-list" id="tags-list">
+                    </div>
                 </div>
-            </div>
-        </fieldset>
+            </fieldset>
 
-        <fieldset class="sampling-parameters">
-            <legend>Sampling</legend>
-            {{ form.sampling_method.label }} {{ form.sampling_method() }}<br>
-            {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
-            {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>
-        </fieldset>
+            <fieldset class="lora-fieldset">
+                <legend>LoRA
+                    <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
+                </legend>
+                <div id="lora-container">
+                    {% for field in form.lora_fields %}
+                        {{ lora_submit(field, field, is_dynamic_entry=False) }}
+                    {% endfor %}
+
+                    <div id="dynamic-lora-list-container">
+                        {% for i in range(form.dynamic_loras|length) %}
+                            {{ lora_submit(form.dynamic_loras[i].data, form.dynamic_strengths[i], is_dynamic_entry=True) }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="sampling-parameters">
+                <legend>Sampling</legend>
+                {{ form.sampling_method.label }} {{ form.sampling_method() }}<br>
+                {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
+                {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>
+            </fieldset>
+        </div>
 
         <label for="image-url">Image URL:</label>
         <input type="url" id="image-url" name="url" value="{{ form.url.data | default('') }}" oninput="updatePreview(this.value)">

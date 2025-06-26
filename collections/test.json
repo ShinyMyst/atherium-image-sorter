@@ -4,10 +4,13 @@
         "model": "Hoshino",
         "Prompt": "...",
         "Tags": [
-            "new1",
-            "new",
             "new2",
-            "kagerou"
+            "new1",
+            "ggggggggggggggggggggggggg",
+            "fffffffffffffffffffffffffffffffff",
+            "kagerou",
+            "new",
+            "hhhhhhhhhhhhhhhhhhhhhhhhhhhh"
         ],
         "LoRA": {},
         "Sampling Method": "Euler A",
@@ -30,7 +33,7 @@
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "CFG Scale": 2.0,
-        "ranking": 3
+        "ranking": 5
     },
     {
         "url": "https://rapi.pixai.art/img/media/567086382015036172/orig",
