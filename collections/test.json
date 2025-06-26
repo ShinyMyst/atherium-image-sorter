@@ -106,5 +106,16 @@
         "Sampling Steps": 10,
         "CFG Scale": 2,
         "ranking": 0
+    },
+    {
+        "url": "https://images-ng.pixai.art/images/orig/70b0a3f8-53ef-43b2-ad36-0c681665d0eb",
+        "model": "Hoshino",
+        "Prompt": "...",
+        "Tags": [],
+        "LoRA": {},
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "CFG Scale": 2.0,
+        "ranking": 0
     }
 ]

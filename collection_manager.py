@@ -74,6 +74,11 @@ class CollectionManager():
     # Public Methods
     # --------------------
     def add_entry(self, entry_data):
+        # Check For Dupe
+        if self._get_entry(entry_data['url']):
+            print("Duplicate Entry")
+            return False
+        # Add Entry
         self.collection.append(entry_data)
         self._stale = True
 
