@@ -3,10 +3,12 @@ venv\Scripts\activate
 
 Running this in console on edit page gives parameters for image gen
 Put in the function then just call extractPageData on each page.
+
 function extractPageData() {
     function copy(text) {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(() => {}).catch(err => {
+                console.error('Clipboard writeText failed:', err);
                 fallbackCopyTextToClipboard(text);
             });
         } else {
@@ -28,7 +30,12 @@ function extractPageData() {
 
         try {
             const successful = document.execCommand('copy');
-        } catch (err) {}
+            if (!successful) {
+                console.error('Fallback copy command unsuccessful.');
+            }
+        } catch (err) {
+            console.error('Fallback copy command failed:', err);
+        }
 
         document.body.removeChild(textArea);
     }
@@ -36,6 +43,13 @@ function extractPageData() {
     function getExtractedDataAsJson() {
         const extractedData = {
             "url": "",
+            "model": "",
+            "Prompt": "",
+            "Tags": [],
+            "LoRA": {},
+            "Sampling Method": "",
+            "Sampling Steps": null,
+            "CFG Scale": null,
             "ranking": 0
         };
 
@@ -54,7 +68,6 @@ function extractPageData() {
             extractedData.Prompt = promptTextarea.value.trim();
         }
 
-        extractedData.Tags = [];
         const tagsList = document.getElementById('tags-list');
         if (tagsList) {
             const tagItems = tagsList.querySelectorAll('.tag-item');
@@ -70,7 +83,7 @@ function extractPageData() {
             const weightInput = entry.querySelector('input[type="number"].MuiInputBase-input');
 
             if (titleElement && weightInput) {
-                const title = titleElement.textContent.replace(/&amp;/g, '&');
+                const title = titleElement.textContent.replace(/&amp;/g, '&').trim();
                 const weight = parseFloat(weightInput.value);
                 if (!isNaN(weight)) {
                     loraEntries.push({
@@ -94,12 +107,17 @@ function extractPageData() {
 
         const samplingStepInput = document.querySelector('input[type="number"].MuiInputBase-input.css-in64xc[min="1"][max="50"]');
         if (samplingStepInput) {
-            extractedData['Sampling Steps'] = parseInt(samplingStepInput.value, 10);
+            // First convert to Number to handle empty strings from type="number" inputs correctly,
+            // then parseInt to ensure it's an integer.
+            const valueAsNumber = Number(samplingStepInput.value);
+            const steps = parseInt(valueAsNumber, 10);
+            extractedData['Sampling Steps'] = isNaN(steps) ? null : steps;
         }
 
         const cfgScaleInput = document.querySelector('input[type="number"].MuiInputBase-input.css-in64xc[min="1.1"][max="15"]');
         if (cfgScaleInput) {
-            extractedData['CFG Scale'] = parseFloat(cfgScaleInput.value);
+            const scale = parseFloat(cfgScaleInput.value);
+            extractedData['CFG Scale'] = isNaN(scale) ? null : scale;
         }
 
         if (Object.keys(extractedData.LoRA || {}).length === 0) {
@@ -113,7 +131,9 @@ function extractPageData() {
     }
 
     const jsonOutputOnLoad = getExtractedDataAsJson();
-    console.log("--- Extracted Data Button ---");
+    console.log("--- Initial Extracted Data (JSON Format) ---");
+    console.log(jsonOutputOnLoad);
+    console.log("--------------------------------------------");
 
     let copyButton = document.getElementById('dynamic-copy-button');
     if (!copyButton) {
@@ -139,14 +159,15 @@ function extractPageData() {
             copy(latestJsonOutput);
 
             const originalBg = copyButton.style.backgroundColor;
-            copyButton.style.backgroundColor = '#007bff'; // Turn blue
+            copyButton.style.backgroundColor = '#007bff';
             setTimeout(() => {
-                copyButton.style.backgroundColor = originalBg; // Revert color
-            }, 500); // Blue for 200 milliseconds
+                copyButton.style.backgroundColor = originalBg;
+            }, 200);
         });
     } else {
         copyButton.textContent = 'Copy Data';
     }
 }
 
+extractPageData();
 

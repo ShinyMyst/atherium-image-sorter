@@ -3,7 +3,7 @@ from python.submit import SubmitForm
 from collection_manager import CollectionManager
 from config.config import MODELS, LORAS, SAMPLING_METHODS
 
-app_data = CollectionManager("Test")
+app_data = CollectionManager("Gallery")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
 

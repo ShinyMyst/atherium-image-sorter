@@ -52,7 +52,8 @@ SAMPLING_METHODS = [
 # Quick Entry pulls full model or LoRA Name
 # This replaces it with the shortened version
 QUICK_SUBSTITUTION = {
-    "LCM&TurboMix LoRA (eular a.fix) XL": "LCM"
+    "LCM&TurboMix LoRA (eular a.fix) XL": "LCM",
+    "Otome v2": "Otome"
 }
 
 """

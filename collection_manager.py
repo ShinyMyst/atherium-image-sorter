@@ -140,7 +140,7 @@ class CollectionManager():
         entry_dict['url'] = img_url
 
         if entry_dict["model"] in QUICK_SUBSTITUTION:
-            entry_dict["model"] = entry_dict
+            entry_dict["model"] = QUICK_SUBSTITUTION[entry_dict["model"]]
 
         for key in list(entry_dict["LoRA"].keys()):
             if key in QUICK_SUBSTITUTION:
