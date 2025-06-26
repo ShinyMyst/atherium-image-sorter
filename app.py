@@ -68,13 +68,11 @@ def new_entry():
 @app.route('/entry/quick', methods=['POST'])
 def quick_entry():
     """Adds entry to active collection using JSON entry."""
-    quick_entry_content = request.form.get('quick_entry_data')
-    image_url = request.form.get('url')
-
-    print(f"Content from Quick Entry Box: {quick_entry_content}")
-    print(f"Image URL: {image_url}")
-
-    return '', 200
+    entry_string = request.form.get('quick_entry_data')
+    url = request.form.get('url')
+    new_entry = app_data.format_quick_entry(entry_string, url)
+    app_data.add_entry(new_entry)
+    return jsonify(new_entry)
 
 
 ##############################
@@ -103,7 +101,6 @@ def update_rating():
 
 @app.route('/entries/tags', methods=['PATCH', 'POST'])
 def update_tags():
-    print('?????????')
     data = request.get_json()
     urls = data.get('imageUrls')
     tags = data.get('tags')

@@ -1,7 +1,7 @@
 import json
 from collections import Counter
 from python.submit import SubmitForm
-from config.config import LORAS
+from config.config import LORAS, QUICK_SUBSTITUTION
 
 
 class CollectionManager():
@@ -132,6 +132,24 @@ class CollectionManager():
             "ranking": 0
         }
         return entry_data
+
+    @staticmethod
+    def format_quick_entry(entry_string: str, img_url: str):
+        """Quick entries already have the proper structure"""
+        entry_dict = json.loads(entry_string)
+        entry_dict['url'] = img_url
+
+        if entry_dict["model"] in QUICK_SUBSTITUTION:
+            entry_dict["model"] = entry_dict
+
+        for key in list(entry_dict["LoRA"].keys()):
+            if key in QUICK_SUBSTITUTION:
+                new_key = QUICK_SUBSTITUTION[key]
+                if new_key != key:
+                    entry_dict["LoRA"][new_key] = entry_dict["LoRA"][key]
+                    del entry_dict["LoRA"][key]
+
+        return entry_dict
 
     @staticmethod
     def _helper_add_dynamic_loras(entry_data: dict, submit_form: SubmitForm):

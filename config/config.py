@@ -48,3 +48,18 @@ SAMPLING_METHODS = [
     'DDIM',
     'LMS'
 ]
+
+# Quick Entry pulls full model or LoRA Name
+# This replaces it with the shortened version
+QUICK_SUBSTITUTION = {
+    "LCM&TurboMix LoRA (eular a.fix) XL": "LCM"
+}
+
+"""
+TODO - A better method would be to ALWAYS store the full name in JSON, and
+then use a dictionary to determines what text is displayed on the webpage.
+However, it will take a significant refactor in multiple areas to make it
+function like that.  This is a quick bandaid to make sure things are func.
+"""
+
+# TODO - JSON Keys should also be here for consistency everywhere

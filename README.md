@@ -35,6 +35,7 @@ function extractPageData() {
 
     function getExtractedDataAsJson() {
         const extractedData = {
+            "url": "",
             "ranking": 0
         };
 
@@ -69,7 +70,7 @@ function extractPageData() {
             const weightInput = entry.querySelector('input[type="number"].MuiInputBase-input');
 
             if (titleElement && weightInput) {
-                const title = titleElement.textContent.replace(/&amp;/g, '&').split(' ')[0];
+                const title = titleElement.textContent.replace(/&amp;/g, '&');
                 const weight = parseFloat(weightInput.value);
                 if (!isNaN(weight)) {
                     loraEntries.push({
