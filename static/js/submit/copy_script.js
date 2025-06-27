@@ -1,178 +1,11 @@
+const textToCopy = "function extractPageData() {\n    // Clipboard functions remain the same\n    function copy(text) {\n        if (navigator.clipboard && navigator.clipboard.writeText) {\n            navigator.clipboard.writeText(text).then(() => {}).catch(err => {\n                console.error('Clipboard writeText failed:', err);\n                fallbackCopyTextToClipboard(text);\n            });\n        } else {\n            fallbackCopyTextToClipboard(text);\n        }\n    }\n\n    function fallbackCopyTextToClipboard(text) {\n        const textArea = document.createElement(\"textarea\");\n        textArea.value = text;\n        textArea.style.top = \"0\";\n        textArea.style.left = \"0\";\n        textArea.style.position = \"fixed\";\n        textArea.style.opacity = \"0\";\n\n        document.body.appendChild(textArea);\n        textArea.focus();\n        textArea.select();\n\n        try {\n            const successful = document.execCommand('copy');\n            if (!successful) {\n                console.error('Fallback copy command unsuccessful.');\n            }\n        } catch (err) {\n            console.error('Fallback copy command failed:', err);\n        }\n\n        document.body.removeChild(textArea);\n    }\n\n    // NEW: Precise date finding function based on our previous work\n    function findClosestDate() {\n        // Try to find highlighted item first\n        const highlightedItem = document.querySelector('.ring-theme-primary');\n        if (highlightedItem) {\n            // Find the item group container\n            const itemGroup = highlightedItem.closest('[data-item-group-index]');\n            if (itemGroup) {\n                // Get all siblings at the same level\n                const allSiblings = Array.from(itemGroup.parentElement.children);\n                const groupIndex = allSiblings.indexOf(itemGroup);\n\n                // Search backward for nearest date div\n                for (let i = groupIndex - 1; i >= 0; i--) {\n                    const sibling = allSiblings[i];\n                    if (sibling.matches('div[data-index]') &&\n                        sibling.classList.contains('px-2') &&\n                        sibling.classList.contains('py-1')) {\n                        return sibling.textContent.trim();\n                    }\n                }\n            }\n        }\n\n        // Fallback: Find first date div if no highlighted item\n        const dateDivs = document.querySelectorAll('div[data-index].px-2.py-1');\n        if (dateDivs.length > 0) {\n            return dateDivs[0].textContent.trim();\n        }\n\n        return null;\n    }\n\n    function getExtractedDataAsJson() {\n        const extractedData = {\n            \"url\": \"\",\n            \"model\": \"\",\n            \"Prompt\": \"\",\n            \"Tags\": [],\n            \"LoRA\": {},\n            \"Sampling Method\": \"\",\n            \"Sampling Steps\": null,\n            \"CFG Scale\": null,\n            \"ranking\": 0,\n            \"Date\": findClosestDate() // Using our date finder\n        };\n\n        // Rest of your existing extraction logic...\n        const urlInput = document.getElementById('image-url');\n        if (urlInput && urlInput.value) {\n            extractedData.url = urlInput.value.trim();\n        }\n\n        const modelNameElement = document.querySelector('p.font-semibold.text-sm.break-all.hyphens-auto a[href*=\"/model/\"]');\n        if (modelNameElement) {\n            extractedData.model = modelNameElement.textContent.trim();\n        }\n\n        const promptTextarea = document.querySelector('section textarea[placeholder=\"Enter prompts here\"]');\n        if (promptTextarea) {\n            extractedData.Prompt = promptTextarea.value.trim();\n        } else {\n            const textareas = document.querySelectorAll('textarea');\n            for (const textarea of textareas) {\n                if (textarea.value && textarea.value.includes(',')) {\n                    extractedData.Prompt = textarea.value.trim();\n                    break;\n                }\n            }\n        }\n\n        const tagsList = document.getElementById('tags-list');\n        if (tagsList) {\n            const tagItems = tagsList.querySelectorAll('.tag-item');\n            if (tagItems.length > 0) {\n                extractedData.Tags = Array.from(tagItems).map(tag => tag.textContent.trim().replace(/×$/, '').trim().toLowerCase());\n            }\n        }\n\n        const loraEntries = [];\n        const loraContainers = document.querySelectorAll('div.relative.flex.gap-3.bg-background-light.p-2.rounded-xl');\n        loraContainers.forEach(entry => {\n            const titleElement = entry.querySelector('a.font-bold.text-sm');\n            const weightInput = entry.querySelector('input[type=\"number\"].MuiInputBase-input');\n\n            if (titleElement && weightInput) {\n                const title = titleElement.textContent.replace(/&amp;/g, '&').trim();\n                const weight = parseFloat(weightInput.value);\n                if (!isNaN(weight)) {\n                    loraEntries.push({\n                        name: title,\n                        weight: weight\n                    });\n                }\n            }\n        });\n        if (loraEntries.length > 0) {\n            extractedData.LoRA = {};\n            loraEntries.forEach(lora => {\n                extractedData.LoRA[lora.name] = lora.weight;\n            });\n        }\n\n        const samplingMethodElement = document.querySelector('div[role=\"combobox\"][aria-expanded=\"false\"].MuiSelect-select');\n        if (samplingMethodElement) {\n            extractedData['Sampling Method'] = samplingMethodElement.textContent.trim();\n        }\n\n        const samplingStepInput = document.querySelector('input[type=\"number\"].MuiInputBase-input.css-in64xc[min=\"1\"][max=\"50\"]');\n        if (samplingStepInput) {\n            const valueAsNumber = Number(samplingStepInput.value);\n            const steps = parseInt(valueAsNumber, 10);\n            extractedData['Sampling Steps'] = isNaN(steps) ? null : steps;\n        }\n\n        const cfgScaleInput = document.querySelector('input[type=\"number\"].MuiInputBase-input.css-in64xc[min=\"1.1\"][max=\"15\"]');\n        if (cfgScaleInput) {\n            const scale = parseFloat(cfgScaleInput.value);\n            extractedData['CFG Scale'] = isNaN(scale) ? null : scale;\n        }\n\n        // Clean empty fields\n        if (Object.keys(extractedData.LoRA || {}).length === 0) {\n            delete extractedData.LoRA;\n        }\n        if (extractedData.Tags.length === 0) {\n            delete extractedData.Tags;\n        }\n        if (!extractedData.Date) {\n            delete extractedData.Date;\n        }\n\n        return JSON.stringify(extractedData, null, 2);\n    }\n\n    // Rest of your existing UI code...\n    const jsonOutputOnLoad = getExtractedDataAsJson();\n    console.log(\"--- Extracted Data with Date ---\");\n    console.log(jsonOutputOnLoad);\n    console.log(\"--------------------------------\");\n\n    let copyButton = document.getElementById('dynamic-copy-button');\n    if (!copyButton) {\n        copyButton = document.createElement('button');\n        copyButton.id = 'dynamic-copy-button';\n        copyButton.textContent = 'Copy Data';\n        copyButton.style.position = 'fixed';\n        copyButton.style.bottom = '20px';\n        copyButton.style.right = '20px';\n        copyButton.style.zIndex = '9999';\n        copyButton.style.padding = '10px 15px';\n        copyButton.style.backgroundColor = '#4CAF50';\n        copyButton.style.color = 'white';\n        copyButton.style.border = 'none';\n        copyButton.style.borderRadius = '5px';\n        copyButton.style.cursor = 'pointer';\n        copyButton.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';\n\n        document.body.appendChild(copyButton);\n\n        copyButton.addEventListener('click', () => {\n            const latestJsonOutput = getExtractedDataAsJson();\n            copy(latestJsonOutput);\n\n            const originalBg = copyButton.style.backgroundColor;\n            copyButton.style.backgroundColor = '#007bff';\n            setTimeout(() => {\n                copyButton.style.backgroundColor = originalBg;\n            }, 200);\n        });\n    } else {\n        copyButton.textContent = 'Copy Data';\n    }\n}\n\n// Run it\nextractPageData();"
+// Hard to read but at least it's functional like this...
+
 const copyButton = document.getElementById('copy-quick-entry');
-
 copyButton.addEventListener('click', () => {
-    const textToCopy = `function extractPageData() {
-    function copy(text) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(() => {}).catch(err => {
-                console.error('Clipboard writeText failed:', err);
-                fallbackCopyTextToClipboard(text);
-            });
-        } else {
-            fallbackCopyTextToClipboard(text);
-        }
-    }
-
-    function fallbackCopyTextToClipboard(text) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.top = "0";
-        textArea.style.left = "0";
-        textArea.style.position = "fixed";
-        textArea.style.opacity = "0";
-
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        try {
-            const successful = document.execCommand('copy');
-            if (!successful) {
-                console.error('Fallback copy command unsuccessful.');
-            }
-        } catch (err) {
-            console.error('Fallback copy command failed:', err);
-        }
-
-        document.body.removeChild(textArea);
-    }
-
-    function getExtractedDataAsJson() {
-        const extractedData = {
-            "url": "",
-            "model": "",
-            "Prompt": "",
-            "Tags": [],
-            "LoRA": {},
-            "Sampling Method": "",
-            "Sampling Steps": null,
-            "CFG Scale": null,
-            "ranking": 0
-        };
-
-        const urlInput = document.getElementById('image-url');
-        if (urlInput && urlInput.value) {
-            extractedData.url = urlInput.value.trim();
-        }
-
-        const modelNameElement = document.querySelector('p.font-semibold.text-sm.break-all.hyphens-auto a[href*="/model/"]');
-        if (modelNameElement) {
-            extractedData.model = modelNameElement.textContent.trim();
-        }
-
-        // Corrected: Using getElementById for the textarea
-        const promptTextarea = document.getElementById('quick-entry-textarea');
-        if (promptTextarea) {
-            extractedData.Prompt = promptTextarea.value.trim();
-        }
-
-        const tagsList = document.getElementById('tags-list');
-        if (tagsList) {
-            const tagItems = tagsList.querySelectorAll('.tag-item');
-            if (tagItems.length > 0) {
-                extractedData.Tags = Array.from(tagItems).map(tag => tag.textContent.trim().replace(/×$/, '').trim().toLowerCase());
-            }
-        }
-
-        const loraEntries = [];
-        const loraContainers = document.querySelectorAll('div.relative.flex.gap-3.bg-background-light.p-2.rounded-xl');
-        loraContainers.forEach(entry => {
-            const titleElement = entry.querySelector('a.font-bold.text-sm');
-            const weightInput = entry.querySelector('input[type="number"].MuiInputBase-input');
-
-            if (titleElement && weightInput) {
-                const title = titleElement.textContent.replace(/&amp;/g, '&').trim();
-                const weight = parseFloat(weightInput.value);
-                if (!isNaN(weight)) {
-                    loraEntries.push({
-                        name: title,
-                        weight: weight
-                    });
-                }
-            }
-        });
-        if (loraEntries.length > 0) {
-            extractedData.LoRA = {};
-            loraEntries.forEach(lora => {
-                extractedData.LoRA[lora.name] = lora.weight;
-            });
-        }
-
-        const samplingMethodElement = document.querySelector('div[role="combobox"][aria-expanded="false"].MuiSelect-select');
-        if (samplingMethodElement) {
-            extractedData['Sampling Method'] = samplingMethodElement.textContent.trim();
-        }
-
-        // Corrected: Using standard attribute selectors for input elements
-        // No escaping needed for min/max attributes if they are actual attributes.
-        const samplingStepInput = document.querySelector('input[type="number"].MuiInputBase-input.css-in64xc[min="1"][max="50"]');
-        if (samplingStepInput) {
-            const valueAsNumber = Number(samplingStepInput.value);
-            const steps = parseInt(valueAsNumber, 10);
-            extractedData['Sampling Steps'] = isNaN(steps) ? null : steps;
-        }
-
-        // Corrected: Using standard attribute selectors for input elements
-        const cfgScaleInput = document.querySelector('input[type="number"].MuiInputBase-input.css-in64xc[min="1.1"][max="15"]');
-        if (cfgScaleInput) {
-            const scale = parseFloat(cfgScaleInput.value);
-            extractedData['CFG Scale'] = isNaN(scale) ? null : scale;
-        }
-
-        if (Object.keys(extractedData.LoRA || {}).length === 0) {
-            delete extractedData.LoRA;
-        }
-        if (extractedData.Tags.length === 0) {
-            delete extractedData.Tags;
-        }
-
-        return JSON.stringify(extractedData, null, 2);
-    }
-
-    const jsonOutputOnLoad = getExtractedDataAsJson();
-    console.log("--- Initial Extracted Data (JSON Format) ---");
-    console.log(jsonOutputOnLoad);
-    console.log("--------------------------------------------");
-
-    let copyButton = document.getElementById('dynamic-copy-button');
-    if (!copyButton) {
-        copyButton = document.createElement('button');
-        copyButton.id = 'dynamic-copy-button';
-        copyButton.textContent = 'Copy Data';
-        copyButton.style.position = 'fixed';
-        copyButton.style.bottom = '20px';
-        copyButton.style.right = '20px';
-        copyButton.style.zIndex = '9999';
-        copyButton.style.padding = '10px 15px';
-        copyButton.style.backgroundColor = '#4CAF50';
-        copyButton.style.color = 'white';
-        copyButton.style.border = 'none';
-        copyButton.style.borderRadius = '5px';
-        copyButton.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-
-        document.body.appendChild(copyButton);
-
-        copyButton.addEventListener('click', () => {
-            const latestJsonOutput = getExtractedDataAsJson();
-            copy(latestJsonOutput);
-
-            const originalBg = copyButton.style.backgroundColor;
-            copyButton.style.backgroundColor = '#007bff';
-            setTimeout(() => {
-                copyButton.style.backgroundColor = originalBg;
-            }, 200);
-        });
-    } else {
-        copyButton.textContent = 'Copy Data';
-    }
-}
-
-extractPageData();
-`;
-
     navigator.clipboard.writeText(textToCopy)
         .then(() => {
-            console.log('Text successfully copied to clipboard!');
+            console.log('Extractor function copied to clipboard!');
             const originalButtonText = copyButton.textContent;
             copyButton.textContent = 'Copied!';
             setTimeout(() => {
@@ -180,7 +13,7 @@ extractPageData();
             }, 1500);
         })
         .catch(err => {
-            console.error('Failed to copy text to clipboard:', err);
+            console.error('Failed to copy extractor function:', err);
             alert('Failed to copy. Please try again or copy manually.');
         });
 });

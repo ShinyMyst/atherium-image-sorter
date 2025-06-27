@@ -1,10 +1,5 @@
-python -m venv venv TO MAKE
-venv\Scripts\activate
-
-Running this in console on edit page gives parameters for image gen
-Put in the function then just call extractPageData on each page.
-
 function extractPageData() {
+    // Clipboard functions remain the same
     function copy(text) {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(() => {}).catch(err => {
@@ -40,6 +35,39 @@ function extractPageData() {
         document.body.removeChild(textArea);
     }
 
+    // NEW: Precise date finding function based on our previous work
+    function findClosestDate() {
+        // Try to find highlighted item first
+        const highlightedItem = document.querySelector('.ring-theme-primary');
+        if (highlightedItem) {
+            // Find the item group container
+            const itemGroup = highlightedItem.closest('[data-item-group-index]');
+            if (itemGroup) {
+                // Get all siblings at the same level
+                const allSiblings = Array.from(itemGroup.parentElement.children);
+                const groupIndex = allSiblings.indexOf(itemGroup);
+
+                // Search backward for nearest date div
+                for (let i = groupIndex - 1; i >= 0; i--) {
+                    const sibling = allSiblings[i];
+                    if (sibling.matches('div[data-index]') &&
+                        sibling.classList.contains('px-2') &&
+                        sibling.classList.contains('py-1')) {
+                        return sibling.textContent.trim();
+                    }
+                }
+            }
+        }
+
+        // Fallback: Find first date div if no highlighted item
+        const dateDivs = document.querySelectorAll('div[data-index].px-2.py-1');
+        if (dateDivs.length > 0) {
+            return dateDivs[0].textContent.trim();
+        }
+
+        return null;
+    }
+
     function getExtractedDataAsJson() {
         const extractedData = {
             "url": "",
@@ -50,9 +78,11 @@ function extractPageData() {
             "Sampling Method": "",
             "Sampling Steps": null,
             "CFG Scale": null,
-            "ranking": 0
+            "ranking": 0,
+            "Date": findClosestDate() // Using our date finder
         };
 
+        // Rest of your existing extraction logic...
         const urlInput = document.getElementById('image-url');
         if (urlInput && urlInput.value) {
             extractedData.url = urlInput.value.trim();
@@ -63,15 +93,13 @@ function extractPageData() {
             extractedData.model = modelNameElement.textContent.trim();
         }
 
-        // Modified prompt selector - simpler and more reliable
         const promptTextarea = document.querySelector('section textarea[placeholder="Enter prompts here"]');
         if (promptTextarea) {
             extractedData.Prompt = promptTextarea.value.trim();
         } else {
-            // Fallback: Try any textarea that might contain the prompt
             const textareas = document.querySelectorAll('textarea');
             for (const textarea of textareas) {
-                if (textarea.value && textarea.value.includes(',')) { // Simple heuristic for prompt content
+                if (textarea.value && textarea.value.includes(',')) {
                     extractedData.Prompt = textarea.value.trim();
                     break;
                 }
@@ -128,20 +156,25 @@ function extractPageData() {
             extractedData['CFG Scale'] = isNaN(scale) ? null : scale;
         }
 
+        // Clean empty fields
         if (Object.keys(extractedData.LoRA || {}).length === 0) {
             delete extractedData.LoRA;
         }
         if (extractedData.Tags.length === 0) {
             delete extractedData.Tags;
         }
+        if (!extractedData.Date) {
+            delete extractedData.Date;
+        }
 
         return JSON.stringify(extractedData, null, 2);
     }
 
+    // Rest of your existing UI code...
     const jsonOutputOnLoad = getExtractedDataAsJson();
-    console.log("--- Initial Extracted Data (JSON Format) ---");
+    console.log("--- Extracted Data with Date ---");
     console.log(jsonOutputOnLoad);
-    console.log("--------------------------------------------");
+    console.log("--------------------------------");
 
     let copyButton = document.getElementById('dynamic-copy-button');
     if (!copyButton) {
@@ -177,4 +210,5 @@ function extractPageData() {
     }
 }
 
+// Run it
 extractPageData();
