@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect
 from python.submit import SubmitForm
 from collection_manager import CollectionManager
 from config.config import MODELS, LORAS, SAMPLING_METHODS
@@ -49,6 +49,13 @@ def submit_edit():
                            form=entry_form,
                            submit_url='/entry/edit'
                            )
+
+
+@app.route('/gallery/switch', methods=['GET'])
+def gallery_switch():
+    selected_option = request.args.get('option')
+    app_data.set_collection(selected_option)
+    return redirect('/gallery')
 
 
 ##############################
