@@ -4,10 +4,13 @@
 export function passesFilters(img) {
     const filters = getCurrentFilters()
 
-    // Model check
-    if (filters.model.toLowerCase() !== "any" && img.model.toLowerCase() !== filters.model.toLowerCase()) {
-        return false;
+    // Model Check
+    if (filters.model.length > 0) {
+        if (!filters.model.map(m => m.toLowerCase()).includes(img.model.toLowerCase())) {
+            return false;
+        }
     }
+
     // Sampling check
     if (filters.sampling.toLowerCase() !== "any" && img["Sampling Method"].toLowerCase() !== filters.sampling.toLowerCase()) {
         return false;
@@ -27,12 +30,28 @@ export function passesFilters(img) {
 // Passes Filter Helpers
 function getCurrentFilters() {
     return {
-        model: document.querySelector("select[name='model']").value || "any",
+        model: _getModels(),
         sampling: document.getElementById('sampling-method').value || "any",
         loras: _getActiveLoras(),
         tags: _getActiveTags()
     };
 }
+
+function _getModels() {
+    const modelSelectElement = document.querySelector("select[name='model']");
+    let selectedModels = [];
+
+    if (modelSelectElement) {
+        selectedModels = Array.from(modelSelectElement.selectedOptions).map(option => option.value);
+    }
+
+    if (selectedModels.length === 0 || selectedModels.includes("Any")) {
+        return [];
+    }
+
+    return selectedModels;
+}
+
 
 function checkLoras(imageLoras, activeLoras) {
     return activeLoras.every(filterLora => {
