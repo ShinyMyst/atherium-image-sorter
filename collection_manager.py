@@ -76,28 +76,27 @@ class CollectionManager():
     def add_entry(self, entry_data):
         # Check For Dupe
         if self._get_entry(entry_data['url']):
-            print("Duplicate Entry")
             return False
         # Add Entry
         self.collection.append(entry_data)
         self._stale = True
 
     def add_tags(self, url, tags):
-        print("ADD STUFF I GUESS")
         entry = self._get_entry(url)[0]
         added_tags = [tag.lower() for tag in tags]
         all_tags = list(set(entry["Tags"] + added_tags))
         entry["Tags"] = all_tags
-        self.stale = True
+        self._stale = True
 
     def delete_entry(self, url):
         del self.collection[self._get_entry(url)[1]]
-        print("Deleted Entry:", url)
+        self._stale = True
 
     def edit_entry(self, entry_data):
         """Replaces an existing an entry with the given data."""
         self.delete_entry(entry_data["url"])
         self.add_entry(entry_data)
+        self._stale = True
 
     def edit_ranking(self, url, change):
         entry = self._get_entry(url)[0]

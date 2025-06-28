@@ -94,20 +94,6 @@
         "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce"
     },
     {
-        "url": "https://images-ng.pixai.art/images/orig/41a7e1af-4601-4b3d-933c-2f3ae2daecd2",
-        "model": "Hoshino",
-        "Prompt": "zoe,<lora:LCMTurboMix2fix:1>, ,(body_zoe: deep pink eyes, black and pink hair, double ponytails, female,)(clothes_zoe: black and pink skirt, black boots, pink cropped, black small jacket, black beanie with small cat ears,)",
-        "LoRA": {
-            "Zoe Rayne (Palworld)": 0.7,
-            "Vivid Soft": 0.7,
-            "LCM": 0.7
-        },
-        "Sampling Method": "Euler a",
-        "Sampling Steps": 10,
-        "CFG Scale": 2,
-        "ranking": 0
-    },
-    {
         "url": "https://images-ng.pixai.art/images/orig/70b0a3f8-53ef-43b2-ad36-0c681665d0eb",
         "model": "Hoshino",
         "Prompt": "...",
