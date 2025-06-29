@@ -7,17 +7,11 @@ from wtforms import (
     FloatField,
     TextAreaField,
     FieldList,
-    SelectMultipleField
 )
-from config.config import COLLECTIONS, MODELS, LORAS, SAMPLING_METHODS
+from config.config import MODELS, LORAS, SAMPLING_METHODS
 
 
 class SubmitForm(FlaskForm):
-    # Data Sets
-    data_sets = SelectMultipleField(
-        choices=[name for name in COLLECTIONS.keys()]
-    )
-
     # Basic Information
     url = StringField('Image URL')
     model = SelectField('Model', choices=MODELS)

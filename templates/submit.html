@@ -33,11 +33,6 @@
 
         <div class="detailed-entry-fields">
             <fieldset>
-                <legend>Data Sets</legend>
-                {{ form.data_sets(size=3, multiple=True) }}
-            </fieldset>
-
-            <fieldset>
                 <legend>Basic Info</legend>
                 {{ form.prompt.label }} {{ form.prompt() }}<br>
                 {{ form.model.label }} {{ form.model() }}<br>
