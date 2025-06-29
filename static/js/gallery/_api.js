@@ -33,15 +33,6 @@ export function updateTags(imageUrls, tags) {
 }
 
 export function updateDetails(imageUrl) {
-    fetch(`/submit/edit?image_url=${encodeURIComponent(imageUrl)}`, {
-        method: 'GET'
-    })
-    .then(response => {
-        if (!response.ok) {
-            console.error('Failed to update image:', response.statusText);
-        }
-    })
-    .catch(error => console.error('Error updating image:', error));
     window.open(`/submit/edit?image_url=${encodeURIComponent(imageUrl)}`, '_blank');
 }
 
