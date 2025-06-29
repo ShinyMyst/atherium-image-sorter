@@ -271,6 +271,23 @@ body:has(.sidebar .switch input:checked) .image-container .image-overlay-details
     display: flex;
 }
 
+.sidebar {
+    width: 230px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 100;
+    box-sizing: border-box;
+}
+
+.main-content {
+    margin-left: 220px;
+}
+
 /* --- Edit Mode Switch --- */
 .switch {
     position: relative;
