@@ -54,13 +54,19 @@ function _getModels() {
 
 
 function checkLoras(imageLoras, activeLoras) {
+    if (!imageLoras) return false;
+    const lowerImageLoraNames = Object.keys(imageLoras).map(key => key.toLowerCase());
+    return activeLoras.every(filterLoraName => {
+        return lowerImageLoraNames.includes(filterLoraName.toLowerCase());
+    });
+    /* Disabled portion of code for also checking strength
     return activeLoras.every(filterLora => {
         const imgLoraKey = Object.keys(imageLoras).find(
             key => key.toLowerCase() === filterLora.name.toLowerCase()
         );
         const matches = imageLoras[imgLoraKey] == filterLora.value;
         return matches
-    });
+    }); */
 }
 
 function checkTags(imageTags, selectedTags) {
@@ -81,13 +87,16 @@ function _getActiveTags() {
 function _getActiveLoras() {
     const active = [];
     document.querySelectorAll('.lora-box.active').forEach(box => {
-        const input = box.querySelector('.value-input');
+        active.push(box.dataset.lora);
+        // Below is previous code for including strength as well.
+        // Disabling it for time being as LoRAs alone are enough.
+        /*const input = box.querySelector('.value-input');
         if (input) {
             active.push({
                 name: box.dataset.lora,
                 value: parseFloat(input.value) || 0
             });
-        }
+        } */
     });
     return active;
 }

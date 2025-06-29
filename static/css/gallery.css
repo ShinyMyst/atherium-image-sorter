@@ -41,6 +41,7 @@
     margin: 0 auto;
 }
 
+/*
 .lora-value {
     display: none;
     margin-top: 5px;
@@ -59,6 +60,7 @@
 .lora-box.active .lora-value {
     display: block;
 }
+*/
 
 /* ==========================================================================
    TAG SYSTEM (SIDEBAR)

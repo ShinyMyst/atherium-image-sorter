@@ -15,10 +15,14 @@
             <img src="/static/icons/{{ icon_path }}"
                  onerror="this.src='/static/icons/missing.png'">
         {% endif %}
+        {# Below is commented out even if it doesn't look like it #}
+        {#
         <div class="lora-value" onclick="event.stopPropagation()">
             <input type="number" value="0.7" min="0" max="2" step="0.1"
                    data-lora-field="{{ name }}" class="value-input">
         </div>
+        #}
+
     </div>
 {% endmacro %}
 
