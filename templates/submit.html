@@ -50,8 +50,17 @@
                         <input type="text" id="tag-input" placeholder="Add a tag...">
                         <button type="button" id="add-tag">+</button>
                     </div>
-                    <div class="tags-list" id="tags-list">
-                    </div>
+            <div class="tags-list" id="tags-list">
+                {% if form.tags.data %}
+                    {% for tag_value in form.tags.data %}
+                        <span class="tag-item">
+                            {{ tag_value }}
+                            <input type="hidden" name="tags-{{ loop.index0 }}" value="{{ tag_value }}">
+                            <span class="remove-tag">×</span>
+                        </span>
+                    {% endfor %}
+                {% endif %}
+            </div>
                 </div>
             </fieldset>
 

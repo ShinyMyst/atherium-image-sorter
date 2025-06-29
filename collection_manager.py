@@ -190,5 +190,4 @@ class CollectionManager():
         for lora_name, lora_strength in lora_data_from_entry.items():
             if lora_name in LORAS.keys():
                 form_data[lora_name] = lora_strength
-
         return form_data
