@@ -68,7 +68,8 @@ def new_entry():
     lora_json = request.form.get('lora_data', '{}')
 
     new_entry = app_data.format_entry(form, lora_json)
-    app_data.add_entry(new_entry)
+    if not app_data.add_entry(new_entry):
+        return jsonify("Error - Duplicate")
     return jsonify(new_entry)
 
 
@@ -78,7 +79,8 @@ def quick_entry():
     entry_string = request.form.get('quick_entry_data')
     url = request.form.get('url')
     new_entry = app_data.format_quick_entry(entry_string, url)
-    app_data.add_entry(new_entry)
+    if not app_data.add_entry(new_entry):
+        return jsonify("Error - Duplicate")
     return jsonify(new_entry)
 
 

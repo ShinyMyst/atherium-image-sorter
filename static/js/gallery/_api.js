@@ -1,6 +1,10 @@
 /******************************
  * API    *
  ******************************/
+// TODO - Page 'could' reload here.  BUT there are two issues.
+// 1.) AppManger does not actually resort the rankings when rank changes.
+// 2.) It would have to rewrite every ranking each time...
+// Better to just omit it for speed OR resort on client level
 export function updateRating(imageUrl, change) {
     fetch(`/entry/rating?image_url=${encodeURIComponent(imageUrl)}&change=${change}`, {
         method: 'POST'
@@ -27,6 +31,8 @@ export function updateTags(imageUrls, tags) {
     .then(response => {
         if (!response.ok) {
             console.error('Failed to update tags:', response.statusText);
+        } else {
+            window.location.reload();
         }
     })
     .catch(error => console.error('Error updating tags:', error));
