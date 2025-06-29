@@ -84,6 +84,7 @@ class CollectionManager():
     def add_tags(self, url, tags):
         entry = self._get_entry(url)[0]
         added_tags = [tag.lower() for tag in tags]
+        entry.setdefault("Tags", [])
         all_tags = list(set(entry["Tags"] + added_tags))
         entry["Tags"] = all_tags
         self._stale = True
