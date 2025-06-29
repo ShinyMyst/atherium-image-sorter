@@ -103,6 +103,15 @@
             updatePreview(initialUrl);
         }
 
+        // Auto-highlight
+        document.getElementById('image-url').onclick = function() {
+            this.select();
+        };
+
+        document.getElementById('quick-entry-textarea').onclick = function() {
+            this.select();
+        };
+
         // --- JavaScript for Dynamic Form Action ---
         const quickEntryToggle = document.getElementById('quick-entry-toggle');
         const imageSubmitForm = document.getElementById('image-submit-form');

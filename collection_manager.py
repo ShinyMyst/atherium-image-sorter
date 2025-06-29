@@ -80,6 +80,7 @@ class CollectionManager():
         # Add Entry
         self.collection.append(entry_data)
         self._stale = True
+        return True
 
     def add_tags(self, url, tags):
         entry = self._get_entry(url)[0]
