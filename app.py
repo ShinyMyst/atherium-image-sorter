@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request, redirect
 from python.submit import SubmitForm
 from collection_manager import CollectionManager
-from config.config import MODELS, LORAS, SAMPLING_METHODS
+from config.config import MODELS, LORAS, SAMPLING_METHODS, COLLECTIONS
 
 app_data = CollectionManager("Gallery")
 app = Flask(__name__)
@@ -22,13 +22,16 @@ def gallery():
     tags = app_data.get_tags()
     model_choices = ['Any'] + MODELS
     sampling_methods = ['Any'] + SAMPLING_METHODS
+    data_key = app_data.get_route().split('/')[-1].split('.')[0]
 
     return render_template('gallery.html',
                            image_json=collection,
                            model_choices=model_choices,
                            loras_data=LORAS,
+                           collection_data=COLLECTIONS,
                            sampling_methods=sampling_methods,
-                           sorted_tags=tags
+                           sorted_tags=tags,
+                           active_route=data_key
                            )
 
 

@@ -50,6 +50,9 @@ class CollectionManager():
         """Returns the collection"""
         return self.collection
 
+    def get_route(self):
+        return self.route
+
     def get_tags(self) -> dict:
         """Returns list of tags sorted by most common"""
         # Technically, it's better to keep a dict of tags and counts

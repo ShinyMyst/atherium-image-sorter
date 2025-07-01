@@ -1,13 +1,7 @@
 COLLECTIONS = {
-    'Gallery': {
-        'route_path': "collections/gallery.json"
-    },
-    'Test Collection': {
-        'route_path': "collections/test.json"
-    },
-    'Test File 51': {
-        'route_path': "collections/llamas.json"
-    }
+    "gallery": 'Gallery',
+    "test": 'Test',
+    'llamas': 'Test2'
 }
 
 MODELS = [

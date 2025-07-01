@@ -22,13 +22,15 @@
 
         <div class="divider"></div>
 
-    <label for="myDropdown">Choose an option:</label>
-    <select id="myDropdown" name="myDropdown">
-        <option value="test">---</option>
-        <option value="test">Test</option>
-        <option value="gallery">Gallery</option>
-        <option value="llamas">Test2</option>
-    </select>
+<label for="myDropdown">Choose an option:</label>
+<select id="myDropdown" name="myDropdown">
+    <option value="">---</option>
+    {% for route_name, display_name in collection_data.items() %}
+        <option value="{{ route_name }}" {% if route_name == active_route %}selected{% endif %}>
+            {{ display_name }}
+        </option>
+    {% endfor %}
+</select>
 
     <label class="switch">
         <input type="checkbox">
