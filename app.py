@@ -18,19 +18,16 @@ def index():
 
 @app.route('/gallery', methods=['GET'])
 def gallery():
-    collection = app_data.get_collection()
-    tags = app_data.get_tags()
-    model_choices = ['Any'] + MODELS
-    sampling_methods = ['Any'] + SAMPLING_METHODS
     data_key = app_data.get_route().split('/')[-1].split('.')[0]
 
     return render_template('gallery.html',
-                           image_json=collection,
-                           model_choices=model_choices,
+                           image_json=app_data.get_collection(),
+                           model_choices=['Any'] + MODELS,
                            loras_data=LORAS,
                            collection_data=COLLECTIONS,
-                           sampling_methods=sampling_methods,
-                           sorted_tags=tags,
+                           sampling_methods=['Any'] + SAMPLING_METHODS,
+                           sorted_tags=app_data.get_tags(),
+                           sorted_loras=app_data.get_loras(),
                            active_route=data_key
                            )
 

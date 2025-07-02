@@ -53,7 +53,7 @@ class CollectionManager():
     def get_route(self):
         return self.route
 
-    def get_tags(self) -> dict:
+    def get_tags(self) -> list:
         """Returns list of tags sorted by most common"""
         # Technically, it's better to keep a dict of tags and counts
         # Then increment when new tags added but this simplifies it.
@@ -64,6 +64,17 @@ class CollectionManager():
         tag_counts = Counter(tags)
         frequency = [tag for tag, count in tag_counts.most_common()]
 
+        return frequency
+
+    def get_loras(self):
+        """Returns a list of LoRAs sorted by most common"""
+        lora_names = []
+        for entry in self.collection:
+            lora_data = entry.get("LoRA", {})
+            lora_names.extend(lora_data.keys())
+
+        lora_counts = Counter(lora_names)
+        frequency = [lora for lora, count in lora_counts.most_common()]
         return frequency
 
     def get_submit_form(self, url) -> SubmitForm:

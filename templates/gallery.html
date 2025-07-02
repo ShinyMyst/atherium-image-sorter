@@ -51,15 +51,33 @@
     <div class="divider"></div>
 
     <!-- LoRA Toggle Boxes -->
-    <fieldset>
-        <legend>LoRA</legend>
-        <div class="lora-grid">
-            {% for lora_name, lora_details in loras_data.items() %}
-                {{ lora_toggle(lora_name, lora_details.img_url) }}
-            {% endfor %}
-        </div>
-    </fieldset>
+<fieldset>
+    <legend>LoRA</legend>
+    <div class="lora-grid">
+        {% for lora_name in sorted_loras %}
+            {# lora_name is the full name #}
+            {% set lora_details = loras_data.get(lora_name) %}
 
+            {# Determine the text to display #}
+            {% set display_text = lora_name %} {# Default to full name #}
+            {% if lora_details and lora_details.display_name %}
+                {% set display_text = lora_details.display_name %}
+            {% endif %}
+
+            {# Determine the icon_src #}
+            {% set icon_src_to_pass = none %}
+            {% if lora_details and lora_details.img_url %}
+                {% set icon_src_to_pass = lora_details.img_url %}
+            {% endif %}
+
+            {# Macro #}
+            {{ lora_toggle(full_name=lora_name, display_text=display_text, icon_src=icon_src_to_pass) }}
+
+        {% endfor %}
+    </div>
+</fieldset>
+
+</fieldset>
     <div class="divider"></div>
 
     <!-- Sampling Method -->

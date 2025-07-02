@@ -5,24 +5,21 @@
     <br>
 {% endmacro %}
 
-{% macro lora_toggle(name, icon_src=None) %}
-    <div class="lora-box" data-lora="{{ name }}">
-        <span class="lora-label">{{ name }}</span>
+{% macro lora_toggle(full_name, display_text, icon_src=None) %}
+    <div class="lora-box" data-lora="{{ full_name }}">
+        <span class="lora-label">{{ display_text }}</span>
         {% if icon_src is not none %}
-            <img src="{{ icon_src }}">
+            <img src="{{ icon_src }}" onerror="this.src='/static/icons/missing.png'">
         {% else %}
-            {% set icon_path = name.lower().replace(' ', '-') + '.png' %}
-            <img src="/static/icons/{{ icon_path }}"
-                 onerror="this.src='/static/icons/missing.png'">
+            {# No explicit image URL provided - render only text #}
         {% endif %}
-        {# Below is commented out even if it doesn't look like it #}
+
         {#
         <div class="lora-value" onclick="event.stopPropagation()">
             <input type="number" value="0.7" min="0" max="2" step="0.1"
-                   data-lora-field="{{ name }}" class="value-input">
+                   data-lora-field="{{ full_name }}" class="value-input">
         </div>
         #}
-
     </div>
 {% endmacro %}
 

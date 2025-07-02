@@ -22,8 +22,9 @@ LORAS = {
     "LCM": {
         "img_url": "https://images-ng.pixai.art/images/orig/85e1e38f-9cc7-4325-b91a-3d6ec07ce7ea" # noqa
     },
-    "Bold Outlines": {
-        "img_url": "https://images-ng.pixai.art/images/thumb/a152bd1f-e50f-47cb-8152-e168e62557c1" # noqa
+    "Bold Outlines & Soft Shading": {
+        "img_url": "https://images-ng.pixai.art/images/thumb/a152bd1f-e50f-47cb-8152-e168e62557c1", # noqa
+        "display_name": "Bold Outlines"
     },
     "Vivid Edge": {
         "img_url": "https://images-ng.pixai.art/images/orig/377a7899-3d6a-4668-a610-42cd5837d98c" # noqa
