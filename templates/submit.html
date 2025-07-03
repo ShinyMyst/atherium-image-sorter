@@ -10,124 +10,103 @@
 <body>
     {% from "_macros.html" import slider_field, lora_submit %}
 
-    <form method="POST" action="{{ submit_url }}" id="image-submit-form" target="_blank">
-        {{ form.hidden_tag() }}
-
-        <div class="quick-entry-switch-container">
-            <label class="switch">
-                <input type="checkbox" id="quick-entry-toggle">
-                <span class="slider"></span>
-                <span class="switch-text">Quick Entry Mode</span>
-            </label>
+    <div class="sidebar"> {# This div will now contain the navbar and all form controls #}
+        <div class="navbar">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('gallery') }}">Gallery</a>
+            <a href="{{ url_for('submit_new') }}">Submit</a>
         </div>
 
-        <div class="image-preview">
-            <img id="preview" src="">
-        </div>
+        {# The form content starts here and is now inside the sidebar #}
+        <form method="POST" action="{{ submit_url }}" id="image-submit-form" target="_blank"
+              data-default-submit-url="{{ submit_url }}"
+              data-quick-entry-submit-url="{{ url_for('quick_entry') }}">
+            {{ form.hidden_tag() }}
 
-        <div class="quick-entry-box">
-            <button type="button" id="copy-quick-entry">COPY SCRIPT</button>
-            <label for="quick-entry-textarea">Quick Entry:</label>
-            <textarea id="quick-entry-textarea" name="quick_entry_data" placeholder="Paste full image metadata here..."></textarea>
-        </div>
-
-        <div class="detailed-entry-fields">
-            <fieldset>
-                <legend>Basic Info</legend>
-                {{ form.prompt.label }} {{ form.prompt() }}<br>
-                {{ form.model.label }} {{ form.model() }}<br>
-            </fieldset>
-
-            <fieldset>
-                <legend>Tags</legend>
-                <div class="tag-container">
-                    <div class="tag-input">
-                        <input type="text" id="tag-input" placeholder="Add a tag...">
-                        <button type="button" id="add-tag">+</button>
-                    </div>
-            <div class="tags-list" id="tags-list">
-                {% if form.tags.data %}
-                    {% for tag_value in form.tags.data %}
-                        <span class="tag-item">
-                            {{ tag_value }}
-                            <input type="hidden" name="tags-{{ loop.index0 }}" value="{{ tag_value }}">
-                            <span class="remove-tag">×</span>
-                        </span>
-                    {% endfor %}
-                {% endif %}
+            <div class="quick-entry-switch-container">
+                <label class="switch">
+                    <input type="checkbox" id="quick-entry-toggle">
+                    <span class="slider"></span>
+                    <span class="switch-text">Quick Entry Mode</span>
+                </label>
             </div>
-                </div>
-            </fieldset>
 
-            <fieldset class="lora-fieldset">
-                <legend>LoRA
-                    <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
-                </legend>
-                <div id="lora-container">
-                    {% for field in form.lora_fields %}
-                        {{ lora_submit(field, field, is_dynamic_entry=False) }}
-                    {% endfor %}
+            <div class="quick-entry-box">
+                <button type="button" id="copy-quick-entry">COPY SCRIPT</button>
+                <label for="quick-entry-textarea">Quick Entry:</label>
+                <textarea id="quick-entry-textarea" name="quick_entry_data" placeholder="Paste full image metadata here..."></textarea>
+            </div>
 
-                    <div id="dynamic-lora-list-container">
-                        {% for i in range(form.dynamic_loras|length) %}
-                            {{ lora_submit(form.dynamic_loras[i].data, form.dynamic_strengths[i], is_dynamic_entry=True) }}
-                        {% endfor %}
+            <div class="detailed-entry-fields">
+                <fieldset>
+                    <legend>Basic Info</legend>
+                    {{ form.prompt.label }} {{ form.prompt() }}<br>
+                    {{ form.model.label }} {{ form.model() }}<br>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Tags</legend>
+                    <div class="tag-container">
+                        <div class="tag-input">
+                            <input type="text" id="tag-input" placeholder="Add a tag...">
+                            <button type="button" id="add-tag">+</button>
+                        </div>
+                        <div class="tags-list" id="tags-list">
+                            {% if form.tags.data %}
+                                {% for tag_value in form.tags.data %}
+                                    <span class="tag-item">
+                                        {{ tag_value }}
+                                        <input type="hidden" name="tags-{{ loop.index0 }}" value="{{ tag_value }}">
+                                        <span class="remove-tag">×</span>
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-            </fieldset>
+                </fieldset>
 
-            <fieldset class="sampling-parameters">
-                <legend>Sampling</legend>
-                {{ form.sampling_method.label }} {{ form.sampling_method() }}<br>
-                {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
-                {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>
-            </fieldset>
-        </div>
+                <fieldset class="lora-fieldset">
+                    <legend>LoRA
+                        <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
+                    </legend>
+                    <div id="lora-container">
+                        {% for field in form.lora_fields %}
+                            {{ lora_submit(field, field, is_dynamic_entry=False) }}
+                        {% endfor %}
 
-        <label for="image-url">Image URL:</label>
-        <input type="url" id="image-url" name="url" value="{{ form.url.data | default('') }}" oninput="updatePreview(this.value)">
+                        <div id="dynamic-lora-list-container">
+                            {% for i in range(form.dynamic_loras|length) %}
+                                {{ lora_submit(form.dynamic_loras[i].data, form.dynamic_strengths[i], is_dynamic_entry=True) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </fieldset>
 
-        <input type="hidden" name="lora_data" id="lora-data">
-        {{ form.submit() }}
-    </form>
+                <fieldset class="sampling-parameters">
+                    <legend>Sampling</legend>
+                    {{ form.sampling_method.label }} {{ form.sampling_method() }}<br>
+                    {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
+                    {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>
+                </fieldset>
+            </div>
+
+            <label for="image-url">Image URL:</label>
+            <input type="url" id="image-url" name="url" value="{{ form.url.data | default('') }}" oninput="updatePreview(this.value)">
+
+            <input type="hidden" name="lora_data" id="lora-data">
+            {{ form.submit() }}
+        </form>
+    </div> {# End of sidebar div #}
+
+    {# The image preview remains outside the sidebar #}
+    <div class="image-preview">
+        <img id="preview" src="">
+    </div>
 
     <script src="{{ url_for('static', filename='js/submit/img_preview.js') }}"></script>
     <script src="{{ url_for('static', filename='js/submit/tags.js') }}"></script>
     <script src="{{ url_for('static', filename='js/submit/lora.js') }}"></script>
     <script src="{{ url_for('static', filename='js/submit/copy_script.js') }}"></script>
-
-
-    <script>
-        const initialUrl = document.getElementById('image-url').value;
-        if (initialUrl) {
-            updatePreview(initialUrl);
-        }
-
-        // Auto-highlight
-        document.getElementById('image-url').onclick = function() {
-            this.select();
-        };
-
-        document.getElementById('quick-entry-textarea').onclick = function() {
-            this.select();
-        };
-
-        // --- JavaScript for Dynamic Form Action ---
-        const quickEntryToggle = document.getElementById('quick-entry-toggle');
-        const imageSubmitForm = document.getElementById('image-submit-form');
-        const defaultSubmitUrl = "{{ submit_url }}";
-        const quickEntrySubmitUrl = "{{ url_for('quick_entry') }}";
-
-        function updateFormAction() {
-            if (quickEntryToggle.checked) {
-                imageSubmitForm.action = quickEntrySubmitUrl;
-            } else {
-                imageSubmitForm.action = defaultSubmitUrl;
-            }
-        }
-
-        updateFormAction();
-        quickEntryToggle.addEventListener('change', updateFormAction);
-    </script>
+    <script src="{{ url_for('static', filename='js/submit/form_logic.js') }}"></script>
 </body>
 </html>
