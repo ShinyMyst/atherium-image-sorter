@@ -371,3 +371,16 @@ body:has(.sidebar .switch input:checked) .image-container .image-overlay-details
 .close-btn:hover {
     background-color: #5a6268;
 }
+
+/* ==========================================================================
+   DISPLAY OPTIONS
+   ========================================================================== */
+.displayOptions {
+    display: flex;
+    gap: 10px;
+}
+
+.displayOptions input[type="number"] {
+    width: 40px;
+    border-radius: 4px;
+}
