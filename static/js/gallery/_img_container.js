@@ -42,13 +42,17 @@ function imageContainer(img) {
             </div>
 
             <div class="metadata-details">
-                <p>Model: ${img.model}</p>
-                <p>Sampling Method: ${img["Sampling Method"]}</p>
-                <p>Sampling Steps: ${img["Sampling Steps"]}</p>
-                <p>CFG Scale: ${img["CFG Scale"]}</p>
-                ${Object.entries(img.LoRA || {}).map(([k, v]) => `<p>LoRA ${k}: ${v}</p>`).join('')}
-                ${img.Tags && img.Tags.length > 0 ? `<p>Tags: ${img.Tags.join(', ')}</p>` : ''}
-                ${img.Prompt ? `<p>Prompt: ${img.Prompt}</p>` : ''}
+                <p><strong><u>Model:</u></strong> ${img.model}</p>
+                <p><strong><u>Sampling Method:</u></strong> ${img["Sampling Method"]}</p>
+                <p><strong><u>Sampling Steps:</u></strong> ${img["Sampling Steps"]}</p>
+                <p><strong><u>CFG Scale:</u></strong> ${img["CFG Scale"]}</p>
+                ${img.LoRA && Object.keys(img.LoRA).length > 0 ?
+                    `<p><strong><u>LoRA:</u></strong></p>` +
+                    Object.entries(img.LoRA).map(([k, v]) => `<p>${k}: ${v}</p>`).join('')
+                    : ''
+                }
+                ${img.Tags && img.Tags.length > 0 ? `<p><strong><u>Tags:</u></strong> ${img.Tags.join(', ')}</p>` : ''}
+                ${img.Prompt ? `<p><strong><u>Prompt:</u></strong> ${img.Prompt}</p>` : ''}
             </div>
         </div>
     `;
