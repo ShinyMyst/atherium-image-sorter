@@ -1,5 +1,5 @@
 export function initDropdown() {
-    const dropdown = document.getElementById('myDropdown');
+    const dropdown = document.getElementById('collectionDropdown');
 
     if (dropdown) {
         dropdown.addEventListener('change', function() {
