@@ -3,15 +3,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const addTagButton = document.getElementById('add-tag');
     const tagsList = document.getElementById('tags-list');
 
-    // Function to re-index hidden tag inputs
+    // Tag order is irrelevant but removing this breaks the entire functionaltiy.
     function reIndexTags() {
-        const hiddenInputs = tagsList.querySelectorAll('[name^="tags-"]');
-        hiddenInputs.forEach((input, index) => {
+        tagsList.querySelectorAll('[name^="tags-"]').forEach((input, index) => {
             input.name = `tags-${index}`;
         });
     }
 
-    // Function to attach remove functionality to a tag element
+    // Remove Tags
     function attachRemoveFunctionality(tagElement) {
         tagElement.querySelector('.remove-tag').addEventListener('click', function() {
             tagElement.remove();
@@ -19,11 +18,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Add Tags
     function addTag(tagText) {
         if (!tagText.trim()) return;
 
-        // Create the tag element
-        const tagIndex = document.querySelectorAll('[name^="tags-"]').length;
+        const tagIndex = tagsList.querySelectorAll('[name^="tags-"]').length;
         const tagElement = document.createElement('span');
         tagElement.className = 'tag-item';
         tagElement.innerHTML = `
@@ -32,13 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <span class="remove-tag">×</span>
         `;
 
-        // Add to the list
         tagsList.appendChild(tagElement);
-
-        // Clear input
         tagInput.value = '';
-
-        // Add remove functionality
         attachRemoveFunctionality(tagElement);
     }
 
@@ -55,10 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Attach remove functionality to any tags already in the HTML on page load
-    const existingTagElements = tagsList.querySelectorAll('.tag-item');
-    existingTagElements.forEach(attachRemoveFunctionality);
-
-    // Ensure initial indexing is correct after pre-population
+    tagsList.querySelectorAll('.tag-item').forEach(attachRemoveFunctionality);
     reIndexTags();
 });

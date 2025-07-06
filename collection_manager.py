@@ -1,58 +1,143 @@
-# TODO Organize this class better?
 import json
+from collections import Counter
 from python.submit import SubmitForm
+from config.config import LORAS, QUICK_SUBSTITUTION
 
 
 class CollectionManager():
-    def __init__(self, collection_name: str):
-        self.route_dict = {
-            'Test': "collections/test.json",
-            'Gallery': "collections/gallery.json",
-            'Test2': "collections/llamas.json"
-            }
-        self.stale = True  # Tracks if active_collection is up-to-date
-        self.active_route = self.route_dict[collection_name]
-        self.active_collection = self._prep_collect(self.active_route)
-        self.tag_frequency = self._count_tags()
-        # Note- Use arg bc _prep_collect may use dif routes elsewhere
+    def __init__(self, collection_name: str = "Test"):
+        self._stale = False
+        self.route = None
+        self._collection_list = []  # Initialize the backing field
+        # Collection is stale if class data != JSON data.
+        self.set_collection(collection_name)
 
-    # TODO - Make a set active route function rather than setting in init.
+    # --------------------
+    # Properties
+    # --------------------
+    @property
+    def collection(self) -> list:
+        """This function will run whenever collection is called.
+        Updates JSON if collection is stale."""
+        if self._stale:
+            with open(self.route, 'w') as f:
+                json.dump(self._collection_list, f, indent=4)
+            self._stale = False
+        return self._collection_list
 
-    def get_collection(self):
-        """Returns the ACTIVE collection"""
-        if self.stale:
-            self.active_collection = self._prep_collect(self.active_route)
-        return self.active_collection
+    @collection.setter
+    def collection(self, new_collection: list):
+        if not isinstance(new_collection, list):
+            raise ValueError("Collection must be a list.")
+        self._collection_list = new_collection
+        self._stale = True
 
-    def update_ranking(self, key_url, change):
-        """Changes the ranking of one ACTIVE collection element.
-        URL used to determine the target element/image."""
-        for image in self.active_collection:
-            if image['url'] == key_url:
-                image['ranking'] += change
-                break
-        self._write_changes()
-
-    def _prep_collect(self, route):
-        """Given a route, returns an up-to-date sorted collection"""
-        collect = self._open_collect(route)
-        sorted_collect = self._sort_collect(collect)
-        self.stale = False
-        return sorted_collect
-
-    def _open_collect(self, route):
-        """Opens, loads, saves, and returns a JSON collection."""
-        with open(route) as f:
+    # --------------------
+    # Public Setters
+    # --------------------
+    def set_collection(self, file_name):
+        self.route = f"collections/{file_name.lower()}.json"
+        with open(self.route) as f:
             collection = json.load(f)
-        return collection
+        collection.sort(key=lambda x: x.get("ranking", 0), reverse=True)
+        self.collection = collection
+        self._stale = True
 
-    def _sort_collect(self, collection: list):
-        """Sorts a collection by 'ranking' and returns the sorted list."""
-        return sorted(collection,
-                      key=lambda x: x.get("ranking", 0),
-                      reverse=True)
+    # --------------------
+    # Public Getters
+    # --------------------
+    def get_collection(self) -> list:
+        """Returns the collection"""
+        return self.collection
 
-    def format_entry(self, form: SubmitForm, lora_json):
+    def get_route(self):
+        return self.route
+
+    def get_tags(self) -> list:
+        """Returns list of tags sorted by most common"""
+        # Technically, it's better to keep a dict of tags and counts
+        # Then increment when new tags added but this simplifies it.
+        tags = []
+        for entry in self.collection:
+            tags.extend(entry.get("Tags", []))
+
+        tag_counts = Counter(tags)
+        frequency = [tag for tag, count in tag_counts.most_common()]
+
+        return frequency
+
+    def get_loras(self):
+        """Returns a list of LoRAs sorted by most common"""
+        lora_names = []
+        for entry in self.collection:
+            lora_data = entry.get("LoRA", {})
+            lora_names.extend(lora_data.keys())
+
+        lora_counts = Counter(lora_names)
+        frequency = [lora for lora, count in lora_counts.most_common()]
+        return frequency
+
+    def get_submit_form(self, url) -> SubmitForm:
+        """Returns entry data in format of a submit form"""
+        entry_data = self._get_entry(url)[0]
+        form_data = self._helper_prepare_form_data(entry_data)
+        entry_form = SubmitForm(data=form_data)
+        return self._helper_add_dynamic_loras(entry_data, entry_form)
+
+    # --------------------
+    # Public Methods
+    # --------------------
+    def add_entry(self, entry_data):
+        # Check For Dupe
+        if self._get_entry(entry_data['url']):
+            return False
+        # Add Entry
+        self.collection.append(entry_data)
+        self._stale = True
+        return True
+
+    def add_tags(self, url, tags):
+        entry = self._get_entry(url)[0]
+        added_tags = [tag.lower() for tag in tags]
+        entry.setdefault("Tags", [])
+        all_tags = list(set(entry["Tags"] + added_tags))
+        entry["Tags"] = all_tags
+        self._stale = True
+
+    def delete_entry(self, url):
+        del self.collection[self._get_entry(url)[1]]
+        self._stale = True
+
+    def edit_entry(self, entry_data):
+        """Replaces an existing an entry with the given data."""
+        self.delete_entry(entry_data["url"])
+        self.add_entry(entry_data)
+        self._stale = True
+
+    def edit_ranking(self, url, change):
+        entry = self._get_entry(url)[0]
+        if entry:
+            entry['ranking'] = entry.get('ranking', 0) + change
+        else:
+            print("Error: Entry not found.")
+        self._stale = True
+
+    # --------------------
+    # Private Methods
+    # --------------------
+    def _get_entry(self, url):
+        """Returns reference to an entry and its index
+        Allowing its entry in collection to be edited."""
+        for i, entry in enumerate(self.collection):
+            if entry["url"] == url:
+                return (entry, i)
+        return False
+
+    # --------------------
+    # Static Methods
+    # --------------------
+    @staticmethod
+    def format_entry(form: SubmitForm, lora_json):
         """Given data from submit form, structures it into a new JSON entry."""
         lora_data = json.loads(lora_json)
         entry_data = {
@@ -68,64 +153,56 @@ class CollectionManager():
         }
         return entry_data
 
-    def add_entry(self, entry_data):
-        """Adds a new entry to the active collection."""
-        self.active_collection.append(entry_data)
-        self._write_changes()
+    @staticmethod
+    def format_quick_entry(entry_string: str, img_url: str):
+        """Quick entries already have the proper structure"""
+        entry_dict = json.loads(entry_string)
+        entry_dict['url'] = img_url
 
-    def _write_changes(self):
-        """Writes pending changes to active JSON.  Change status to stale"""
-        with open(self.active_route, 'w') as f:
-            json.dump(self.active_collection, f, indent=4)
-        self.stale = True
+        if entry_dict["model"] in QUICK_SUBSTITUTION:
+            entry_dict["model"] = QUICK_SUBSTITUTION[entry_dict["model"]]
 
-    def _count_tags(self):
-        """Counts frequency of each tag in the active collection
-        Sorts with most frequent at top."""
-        tag_frequency = dict()
-        for entry in self.active_collection:
-            for tag in entry.get("Tags", []):
-                tag_frequency[tag] = tag_frequency.get(tag, 0) + 1
-        tag_frequency = dict(sorted(tag_frequency.items(),
-                                    key=lambda x: x[1],
-                                    reverse=True))
-        return tag_frequency
+        for key in list(entry_dict["LoRA"].keys()):
+            if key in QUICK_SUBSTITUTION:
+                new_key = QUICK_SUBSTITUTION[key]
+                if new_key != key:
+                    entry_dict["LoRA"][new_key] = entry_dict["LoRA"][key]
+                    del entry_dict["LoRA"][key]
 
-    def get_tag_frequency(self):
-        return self.tag_frequency
+        return entry_dict
 
-    def get_entry(self, url):
-        """Returns a single entry from active collection by URL"""
-        for entry in self.active_collection:
-            if entry["url"] == url:
-                return entry
-        return False
+    @staticmethod
+    def _helper_add_dynamic_loras(entry_data: dict, submit_form: SubmitForm):
+        """Add dynamic LoRAs to the form"""
+        entry_lora_data = entry_data.get('LoRA', {})
 
-    def get_entry_index(self, url):
-        for i, entry in enumerate(self.active_collection):
-            if entry["url"] == url:
-                return i
-        return False
+        for lora_name, lora_strength in entry_lora_data.items():
+            if lora_name not in LORAS.keys():
+                name_field = submit_form.dynamic_loras.append_entry()
+                name_field.data = lora_name
+                strength_field = submit_form.dynamic_strengths.append_entry()
+                strength_field.data = lora_strength
 
-    def add_tags(self, url, tags):
-        """Adds tags from list to entry with given url"""
-        tags = [tag.lower() for tag in tags]
-        entry = self.get_entry(url)
-        combined_tags = list(set(entry["Tags"] + tags))
-        entry["Tags"] = combined_tags
-        self._write_changes()
+        return submit_form
 
-    def edit_entry(self, entry_data):
-        """Replaces an existing an entry with the given data."""
-        self.delete_entry(entry_data["url"])
-        self.add_entry(entry_data)
-        # Changes are written with add_entry
+    @staticmethod
+    def _helper_prepare_form_data(entry_data: dict) -> dict:
+        """
+        Extracts form data and known LoRAs into a dictionary for SubmitForm.
+        """
+        lora_data_from_entry = entry_data.get('LoRA', {})
 
-    def delete_entry(self, url):
-        """Removes entry from collection."""
-        del self.active_collection[self.get_entry_index(url)]
-        print("Deleted Entry:", url)
+        form_data = {
+            'url': entry_data.get('url', ''),
+            'model': entry_data.get('model', ''),
+            'prompt': entry_data.get('Prompt', ''),
+            'sampling_method': entry_data.get('Sampling Method', ''),
+            'sampling_steps': entry_data.get('Sampling Steps', 10),
+            'cfg_scale': entry_data.get('CFG Scale', 2.0),
+            'tags': entry_data.get('Tags', []),
+        }
 
-
-# TODO - Be more intentional and careful with stale.
-# TODO - Also assume set is always active unless changed
+        for lora_name, lora_strength in lora_data_from_entry.items():
+            if lora_name in LORAS.keys():
+                form_data[lora_name] = lora_strength
+        return form_data

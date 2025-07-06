@@ -1,21 +1,5 @@
 [
     {
-        "url": "https://rapi.pixai.art/img/media/556188957993753129/orig",
-        "model": "Hoshino",
-        "Prompt": "...",
-        "Tags": [
-            "new1",
-            "new",
-            "new2",
-            "kagerou"
-        ],
-        "LoRA": {},
-        "Sampling Method": "Euler A",
-        "Sampling Steps": 10,
-        "CFG Scale": 2.0,
-        "ranking": 0
-    },
-    {
         "url": "https://rapi.pixai.art/img/media/555892938650569840/orig",
         "model": "Hoshino",
         "Prompt": "...",
@@ -30,7 +14,40 @@
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "CFG Scale": 2.0,
-        "ranking": 0
+        "ranking": 5
+    },
+    {
+        "ranking": 5,
+        "model": "Shiitake-Mix",
+        "Prompt": "imaizumi kagerou, masterpiece, ,,flat color, no lineart",
+        "LoRA": {
+            "ModelBoosterXL": 0.8,
+            "Hyper": 0.7,
+            "Flat": 0.7
+        },
+        "Sampling Method": "Euler a",
+        "Sampling Steps": 10,
+        "CFG Scale": 3,
+        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1"
+    },
+    {
+        "url": "https://rapi.pixai.art/img/media/556188957993753129/orig",
+        "model": "Hoshino",
+        "Prompt": "...",
+        "Tags": [
+            "new2",
+            "new1",
+            "ggggggggggggggggggggggggg",
+            "fffffffffffffffffffffffffffffffff",
+            "kagerou",
+            "new",
+            "hhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+        ],
+        "LoRA": {},
+        "Sampling Method": "Euler A",
+        "Sampling Steps": 10,
+        "CFG Scale": 2.0,
+        "ranking": 4
     },
     {
         "url": "https://rapi.pixai.art/img/media/567086382015036172/orig",
@@ -43,22 +60,39 @@
             "Bold Outlines": 3,
             "Vivid Edge": 4,
             "Vivid Soft": 5,
-            "Cartoony": 6
+            "Cartoony": 6,
+            "SAMPLE": 4
         },
         "Sampling Method": "DDIM",
         "Sampling Steps": 20,
         "CFG Scale": 7.0,
-        "ranking": 0
+        "ranking": 2
     },
     {
-        "url": "https://images-ng.pixai.art/images/orig/959ca71f-4693-4cfb-b54f-16d3d513c4e1",
+        "url": "https://images-ng.pixai.art/images/orig/70b0a3f8-53ef-43b2-ad36-0c681665d0eb",
         "model": "Hoshino",
         "Prompt": "...",
-        "Tags": [],
+        "Tags": [
+            "ahri"
+        ],
         "LoRA": {},
         "Sampling Method": "Euler A",
         "Sampling Steps": 10,
         "CFG Scale": 2.0,
-        "ranking": 0
+        "ranking": 1
+    },
+    {
+        "ranking": 0,
+        "model": "Shiitake-Mix",
+        "Prompt": "imaizumi kagerou, masterpiece, ,,flat color, no lineart",
+        "LoRA": {
+            "ModelBoosterXL": 0.8,
+            "Hyper": 0.7,
+            "Flat": 0.7
+        },
+        "Sampling Method": "Euler a",
+        "Sampling Steps": 10,
+        "CFG Scale": 3,
+        "url": "https://images-ng.pixai.art/images/orig/dd897f1d-47e6-4265-9798-a28460ca79ce"
     }
 ]

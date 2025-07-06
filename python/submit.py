@@ -7,52 +7,32 @@ from wtforms import (
     FloatField,
     TextAreaField,
     FieldList,
-    SelectMultipleField
 )
+from config.config import MODELS, LORAS, SAMPLING_METHODS
 
 
 class SubmitForm(FlaskForm):
-    # Data Sets
-    data_sets = SelectMultipleField(
-        choices=[
-            ('gallery', 'Gallery'),
-            ('test', 'Test File'),
-            ('llamas', 'Ill Llama')
-        ]
-    )
     # Basic Information
     url = StringField('Image URL')
-    model = SelectField('Model', choices=[
-        ('Hoshino', 'Hoshino'),
-        ('Hoseki', 'Hoseki'),
-        ('AniKawaXL', 'AniKawaXL'),
-        ('KonpaEvo', 'KonpaEvo'),
-        ('KiwiMix-XL', 'KiwiMix-XL')
-        ])
+    model = SelectField('Model', choices=MODELS)
     prompt = TextAreaField('Prompt', default='...')
     tags = FieldList(StringField('Tag'), min_entries=0)
 
-    # LoRA
-    dmd2 = FloatField('DMD2', default=0)
-    lcm = FloatField('LCM', default=0)
-    bold_outlines = FloatField('Bold Outlines', default=0)
-    vivid_edge = FloatField('Vivid Edge', default=0)
-    vivid_soft = FloatField('Vivid Soft', default=0)
-    cartoony = FloatField('Cartoony', default=0)
-    # URL needs hardcoded into html for now
+    # LORAS
+    default_loras = {lora_name: 0 for lora_name in LORAS.keys()}
+
+    for name, default in default_loras.items():
+        locals()[name] = FloatField(name.replace('_', ' ').title(), default=default) # noqa
 
     dynamic_loras = FieldList(StringField('LoRA Type'), min_entries=0)
     dynamic_strengths = FieldList(FloatField('Strength'), min_entries=0)
 
-    lora_fields = [dmd2, lcm, bold_outlines, vivid_edge, vivid_soft, cartoony]
+    @property
+    def lora_fields(self):
+        return [getattr(self, name) for name in self.default_loras.keys()]
 
-    # LoRA Details
-    sampling_method = SelectField('Sampling Method', choices=[
-        ('Euler A', 'Euler A'),
-        ('Euler', 'Euler'),
-        ('DDIM', 'DDIM'),
-        ('LMS', 'LMS'),
-        ])
+    # Sampling Details
+    sampling_method = SelectField('Sampling Method', choices=SAMPLING_METHODS)
     sampling_steps = IntegerField('Sampling Steps', default=10)
     cfg_scale = FloatField('CFG Scale', default=2)
 

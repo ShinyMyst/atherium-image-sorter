@@ -5,100 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Processing Form</title>
     <link rel="stylesheet" href="/static/css/style.css">
-        <link rel="stylesheet" href="/static/css/submit.css">
-
+    <link rel="stylesheet" href="/static/css/submit.css">
 </head>
 <body>
-{# Macros #}
-    {% from "_macros.html" import slider_field %}
-    {% from "_macros.html" import lora_submit %}
+    {% from "_macros.html" import slider_field, lora_submit %}
 
-{# Form #}
-    <form method="POST" action="{{ submit_url }}" target="_blank">
-        {{ form.hidden_tag() }}
+    <div class="sidebar">
+        <div class="navbar">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('gallery') }}">Gallery</a>
+            <a href="{{ url_for('submit_new') }}">Submit</a>
+        </div>
+
+        <form method="POST" action="{{ submit_url }}" id="image-submit-form" target="_blank"
+              data-default-submit-url="{{ submit_url }}"
+              data-quick-entry-submit-url="{{ url_for('quick_entry') }}">
+            {{ form.hidden_tag() }}
+
+            <div class="quick-entry-switch-container">
+                <label class="switch">
+                    <input type="checkbox" id="quick-entry-toggle">
+                    <span class="slider"></span>
+                    <span class="switch-text">Quick Entry Mode</span>
+                </label>
+            </div>
+
+            <div class="quick-entry-box">
+                <button type="button" id="copy-quick-entry">COPY SCRIPT</button>
+                <label for="quick-entry-textarea">Quick Entry:</label>
+                <textarea id="quick-entry-textarea" name="quick_entry_data" placeholder="Paste full image metadata here..."></textarea>
+            </div>
+
+            <div class="detailed-entry-fields">
+                <fieldset>
+                    <legend>Basic Info</legend>
+                    {{ form.prompt.label }} {{ form.prompt() }}<br>
+                    {{ form.model.label }} {{ form.model() }}<br>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Tags</legend>
+                    <div class="tag-container">
+                        <div class="tag-input">
+                            <input type="text" id="tag-input" placeholder="Add a tag...">
+                            <button type="button" id="add-tag">+</button>
+                        </div>
+                        <div class="tags-list" id="tags-list">
+                            {% if form.tags.data %}
+                                {% for tag_value in form.tags.data %}
+                                    <span class="tag-item">
+                                        {{ tag_value }}
+                                        <input type="hidden" name="tags-{{ loop.index0 }}" value="{{ tag_value }}">
+                                        <span class="remove-tag">×</span>
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="lora-fieldset">
+                    <legend>LoRA
+                        <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
+                    </legend>
+                    <div id="lora-container">
+                        {% for field in form.lora_fields %}
+                            {{ lora_submit(field, field, is_dynamic_entry=False) }}
+                        {% endfor %}
+
+                        <div id="dynamic-lora-list-container">
+                            {% for i in range(form.dynamic_loras|length) %}
+                                {{ lora_submit(form.dynamic_loras[i].data, form.dynamic_strengths[i], is_dynamic_entry=True) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="sampling-parameters">
+                    <legend>Sampling</legend>
+                    {{ form.sampling_method.label }} {{ form.sampling_method() }}<br>
+                    {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
+                    {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>
+                </fieldset>
+            </div>
+
+            <label for="image-url">Image URL:</label>
+            <input type="url" id="image-url" name="url" value="{{ form.url.data | default('') }}" oninput="updatePreview(this.value)">
+
+            <input type="hidden" name="lora_data" id="lora-data">
+            {{ form.submit() }}
+        </form>
+    </div>
 
     <div class="image-preview">
         <img id="preview" src="">
     </div>
 
-    <fieldset>
-        <legend>Data Sets</legend>
-        {{ form.data_sets(size=3, multiple=True) }}
-    </fieldset>
-
-
-        <fieldset>
-            <legend>Basic Info</legend>
-
-            {{ form.prompt.label }} {{ form.prompt() }}<br>
-
-            {{ form.model.label }} {{ form.model() }}<br>
-
-        </fieldset>
-
-        <fieldset>
-    <legend>Tags</legend>
-    <div class="tag-container">
-        <div class="tag-input">
-            <input type="text" id="tag-input" placeholder="Add a tag...">
-            <button type="button" id="add-tag">+</button>
-        </div>
-        <div class="tags-list" id="tags-list">
-            {% for tag in form.tags %}
-                {% if tag.data %}
-                    <span class="tag-item">
-                        {{ tag.data }}
-                        <input type="hidden" name="tags-{{ loop.index0 }}" value="{{ tag.data }}">
-                        <span class="remove-tag">×</span>
-                    </span>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-</fieldset>
-
-<fieldset class="lora-fieldset">
-    <legend>LoRA
-        <button type="button" id="add-lora" class="add-button">+ Add Custom LoRA</button>
-    </legend>
-
-    <div id="lora-container">
-        {{ lora_submit(form.dmd2) }}
-        {{ lora_submit(form.lcm) }}
-        {{ lora_submit(form.bold_outlines) }}
-        {{ lora_submit(form.vivid_edge) }}
-        {{ lora_submit(form.vivid_soft) }}
-        {{ lora_submit(form.cartoony) }}
-
-        <div id="dynamic-lora-container"></div>
-    </div>
-</fieldset>
-
-        <fieldset class="sampling-parameters">
-            <legend>Sampling</legend>
-            {{ form.sampling_method.label }} {{ form.sampling_method() }}<br>
-            {{ form.sampling_steps.label }} {{ form.sampling_steps() }}<br>
-            {{ form.cfg_scale.label }} {{ form.cfg_scale() }}<br>
-        </fieldset>
-
-            <label for="image-url">Image URL:</label>
-            <input type="url" id="image-url" name="url" value="{{ form.url.data | default('') }}" oninput="updatePreview(this.value)">
-        <fieldset>
-        <input type="hidden" name="lora_data" id="lora-data">
-</fieldset>
-        {{ form.submit() }}
-    </form>
-
-{# Script #}
-    <script src="{{ url_for('static', filename='js/img_preview.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/tags.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/lora.js') }}"></script>
-    <script>
-        // Updates image when loading this form with a pre-loaded URL
-        const initialUrl = document.getElementById('image-url').value;
-        if (initialUrl) {
-            updatePreview(initialUrl);
-        }
-    </script>
+    <script src="{{ url_for('static', filename='js/submit/img_preview.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/submit/tags.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/submit/lora.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/submit/copy_script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/submit/form_logic.js') }}"></script>
 </body>
 </html>

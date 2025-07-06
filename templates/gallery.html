@@ -6,60 +6,106 @@
     <title>Gallery Page</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/gallery.css">
-
 </head>
 <body>
     {# Macros #}
     {% from "_macros.html" import lora_toggle %}
 
-
     <div class="sidebar">
         <div class="navbar">
             <a href="{{ url_for('index') }}">Home</a>
-            <a href="gallery">Gallery</a>
-            <a href="submit" target="_blank">Submit</a>
+            <a href="{{ url_for('gallery') }}">Gallery</a>
+            <a href="{{ url_for('submit_new') }}" target="_blank">Submit</a>
         </div>
 
         <div class="divider"></div>
 
-    <label class="switch">
-        <input type="checkbox">
-        <span class="slider"></span>
-        <span class="switch-text">Edit Mode</span>
-    </label>
-
-    <!-- Model Select -->
-    <fieldset>
-        <legend>Model</legend>
-        {{ form.model(class="form-control") }}
-    </fieldset>
-
-    <div class="divider"></div>
-
-    <!-- LoRA Toggle Boxes -->
-    <fieldset>
-        <legend>LoRA</legend>
-        <div class="lora-grid">
-            {% for name, icon_src in form.lora %}
-                {{ lora_toggle(name, icon_src) }}
+        <label for="collectionDropdown">Choose a Collection:</label>
+        <select id="collectionDropdown" name="collectionDropdown" class="form-control">
+            {% for route_name, display_name in collection_data.items() %}
+                <option value="{{ route_name }}" {% if route_name == active_route %}selected{% endif %}>
+                    {{ display_name }}
+                </option>
             {% endfor %}
-        </div>
-    </fieldset>
+        </select>
 
         <div class="divider"></div>
 
-        <!-- Sampling Method -->
+        <div class="displayOptions">
+            <label for="unitsPerRowInput">Units per Row:</label>
+            <input
+                type="number"
+                id="unitsPerRowInput"
+                min="1"
+                value="4"
+            >
+        </div>
+
+        <div class="divider"></div>
+
+        <label class="switch">
+            <input type="checkbox" id="editModeToggle">
+            <span class="slider"></span>
+            <span class="switch-text">Edit Mode</span>
+        </label>
+
+        <div class="divider"></div>
+
         <fieldset>
-            <legend>Sampling</legend>
-            {{ form.sampling(class="form-control", id="sampling-method") }}
+            <legend>Model</legend>
+            <select name="model" id="model-select" class="form-control" multiple>
+                {% for model_name in model_choices %}
+                    <option value="{{ model_name }}">{{ model_name }}</option>
+                {% endfor %}
+            </select>
         </fieldset>
 
-        <!-- Tags -->
+        <div class="divider"></div>
+
+        <fieldset>
+            <legend>LoRA</legend>
+            <div class="lora-grid">
+                {% for lora_name in sorted_loras %}
+                    {# lora_name is the full name #}
+                    {% set lora_details = loras_data.get(lora_name) %}
+
+                    {# Determine the text to display #}
+                    {% set display_text = lora_name %}
+                    {% if lora_details and lora_details.display_name %}
+                        {% set display_text = lora_details.display_name %}
+                    {% endif %}
+
+                    {# Determine the icon_src #}
+                    {% set icon_src_to_pass = none %}
+                    {% if lora_details and lora_details.img_url %}
+                        {% set icon_src_to_pass = lora_details.img_url %}
+                    {% endif %}
+
+                    {# Macro #}
+                    {{ lora_toggle(full_name=lora_name, display_text=display_text, icon_src=icon_src_to_pass) }}
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <div class="divider"></div>
+
+        <fieldset>
+            <legend>Sampling</legend>
+            <select name="sampling" id="sampling-method" class="form-control">
+                {% for sampling_method in sampling_methods %}
+                    <option value="{{ sampling_method }}">{{ sampling_method }}</option>
+                {% endfor %}
+            </select>
+        </fieldset>
+
         <fieldset>
             <legend>Tags</legend>
             <div class="tags-container" id="tags-container">
-                {% for tag in form.default_tags %}
-                    <span class="tag" data-tag="{{ tag }}">{{ tag }}</span>
+                {% for tag in sorted_tags %}
+                    <span class="tag" data-tag="{{ tag }}">
+                        {{ tag }}
+                        <span class="remove-tag">×</span>
+                    </span>
                 {% endfor %}
             </div>
             <div class="tag-input-container">
@@ -67,24 +113,29 @@
                 <button id="add-tag-btn">+</button>
             </div>
         </fieldset>
-    </div>
+    </div> {# End sidebar #}
 
     <div class="main-content">
-    <div id="action-bar">
-        <div class="action-bar-tag-input-group">
-            <input type="text" id="action-bar-tag-input" placeholder="Enter tag for selected...">
-            <button id="action-bar-tag-btn">+</button>
-        </div>
+        <div id="action-bar">
+            <div class="action-controls-group"> {# Main left-side group #}
+                <div class="action-bar-tag-input-group">
+                    <input type="text" id="action-bar-tag-input" placeholder="Enter tag for selected...">
+                    <button id="action-bar-tag-btn">+</button>
+                </div>
 
-        <div id="action-bar-tags-display">
+                <div class="action-bar-buttons"> {# Apply/Delete buttons #}
+                    <button id="bulk-action-btn" class="action-bar-btn">Apply Tags</button>
+                    <button id="delete-selected-btn" class="action-bar-btn delete-btn">Delete Entries</button>
+                </div>
+
+                <button id="close-action-bar-btn" class="action-bar-btn close-btn">Close</button>
             </div>
 
-        <button id="bulk-action-btn" class="action-bar-corner-btn bottom-left">Apply to Selected</button>
-        <button id="close-action-bar-btn" class="action-bar-corner-btn bottom-right">Close</button>
-    </div>
-    <div class="grid"><!-- Image containers will be inserted here --></div>
-
-</div>
+            <div id="action-bar-tags-display"> {# Right-side tags display #}
+            </div>
+        </div>
+        <div class="grid"></div>
+    </div> {# End main-content #}
 
     <script type="module">
         const IMAGE_DATA = {{ image_json | tojson | safe }};

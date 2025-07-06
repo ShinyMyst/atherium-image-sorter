@@ -1,123 +1,146 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect
 from python.submit import SubmitForm
-from python.gallery import GalleryForm
 from collection_manager import CollectionManager
+from config.config import MODELS, LORAS, SAMPLING_METHODS, COLLECTIONS
 
-
-app_data = CollectionManager("Test")
+app_data = CollectionManager("Gallery")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
 
 
-@app.route('/')
+##############################
+#     GET ROUTES
+##############################
+@app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
 
-@app.route('/gallery')
+@app.route('/gallery', methods=['GET'])
 def gallery():
-    collection = app_data.get_collection()
-    tags = app_data.get_tag_frequency()
+    data_key = app_data.get_route().split('/')[-1].split('.')[0]
+
     return render_template('gallery.html',
-                           form=GalleryForm(tags),
-                           image_json=collection)
+                           image_json=app_data.get_collection(),
+                           model_choices=['Any'] + MODELS,
+                           loras_data=LORAS,
+                           collection_data=COLLECTIONS,
+                           sampling_methods=['Any'] + SAMPLING_METHODS,
+                           sorted_tags=app_data.get_tags(),
+                           sorted_loras=app_data.get_loras(),
+                           active_route=data_key
+                           )
 
 
-@app.route('/submit')
-def get_submit():
-    return render_template('submit.html', form=SubmitForm(), submit_url='/new')
+@app.route('/submit/new', methods=['GET'])
+def submit_new():
+    return render_template('submit.html',
+                           form=SubmitForm(),
+                           submit_url='/entry/new',
+                           collection_data=COLLECTIONS
+                           )
 
 
-@app.route('/new', methods=['POST'])
-def post_submit():
+@app.route('/submit/edit', methods=['GET'])
+def submit_edit():
+    image_url = request.args.get('image_url')
+    entry_form = app_data.get_submit_form(image_url)
+
+    return render_template('submit.html',
+                           form=entry_form,
+                           submit_url='/entry/edit',
+                           collection_data=COLLECTIONS
+                           )
+
+
+@app.route('/gallery/switch', methods=['GET'])
+def gallery_switch():
+    selected_option = request.args.get('option')
+    app_data.set_collection(selected_option)
+    return redirect('/gallery')
+
+
+##############################
+#     SUBMIT PAGE ROUTES
+##############################
+@app.route('/entry/new', methods=['POST'])
+def new_entry():
     """Adds entry to active collection.  Displays entry in a new tab."""
-    # TODO - Collection is choice but this only write to the active.
-    # Update this again to account for different or multiple collection updates
-
     form = SubmitForm()
     lora_json = request.form.get('lora_data', '{}')
-    # TODO - Integrate this into the form instead?
 
     new_entry = app_data.format_entry(form, lora_json)
-    app_data.add_entry(new_entry)
+    if not app_data.add_entry(new_entry):
+        return jsonify("Error - Duplicate")
     return jsonify(new_entry)
 
 
-@app.route('/update-rating', methods=['POST'])
-def update_rating():
-    image_url = request.args.get('image_url')
-    change = int(request.args.get('change'))
-    app_data.update_ranking(image_url, change)
-    return '', 200
+@app.route('/entry/quick', methods=['POST'])
+def quick_entry():
+    """Adds entry to active collection using JSON entry."""
+    entry_string = request.form.get('quick_entry_data')
+    url = request.form.get('url')
+    new_entry = app_data.format_quick_entry(entry_string, url)
+    if not app_data.add_entry(new_entry):
+        return jsonify("Error - Duplicate")
+    return jsonify(new_entry)
 
 
-@app.route('/update-tags-bulk', methods=['POST'])
-def update_tags_bulk():
-    data = request.get_json()
-    urls = data.get('imageUrls')
-    tags = data.get('tags')
-    for url in urls:
-        app_data.add_tags(url, tags)
-
-    return '', 200
-
-
-@app.route('/api/update-details', methods=['GET'])
-def update_details():
-    image_url = request.args.get('image_url')
-    entry_data = app_data.get_entry(image_url)
-
-    form_data = {
-        'url': entry_data.get('url', ''),
-        'model': entry_data.get('model', ''),
-        'prompt': entry_data.get('Prompt', ''),
-        'sampling_method': entry_data.get('Sampling Method', ''),
-        'sampling_steps': entry_data.get('Sampling Steps', 10),
-        'cfg_scale': entry_data.get('CFG Scale', 2.0),
-        'tags': entry_data.get('Tags', []),
-    }
-
-    entry_form = SubmitForm(data=form_data)
-
-    lora_data = entry_data.get('LoRA', {})
-    lora_form_field_to_data_key_map = {
-        'dmd2': 'DMD2',
-        'lcm': 'LCM',
-        'bold_outlines': 'Bold Outlines',
-        'vivid_edge': 'Vivid Edge',
-        'vivid_soft': 'Vivid Soft',
-        'cartoony': 'Cartoony'
-    }
-    for field_name, data_key_name in lora_form_field_to_data_key_map.items():
-        getattr(entry_form, field_name).data = lora_data.get(data_key_name, 0.0)  # noqa
-
-    return render_template('submit.html', form=entry_form, submit_url='/edit')
-
-
-@app.route('/edit', methods=['POST'])
-def change_entry():
+##############################
+#     PUT ROUTES
+##############################
+@app.route('/entry/edit', methods=['PUT', 'POST'])
+def edit_entry():
     form = SubmitForm()
     lora_json = request.form.get('lora_data', '{}')
+
     entry_data = app_data.format_entry(form, lora_json)
     app_data.edit_entry(entry_data)
     return jsonify(entry_data)
 
 
+##############################
+#     PATCH ROUTES
+##############################
+@app.route('/entry/rating', methods=['PATCH', 'POST'])
+def update_rating():
+    image_url = request.args.get('image_url')
+    change = int(request.args.get('change'))
+    app_data.edit_ranking(image_url, change)
+    return '', 200
+
+
+@app.route('/entries/tags', methods=['PATCH', 'POST'])
+def update_tags():
+    data = request.get_json()
+    urls = data.get('imageUrls')
+    tags = data.get('tags')
+    for url in urls:
+        app_data.add_tags(url, tags)
+    return '', 200
+
+
+##############################
+#     DELETE ROUTES
+##############################
+@app.route('/entries/delete', methods=['DELETE'])
+def delete_tags():
+    image_urls = request.get_json().get('urls')
+    for url in image_urls:
+        app_data.delete_entry(url)
+    return '', 200
+
+
+##############################
+#     UTILITY ROUTES
+##############################
 @app.route('/favicon.ico')
 def favicon():
     return "", 204
 
 
+##############################
+#     MAIN
+##############################
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-# TODO - Restructure JSON as a dict with the URL as main key.
-# Make sure to only write if key is unique
-# TODO - More dynamic way to save elements of the JSON
-# TODO - Pagination??
-
-# TODO - Make the app function do the data format internally?
-# TODO - It could return the entry info for the return display json
-# TODO - Editing image also resets ranking at the moment.
-# TODO - Pop-ups from testing still present.  Repurpose or remove

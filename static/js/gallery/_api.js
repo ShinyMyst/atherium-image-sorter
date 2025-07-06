@@ -1,5 +1,12 @@
+/******************************
+ * API    *
+ ******************************/
+// TODO - Page 'could' reload here.  BUT there are two issues.
+// 1.) AppManger does not actually resort the rankings when rank changes.
+// 2.) It would have to rewrite every ranking each time...
+// Better to just omit it for speed OR resort on client level
 export function updateRating(imageUrl, change) {
-    fetch(`/update-rating?image_url=${encodeURIComponent(imageUrl)}&change=${change}`, {
+    fetch(`/entry/rating?image_url=${encodeURIComponent(imageUrl)}&change=${change}`, {
         method: 'POST'
     })
     .then(response => {
@@ -10,10 +17,8 @@ export function updateRating(imageUrl, change) {
     .catch(error => console.error('Error updating rating:', error));
 }
 
-
 export function updateTags(imageUrls, tags) {
-    console.warn("The updateTags function needs review and a proper endpoint for bulk operations.");
-    fetch('/update-tags-bulk', {
+    fetch('/entries/tags', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -26,21 +31,37 @@ export function updateTags(imageUrls, tags) {
     .then(response => {
         if (!response.ok) {
             console.error('Failed to update tags:', response.statusText);
+        } else {
+            window.location.reload();
         }
     })
     .catch(error => console.error('Error updating tags:', error));
 }
 
-
 export function updateDetails(imageUrl) {
-    fetch(`/api/update-details?image_url=${encodeURIComponent(imageUrl)}`, {
-        method: 'GET'
+    window.open(`/submit/edit?image_url=${encodeURIComponent(imageUrl)}`, '_blank');
+}
+
+export function deleteEntries(imageUrls) {
+    fetch('/entries/delete', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ urls: imageUrls })
     })
     .then(response => {
-        if (!response.ok) {
-            console.error('Failed to update image:', response.statusText);
+        if (response.ok) {
+            console.log('Images successfully deleted:', imageUrls);
+            // Reload the page
+            location.reload();
+        } else {
+            console.error('Failed to delete images:', response.statusText);
+            alert('Failed to delete images. Please try again.');
         }
     })
-    .catch(error => console.error('Error updating image:', error));
-    window.open(`/api/update-details?image_url=${encodeURIComponent(imageUrl)}`, '_blank');
+    .catch(error => {
+        console.error('Error deleting images:', error);
+        alert('An error occurred while deleting images.');
+    });
 }
