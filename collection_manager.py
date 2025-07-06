@@ -158,16 +158,23 @@ class CollectionManager():
         """Quick entries already have the proper structure"""
         entry_dict = json.loads(entry_string)
         entry_dict['url'] = img_url
+        # Round Entries
+        for key, value in entry_dict["LoRA"].items():
+            if isinstance(value, (int, float)):
+                entry_dict["LoRA"][key] = round(value, 1)
 
+        # Replace Model Names
         if entry_dict["model"] in QUICK_SUBSTITUTION:
             entry_dict["model"] = QUICK_SUBSTITUTION[entry_dict["model"]]
 
-        for key in list(entry_dict["LoRA"].keys()):
-            if key in QUICK_SUBSTITUTION:
-                new_key = QUICK_SUBSTITUTION[key]
-                if new_key != key:
-                    entry_dict["LoRA"][new_key] = entry_dict["LoRA"][key]
-                    del entry_dict["LoRA"][key]
+        # Replace LoRA Names
+        if "LoRA" in entry_dict and entry_dict["LoRA"] is not None:
+            for key in list(entry_dict["LoRA"].keys()):
+                if key in QUICK_SUBSTITUTION:
+                    new_key = QUICK_SUBSTITUTION[key]
+                    if new_key != key:
+                        entry_dict["LoRA"][new_key] = entry_dict["LoRA"][key]
+                        del entry_dict["LoRA"][key]
 
         return entry_dict
 

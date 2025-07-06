@@ -37,11 +37,8 @@
         "Tags": [
             "new2",
             "new1",
-            "ggggggggggggggggggggggggg",
-            "fffffffffffffffffffffffffffffffff",
             "kagerou",
-            "new",
-            "hhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+            "new"
         ],
         "LoRA": {},
         "Sampling Method": "Euler A",
