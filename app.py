@@ -36,7 +36,8 @@ def gallery():
 def submit_new():
     return render_template('submit.html',
                            form=SubmitForm(),
-                           submit_url='/entry/new'
+                           submit_url='/entry/new',
+                           collection_data=COLLECTIONS
                            )
 
 
@@ -47,7 +48,8 @@ def submit_edit():
 
     return render_template('submit.html',
                            form=entry_form,
-                           submit_url='/entry/edit'
+                           submit_url='/entry/edit',
+                           collection_data=COLLECTIONS
                            )
 
 

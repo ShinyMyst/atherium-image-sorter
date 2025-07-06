@@ -10,14 +10,13 @@
 <body>
     {% from "_macros.html" import slider_field, lora_submit %}
 
-    <div class="sidebar"> {# This div will now contain the navbar and all form controls #}
+    <div class="sidebar">
         <div class="navbar">
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('gallery') }}">Gallery</a>
             <a href="{{ url_for('submit_new') }}">Submit</a>
         </div>
 
-        {# The form content starts here and is now inside the sidebar #}
         <form method="POST" action="{{ submit_url }}" id="image-submit-form" target="_blank"
               data-default-submit-url="{{ submit_url }}"
               data-quick-entry-submit-url="{{ url_for('quick_entry') }}">
@@ -96,9 +95,8 @@
             <input type="hidden" name="lora_data" id="lora-data">
             {{ form.submit() }}
         </form>
-    </div> {# End of sidebar div #}
+    </div>
 
-    {# The image preview remains outside the sidebar #}
     <div class="image-preview">
         <img id="preview" src="">
     </div>
