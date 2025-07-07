@@ -63,6 +63,35 @@
         <div class="divider"></div>
 
         <fieldset>
+            <legend>Sampling</legend>
+            <select name="sampling" id="sampling-method" class="form-control">
+                {% for sampling_method in sampling_methods %}
+                    <option value="{{ sampling_method }}">{{ sampling_method }}</option>
+                {% endfor %}
+            </select>
+        </fieldset>
+
+        <div class="divider"></div>
+
+        <fieldset>
+            <legend>Tags</legend>
+            <div class="tags-container" id="tags-container">
+                {% for tag in sorted_tags %}
+                    <span class="tag" data-tag="{{ tag }}">
+                        {{ tag }}
+                        <span class="remove-tag">×</span>
+                    </span>
+                {% endfor %}
+            </div>
+            <div class="tag-input-container">
+                <input type="text" id="new-tag-input" placeholder="Add new tag...">
+                <button id="add-tag-btn">+</button>
+            </div>
+        </fieldset>
+
+        <div class="divider"></div>
+
+        <fieldset>
             <legend>LoRA</legend>
             <div class="lora-grid">
                 {% for lora_name in sorted_loras %}
@@ -84,33 +113,6 @@
                     {# Macro #}
                     {{ lora_toggle(full_name=lora_name, display_text=display_text, icon_src=icon_src_to_pass) }}
                 {% endfor %}
-            </div>
-        </fieldset>
-
-        <div class="divider"></div>
-
-        <fieldset>
-            <legend>Sampling</legend>
-            <select name="sampling" id="sampling-method" class="form-control">
-                {% for sampling_method in sampling_methods %}
-                    <option value="{{ sampling_method }}">{{ sampling_method }}</option>
-                {% endfor %}
-            </select>
-        </fieldset>
-
-        <fieldset>
-            <legend>Tags</legend>
-            <div class="tags-container" id="tags-container">
-                {% for tag in sorted_tags %}
-                    <span class="tag" data-tag="{{ tag }}">
-                        {{ tag }}
-                        <span class="remove-tag">×</span>
-                    </span>
-                {% endfor %}
-            </div>
-            <div class="tag-input-container">
-                <input type="text" id="new-tag-input" placeholder="Add new tag...">
-                <button id="add-tag-btn">+</button>
             </div>
         </fieldset>
     </div> {# End sidebar #}

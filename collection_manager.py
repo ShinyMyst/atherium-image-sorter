@@ -159,9 +159,10 @@ class CollectionManager():
         entry_dict = json.loads(entry_string)
         entry_dict['url'] = img_url
         # Round Entries
-        for key, value in entry_dict["LoRA"].items():
-            if isinstance(value, (int, float)):
-                entry_dict["LoRA"][key] = round(value, 1)
+        if "LoRA" in entry_dict and entry_dict["LoRA"] is not None:
+            for key, value in entry_dict["LoRA"].items():
+                if isinstance(value, (int, float)):
+                    entry_dict["LoRA"][key] = round(value, 1)
 
         # Replace Model Names
         if entry_dict["model"] in QUICK_SUBSTITUTION:
